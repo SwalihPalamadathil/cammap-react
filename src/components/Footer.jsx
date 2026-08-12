@@ -21,12 +21,12 @@ function Footer() {
           <div className="footer-nav">
             <h4>Quick Navigation</h4>
             <ul>
-              <li><a href="/">Home</a></li>
+              <li><a href="#">Home</a></li>
               <li><a href="#search">Route Finder</a></li>
               <li><a href="#how-it-works">How It Works</a></li>
               <li><a href="#features">Features</a></li>
               <li><a href="#about">About System</a></li>
-              <li><a href="/map/index.html">Open Map</a></li>
+              <li><a href="map/index.html">Open Map</a></li>
             </ul>
           </div>
 

@@ -47,7 +47,7 @@ function Header() {
     <header className="header" ref={headerRef}>
       <div className="header-container">
         {/* LEFT: BRAND */}
-        <a href="/" className="logoBox" onClick={closeMobileMenu} aria-label="CamMap Home">
+        <a href="#" className="logoBox" onClick={closeMobileMenu} aria-label="CamMap Home">
           <img src={logo} alt="CamMap Logo" className="logo" />
           <div className="logoText">
             <span className="brandName">CamMap</span>
@@ -67,7 +67,7 @@ function Header() {
           <a href="#features" onClick={closeMobileMenu}>Features</a>
           <a href="#about" onClick={closeMobileMenu}>About</a>
           <a 
-            href="/map/index.html" 
+            href="map/index.html" 
             className="nav-cta-btn mobile-cta"
             onClick={closeMobileMenu}
           >
@@ -77,7 +77,7 @@ function Header() {
 
         {/* RIGHT: DESKTOP CTA & HAMBURGER */}
         <div className="header-actions">
-          <a href="/map/index.html" className="nav-cta-btn desktop-cta">
+          <a href="map/index.html" className="nav-cta-btn desktop-cta">
             Open Map <i className="bi bi-arrow-right-short" aria-hidden="true"></i>
           </a>
 
