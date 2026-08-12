@@ -1,109 +1,316 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>CamMap</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CamMap — EMEA College Interactive Campus Map</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Framework & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    
+    <!-- Custom Style -->
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="logo1.png">
-    
 </head>
 <body>
     
+    <!-- TOP GLASS NAVIGATION BAR -->
+    <header class="app-header">
+        <div class="header-container">
+            <a href="/" class="brand-group">
+                <img src="logo1.png" alt="CamMap Logo" class="brand-logo">
+                <div class="brand-text">
+                    <span class="brand-name">CamMap <span class="badge-tag">PRO</span></span>
+                    <span class="brand-sub">EMEA College Navigation System</span>
+                </div>
+            </a>
 
-   <div class="map-area">
+            <div class="breadcrumb-nav d-none d-md-flex">
+                <a href="/" class="crumb-link"><i class="bi bi-house-door-fill"></i> Home</a>
+                <i class="bi bi-chevron-right crumb-sep"></i>
+                <span class="crumb-active">Interactive Campus Map</span>
+            </div>
 
-    <div id="mapWrapper">
+            <div class="header-actions">
+                <button id="resetRouteBtn" class="btn-glass" title="Reset Current Route">
+                    <i class="bi bi-arrow-counterclockwise"></i>
+                    <span class="d-none d-lg-inline">Reset Route</span>
+                </button>
+                <button id="locateMeBtn" class="btn-glass" title="Locate My Position" data-bs-toggle="modal" data-bs-target="#gpsModal">
+                    <i class="bi bi-crosshair"></i>
+                    <span class="d-none d-lg-inline">Locate Me</span>
+                </button>
+                <button id="resetViewBtn" class="btn-glass" title="Reset Zoom & Pan">
+                    <i class="bi bi-aspect-ratio"></i>
+                    <span class="d-none d-lg-inline">Center Map</span>
+                </button>
+                <button class="btn-glass btn-icon-only" data-bs-toggle="modal" data-bs-target="#infoModal" title="Campus Info">
+                    <i class="bi bi-info-circle"></i>
+                </button>
+            </div>
+        </div>
+    </header>
 
-        <svg 
-        id="campusMap"
-        width="2390" height="1792" viewBox="0 0 2390 1792" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="2390" height="1792" fill="#1E1E1E"/>
-<rect width="2390" height="1792" fill="white"/>
-<g filter="url(#filter0_d_0_1)">
-<path d="M1469.12 1528V1398M1469.12 1398L460 1408.5V1499.5V920L864.642 907.5M1469.12 1398L1485.52 934M864.642 907.5L1485.52 934M1745.51 115.5L1215.6 137.5L1009.8 241L919.323 458L806.481 747.5L864.642 907.5M1485.52 934V826.5M1485.52 934L1634.65 849L1713.2 703V618M1713.2 618L2090 601.5M1713.2 618V470M919.323 458L1154.95 470H1713.2M1713.2 470L1745.51 115.5M1154.95 470V289.5M1745.51 115.5L1757.44 4" stroke="#D9DEE5" stroke-width="90" stroke-linecap="square" stroke-linejoin="round" shape-rendering="crispEdges"/>
-</g>
-<g filter="url(#filter1_d_0_1)">
-<rect x="1409" y="690" width="195" height="126" rx="3" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
-<rect x="1375" y="538" width="51" height="278" rx="3" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
-<rect x="1428" y="625" width="125" height="63" rx="3" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
-<rect x="1555" y="572" width="31" height="116" rx="3" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
-<rect x="1588" y="597" width="58" height="32" rx="3" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
-<rect x="1269" y="724" width="104" height="57" rx="3" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
-<rect x="1036" y="690" width="337" height="22" rx="3" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
-<rect x="1253" y="714" width="14" height="87" rx="3" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
-<rect x="1101" y="710" width="150" height="111" rx="3" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
-<rect x="1036" y="715" width="63" height="106" rx="3" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
-<rect x="1261" y="556" width="112" height="24" rx="3" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
-<rect x="1040" y="597" width="114" height="46" rx="3" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
-<rect x="1040" y="645" width="333" height="43" rx="3" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
-<rect x="1154" y="615" width="44" height="30" rx="3" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
-</g>
-<g filter="url(#filter2_d_0_1)">
-<rect x="484.594" y="637.016" width="217" height="149.302" rx="3" transform="rotate(0.932283 484.594 637.016)" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
-<path d="M491 601H736C737.657 601 739 602.343 739 604V636C739 637.657 737.657 639 736 639H491C489.343 639 488 637.657 488 636V604C488 602.343 489.343 601 491 601Z" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
-<path d="M454 602H486C487.657 602 489 603.343 489 605V786C489 787.657 487.657 789 486 789H454C452.343 789 451 787.657 451 786V605C451 603.343 452.343 602 454 602Z" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
-<path d="M454 789H736C737.657 789 739 790.343 739 792V824C739 825.657 737.657 827 736 827H454C452.343 827 451 825.657 451 824V792C451 790.343 452.343 789 454 789Z" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
-<path d="M706 601H736C737.657 601 739 602.343 739 604V824C739 825.657 737.657 827 736 827H706C704.343 827 703 825.657 703 824V604C703 602.343 704.343 601 706 601Z" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
-</g>
-<g filter="url(#filter3_d_0_1)">
-<rect x="300.653" y="1503.19" width="316.859" height="161.448" rx="4" transform="rotate(0.932283 300.653 1503.19)" fill="#E2E8F0"/>
-<rect x="301.637" y="1504.2" width="314.859" height="159.448" rx="3" transform="rotate(0.932283 301.637 1504.2)" stroke="#94A3B8" stroke-width="2"/>
-</g>
-<rect x="879.956" y="1469.02" width="271.874" height="119.199" rx="3" transform="rotate(0.932283 879.956 1469.02)" fill="#7BE5F8" stroke="#94A3B8" stroke-width="2"/>
-<g filter="url(#filter4_d_0_1)">
-<rect x="1188.5" y="1458.84" width="203.511" height="98.3824" rx="4" transform="rotate(0.932283 1188.5 1458.84)" fill="#E2E8F0"/>
-<rect x="1189.48" y="1459.85" width="201.511" height="96.3824" rx="3" transform="rotate(0.932283 1189.48 1459.85)" stroke="#94A3B8" stroke-width="2"/>
-</g>
-<g filter="url(#filter5_d_0_1)">
-<rect x="1647" y="1618.66" width="221.833" height="121.975" rx="4" transform="rotate(-87.2113 1647 1618.66)" fill="#E2E8F0"/>
-<rect x="1648.05" y="1617.71" width="219.833" height="119.975" rx="3" transform="rotate(-87.2113 1648.05 1617.71)" stroke="#94A3B8" stroke-width="2"/>
-</g>
-<g filter="url(#filter6_d_0_1)">
-<rect x="1583.97" y="1169.9" width="135.431" height="205.393" rx="4" transform="rotate(0.932283 1583.97 1169.9)" fill="#E2E8F0"/>
-<rect x="1584.95" y="1170.91" width="133.431" height="203.393" rx="3" transform="rotate(0.932283 1584.95 1170.91)" stroke="#94A3B8" stroke-width="2"/>
-</g>
-<g filter="url(#filter7_d_0_1)">
-<rect x="1671.33" y="885" width="182.146" height="204.476" rx="4" transform="rotate(0.932283 1671.33 885)" fill="#E2E8F0"/>
-<rect x="1672.31" y="886.016" width="180.146" height="202.476" rx="3" transform="rotate(0.932283 1672.31 886.016)" stroke="#94A3B8" stroke-width="2"/>
-</g>
-<g filter="url(#filter8_d_0_1)">
-<rect x="1780.25" y="689" width="69.393" height="174.894" rx="4" transform="rotate(13.9808 1780.25 689)" fill="#E2E8F0"/>
-<rect x="1780.98" y="690.212" width="67.393" height="172.894" rx="3" transform="rotate(13.9808 1780.98 690.212)" stroke="#94A3B8" stroke-width="2"/>
-</g>
-<g filter="url(#filter9_d_0_1)">
-<rect x="2158.89" y="381.755" width="212.306" height="182.138" rx="4" transform="rotate(0.932283 2158.89 381.755)" fill="#E2E8F0"/>
-<rect x="2159.87" y="382.771" width="210.306" height="180.138" rx="3" transform="rotate(0.932283 2159.87 382.771)" stroke="#94A3B8" stroke-width="2"/>
-</g>
-<g filter="url(#filter10_d_0_1)">
-<rect x="1831.77" y="20.6109" width="332.377" height="108.594" rx="4" transform="rotate(0.932283 1831.77 20.6109)" fill="#E2E8F0"/>
-<rect x="1832.75" y="21.627" width="330.377" height="106.594" rx="3" transform="rotate(0.932283 1832.75 21.627)" stroke="#94A3B8" stroke-width="2"/>
-</g>
-<rect x="1223.76" y="201.016" width="427.471" height="107.208" rx="3" transform="rotate(0.932283 1223.76 201.016)" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
-<rect x="1318.42" y="175.849" width="336.27" height="38.8796" rx="3" transform="rotate(0.932283 1318.42 175.849)" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
-<g filter="url(#filter11_d_0_1)">
-<rect x="1108" y="33.4703" width="220.418" height="61.4218" rx="4" transform="rotate(-6.89738 1108 33.4703)" fill="#E2E8F0"/>
-<rect x="1109.11" y="34.3429" width="218.418" height="59.4218" rx="3" transform="rotate(-6.89738 1109.11 34.3429)" stroke="#94A3B8" stroke-width="2"/>
-</g>
-<rect x="1269.52" y="327.016" width="206.956" height="92.6127" rx="3" transform="rotate(0.932283 1269.52 327.016)" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
-<rect x="1497.36" y="340.016" width="145.785" height="82.6066" rx="3" transform="rotate(0.932283 1497.36 340.016)" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
-<g filter="url(#filter12_d_0_1)">
-<rect x="304.555" y="993" width="88.2919" height="402.89" rx="4" transform="rotate(0.932283 304.555 993)" fill="#E2E8F0"/>
-<rect x="305.539" y="994.016" width="86.2919" height="400.89" rx="3" transform="rotate(0.932283 305.539 994.016)" stroke="#94A3B8" stroke-width="2"/>
-</g>
-<rect x="642.3" y="990.016" width="125.723" height="78.9326" rx="3" transform="rotate(0.932283 642.3 990.016)" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
-<rect x="712.076" y="1128.37" width="143.59" height="70.6408" rx="3" transform="rotate(-4.51288 712.076 1128.37)" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
-<path d="M927.584 936L499.842 956.37L484 1397L757.918 1380.92H1101.34H1433L1456 956.37L927.584 936Z" fill="#B8D98A" stroke="#97BE6A"/>
-<path d="M1009.11 1141.08L977.394 1198.92C972.871 1207.17 970.5 1216.43 970.5 1225.84V1242V1243.81C970.5 1263.74 981.093 1282.17 998.316 1292.2L1002.94 1294.89C1011.49 1299.87 1021.22 1302.5 1031.12 1302.5H1042.36C1049.72 1302.5 1057 1301.05 1063.79 1298.24L1117.5 1276L1163.02 1263.12C1167.98 1261.71 1173.12 1261 1178.27 1261H1238.5H1262.52C1273.9 1261 1285.01 1264.47 1294.38 1270.94L1325.81 1292.69C1335.05 1299.08 1346.02 1302.5 1357.25 1302.5C1374.99 1302.5 1391.66 1293.99 1402.05 1279.61L1411.22 1266.92C1414.06 1262.99 1416.38 1258.71 1418.12 1254.18L1426.41 1232.56C1431.6 1219.05 1431.35 1204.05 1425.72 1190.71L1419.91 1176.94C1417 1170.05 1415.5 1162.64 1415.5 1155.16V1139.84C1415.5 1132.36 1417 1124.95 1419.91 1118.06L1426 1103.62C1431.47 1090.68 1431.87 1076.16 1427.13 1062.94L1423.53 1052.89C1418.4 1038.58 1407.67 1026.97 1393.81 1020.73L1365.89 1008.16C1349.62 1000.83 1330.82 1001.7 1315.29 1010.5L1305.26 1016.18C1289.42 1025.16 1270.21 1025.88 1253.74 1018.1L1219.35 1001.86C1211.88 998.331 1203.71 996.5 1195.44 996.5H1170.5H1132.5H1087.5H1075.11C1061.2 996.5 1047.79 1001.67 1037.49 1011.01L1034.39 1013.83C1022.68 1024.45 1016 1039.51 1016 1055.32V1114.16C1016 1123.57 1013.63 1132.83 1009.11 1141.08Z" fill="#7CC8F8" stroke="#4DA6D9" stroke-width="2"/>
-<path d="M2147.55 414.766L1818.59 296.2L1759.94 438.776L1757 574.935L2107.91 553.942L2147.55 414.766Z" fill="#B8D98A" stroke="#97BE6A"/>
-<path d="M989.5 434.5H1114V268.5H1197V306.5V419.5L1212 453.5H1612L1668.5 434.5L1702.5 238.5V174.5L1668.5 151.5H1464.5L1276 174.5L1174 204.5L1083.5 238.5L1023.5 306.5L989.5 393V434.5Z" fill="#B8D98A" stroke="#97BE6A"/>
-<path d="M571.484 1057.59V1042.79C571.484 1041.46 572.564 1040.38 573.896 1040.38C575.228 1040.38 576.308 1041.46 576.308 1042.79V1057.59C576.308 1058.92 575.228 1060 573.896 1060C572.564 1060 571.484 1058.92 571.484 1057.59Z" fill="#7B4A4A" stroke="#3F6B2A"/>
-<path d="M555 1027.57V1031.97C555 1037.01 557.577 1041.7 561.833 1044.41C564.197 1045.91 566.941 1046.71 569.743 1046.71H578.208C580.922 1046.71 583.597 1046.06 586.008 1044.81C591.656 1041.9 595.204 1036.07 595.204 1029.71V1028.97C595.204 1023.39 592.643 1018.11 588.255 1014.66L587.695 1014.22C584.225 1011.49 579.938 1010 575.522 1010H572.567C568.004 1010 563.621 1011.78 560.344 1014.95C556.928 1018.26 555 1022.81 555 1027.57Z" fill="#5E8C4A" stroke="#3F6B2A"/>
-<path d="M624.484 1370.59V1355.79C624.484 1354.46 625.564 1353.38 626.896 1353.38C628.228 1353.38 629.308 1354.46 629.308 1355.79V1370.59C629.308 1371.92 628.228 1373 626.896 1373C625.564 1373 624.484 1371.92 624.484 1370.59Z" fill="#7B4A4A" stroke="#3F6B2A"/>
-<path d="M608 1340.57V1344.97C608 1350.01 610.577 1354.7 614.833 1357.41C617.197 1358.91 619.941 1359.71 622.743 1359.71H631.208C633.922 1359.71 636.597 1359.06 639.008 1357.81C644.656 1354.9 648.204 1349.07 648.204 1342.71V1341.97C648.204 1336.39 645.643 1331.11 641.255 1327.66L640.695 1327.22C637.225 1324.49 632.938 1323 628.522 1323H625.567C621.004 1323 616.621 1324.78 613.344 1327.95C609.928 1331.26 608 1335.81 608 1340.57Z" fill="#5E8C4A" stroke="#3F6B2A"/>
-<path d="M689.484 1270.59V1263.64C689.484 1262.31 690.564 1261.23 691.896 1261.23C693.228 1261.23 694.308 1262.31 694.308 1263.64V1270.59C694.308 1271.92 693.228 1273 691.896 1273C690.564 1273 689.484 1271.92 689.484 1270.59Z" fill="#7B4A4A" stroke="#3F6B2A"/>
-<path d="M679.09 1263.36L681.247 1264.18C682.705 1264.74 684.253 1265.03 685.814 1265.03H698.043C699.565 1265.03 701.078 1264.8 702.531 1264.35L707.06 1262.94C710.713 1261.81 713.204 1258.43 713.204 1254.61C713.204 1251.23 711.256 1248.16 708.203 1246.71L703.702 1244.59C701.487 1243.54 699.068 1243 696.619 1243H687.31C684.784 1243 682.303 1243.67 680.119 1244.94L677.707 1246.34C674.793 1248.03 673 1251.15 673 1254.52C673 1258.44 675.423 1261.96 679.09 1263.36Z" fill="#5E8C4A" stroke="#3F6B2A"/>
-<path d="M976.484 1103.59V1088.79C976.484 1087.46 977.564 1086.38 978.896 1086.38C980.228 1086.38 981.308 1087.46 981.308 1088.79V1103.59C981.308 1104.92 980.228 1106 978.896 1106C977.564 1106 976.484 1104.92 976.484 1103.59Z" fill="#7B4A4A" stroke="#3F6B2A"/>
+    <main class="main-content">
+        <div class="container-fluid px-3 px-md-4 max-w-1400">
+            
+            <!-- SEARCH & ROUTE CONTROLLER PANEL -->
+            <section class="search-section my-4">
+                <div class="glass-panel search-card">
+                    <div class="search-card-header">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="pulse-dot"></span>
+                            <h2 class="section-title mb-0">Campus Route Planner</h2>
+                        </div>
+                        <span class="badge-pill bg-blue-subtle text-primary">
+                            <i class="bi bi-lightning-charge-fill"></i> BFS Engine Active
+                        </span>
+                    </div>
+
+                    <div class="search-card-body">
+                        <div class="row g-3 align-items-center">
+                            <!-- START LOCATION -->
+                            <div class="col-lg-5 col-md-5">
+                                <div class="input-group-custom">
+                                    <label for="startSelect" class="form-label-custom text-success">
+                                        <i class="bi bi-geo-alt-fill"></i> Starting Location
+                                    </label>
+                                    <div class="select-wrapper">
+                                        <select id="startSelect" class="form-select-custom">
+                                            <option value="" disabled selected>Select start location...</option>
+                                            <option value="Main Gate">Main Gate</option>
+                                            <option value="Main Block">Main Block</option>
+                                            <option value="Commerce Department">Commerce Department</option>
+                                            <option value="Business Administration Department">Business Administration Department</option>
+                                            <option value="Economics Department">Economics Department</option>
+                                            <option value="Language Department">Language Department</option>
+                                            <option value="West Asian Studies Department">West Asian Studies Department</option>
+                                            <option value="Computer Science Department">Computer Science Department</option>
+                                            <option value="English Department">English Department</option>
+                                            <option value="Microbiology Department">Microbiology Department</option>
+                                            <option value="Biochemistry Department">Biochemistry Department</option>
+                                            <option value="Biotechnology Department">Biotechnology Department</option>
+                                            <option value="Mathematics & Physics Department">Mathematics & Physics Department</option>
+                                            <option value="RUSA Building">RUSA Building</option>
+                                            <option value="BVoc Block">BVoc Block</option>
+                                            <option value="Library Building">Library Building</option>
+                                            <option value="Canteen">Canteen</option>
+                                            <option value="Auditorium">Auditorium</option>
+                                            <option value="Sports Hostel">Sports Hostel</option>
+                                            <option value="Ladies Hostel">Ladies Hostel</option>
+                                            <option value="Prayer Hall">Prayer Hall</option>
+                                            <option value="Cooperative Store">Cooperative Store</option>
+                                            <option value="Bamboo Lake">Bamboo Lake</option>
+                                            <option value="Basketball Court">Basketball Court</option>
+                                            <option value="Boys Washroom">Boys Washroom</option>
+                                            <option value="NSS/NCC Office">NSS/NCC Office</option>
+                                            <option value="Audio Visual Theater">Audio Visual Theater</option>
+                                            <option value="EMEA Training College">EMEA Training College</option>
+                                            <option value="Mahogany Park">Mahogany Park</option>
+                                            <option value="NCC Ground">NCC Ground</option>
+                                            <option value="Administrative Office">Administrative Office</option>
+                                            <option value="Principal Room">Principal Room</option>
+                                            <option value="College Office">College Office</option>
+                                            <option value="Seminar Hall">Seminar Hall</option>
+                                        </select>
+                                        <i class="bi bi-chevron-down select-icon"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- SWAP BUTTON -->
+                            <div class="col-lg-2 col-md-2 text-center py-1">
+                                <button id="swapBtn" class="btn-swap-circular" title="Swap From and To Locations">
+                                    <i class="bi bi-arrow-down-up fs-5 d-md-none"></i>
+                                    <i class="bi bi-arrow-left-right fs-5 d-none d-md-inline"></i>
+                                </button>
+                            </div>
+
+                            <!-- DESTINATION LOCATION -->
+                            <div class="col-lg-5 col-md-5">
+                                <div class="input-group-custom">
+                                    <label for="destSelect" class="form-label-custom text-danger">
+                                        <i class="bi bi-flag-fill"></i> Destination
+                                    </label>
+                                    <div class="select-wrapper">
+                                        <select id="destSelect" class="form-select-custom">
+                                            <option value="" disabled selected>Select destination...</option>
+                                            <option value="Main Block">Main Block</option>
+                                            <option value="Main Gate">Main Gate</option>
+                                            <option value="Commerce Department">Commerce Department</option>
+                                            <option value="Business Administration Department">Business Administration Department</option>
+                                            <option value="Economics Department">Economics Department</option>
+                                            <option value="Language Department">Language Department</option>
+                                            <option value="West Asian Studies Department">West Asian Studies Department</option>
+                                            <option value="Computer Science Department">Computer Science Department</option>
+                                            <option value="English Department">English Department</option>
+                                            <option value="Microbiology Department">Microbiology Department</option>
+                                            <option value="Biochemistry Department">Biochemistry Department</option>
+                                            <option value="Biotechnology Department">Biotechnology Department</option>
+                                            <option value="Mathematics & Physics Department">Mathematics & Physics Department</option>
+                                            <option value="RUSA Building">RUSA Building</option>
+                                            <option value="BVoc Block">BVoc Block</option>
+                                            <option value="Library Building">Library Building</option>
+                                            <option value="Canteen">Canteen</option>
+                                            <option value="Auditorium">Auditorium</option>
+                                            <option value="Sports Hostel">Sports Hostel</option>
+                                            <option value="Ladies Hostel">Ladies Hostel</option>
+                                            <option value="Prayer Hall">Prayer Hall</option>
+                                            <option value="Cooperative Store">Cooperative Store</option>
+                                            <option value="Bamboo Lake">Bamboo Lake</option>
+                                            <option value="Basketball Court">Basketball Court</option>
+                                            <option value="Boys Washroom">Boys Washroom</option>
+                                            <option value="NSS/NCC Office">NSS/NCC Office</option>
+                                            <option value="Audio Visual Theater">Audio Visual Theater</option>
+                                            <option value="EMEA Training College">EMEA Training College</option>
+                                            <option value="Mahogany Park">Mahogany Park</option>
+                                            <option value="NCC Ground">NCC Ground</option>
+                                            <option value="Administrative Office">Administrative Office</option>
+                                            <option value="Principal Room">Principal Room</option>
+                                            <option value="College Office">College Office</option>
+                                            <option value="Seminar Hall">Seminar Hall</option>
+                                        </select>
+                                        <i class="bi bi-chevron-down select-icon"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- QUICK PICK CHIPS -->
+                        <div class="chips-container mt-3">
+                            <span class="chips-label"><i class="bi bi-stars"></i> Popular Destinations:</span>
+                            <div class="chips-scroll">
+                                <button class="chip-item" data-place="Library Building"><i class="bi bi-journal-bookmark-fill"></i> Library</button>
+                                <button class="chip-item" data-place="Main Block"><i class="bi bi-building-fill"></i> Main Block</button>
+                                <button class="chip-item" data-place="Computer Science Department"><i class="bi bi-laptop-fill"></i> CS Department</button>
+                                <button class="chip-item" data-place="Canteen"><i class="bi bi-cup-hot-fill"></i> Canteen</button>
+                                <button class="chip-item" data-place="Auditorium"><i class="bi bi-mic-fill"></i> Auditorium</button>
+                                <button class="chip-item" data-place="Sports Hostel"><i class="bi bi-trophy-fill"></i> Sports Hostel</button>
+                                <button class="chip-item" data-place="RUSA Building"><i class="bi bi-mortarboard-fill"></i> RUSA</button>
+                                <button class="chip-item" data-place="Ladies Hostel"><i class="bi bi-house-heart-fill"></i> Ladies Hostel</button>
+                            </div>
+                        </div>
+
+                        <!-- SEARCH ACTION BUTTON -->
+                        <div class="mt-4 text-end">
+                            <button id="findRouteBtn" class="btn-primary-action">
+                                <span>Find Best Route</span>
+                                <i class="bi bi-arrow-right-short fs-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- HERO MAP CANVAS CONTAINER -->
+            <section class="map-section my-4">
+                <div class="glass-panel map-card">
+                    
+                    <!-- MAP HEADER CONTROL BAR -->
+                    <div class="map-card-header">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge-status-dot"></span>
+                            <span class="fw-semibold text-slate-800">EMEA College Campus Vector Map</span>
+                        </div>
+
+                        <div class="map-legend d-none d-md-flex align-items-center gap-3 fs-7">
+                            <span class="legend-item"><span class="legend-dot bg-yellow"></span> Route Path</span>
+                            <span class="legend-item"><span class="legend-dot bg-green"></span> Selected Block</span>
+                            <span class="legend-item"><span class="legend-dot bg-building"></span> Buildings</span>
+                            <span class="legend-item"><span class="legend-dot bg-road"></span> Walking Roads</span>
+                        </div>
+                    </div>
+
+                    <!-- INTERACTIVE MAP CANVAS -->
+                    <div class="map-viewport">
+                        <div class="map-area">
+                            <div id="mapWrapper">
+                                <svg id="campusMap" width="2390" height="1792" viewBox="0 0 2390 1792" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="2390" height="1792" fill="#1E1E1E"/>
+                                    <rect width="2390" height="1792" fill="white"/>
+                                    <g filter="url(#filter0_d_0_1)">
+                                        <path d="M1469.12 1528V1398M1469.12 1398L460 1408.5V1499.5V920L864.642 907.5M1469.12 1398L1485.52 934M864.642 907.5L1485.52 934M1745.51 115.5L1215.6 137.5L1009.8 241L919.323 458L806.481 747.5L864.642 907.5M1485.52 934V826.5M1485.52 934L1634.65 849L1713.2 703V618M1713.2 618L2090 601.5M1713.2 618V470M919.323 458L1154.95 470H1713.2M1713.2 470L1745.51 115.5M1154.95 470V289.5M1745.51 115.5L1757.44 4" stroke="#D9DEE5" stroke-width="90" stroke-linecap="square" stroke-linejoin="round" shape-rendering="crispEdges"/>
+                                    </g>
+                                    <g filter="url(#filter1_d_0_1)">
+                                        <rect x="1409" y="690" width="195" height="126" rx="3" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
+                                        <rect x="1375" y="538" width="51" height="278" rx="3" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
+                                        <rect x="1428" y="625" width="125" height="63" rx="3" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
+                                        <rect x="1555" y="572" width="31" height="116" rx="3" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
+                                        <rect x="1588" y="597" width="58" height="32" rx="3" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
+                                        <rect x="1269" y="724" width="104" height="57" rx="3" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
+                                        <rect x="1036" y="690" width="337" height="22" rx="3" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
+                                        <rect x="1253" y="714" width="14" height="87" rx="3" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
+                                        <rect x="1101" y="710" width="150" height="111" rx="3" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
+                                        <rect x="1036" y="715" width="63" height="106" rx="3" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
+                                        <rect x="1261" y="556" width="112" height="24" rx="3" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
+                                        <rect x="1040" y="597" width="114" height="46" rx="3" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
+                                        <rect x="1040" y="645" width="333" height="43" rx="3" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
+                                        <rect x="1154" y="615" width="44" height="30" rx="3" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
+                                    </g>
+                                    <g filter="url(#filter2_d_0_1)">
+                                        <rect x="484.594" y="637.016" width="217" height="149.302" rx="3" transform="rotate(0.932283 484.594 637.016)" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
+                                        <path d="M491 601H736C737.657 601 739 602.343 739 604V636C739 637.657 737.657 639 736 639H491C489.343 639 488 637.657 488 636V604C488 602.343 489.343 601 491 601Z" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
+                                        <path d="M454 602H486C487.657 602 489 603.343 489 605V786C489 787.657 487.657 789 486 789H454C452.343 789 451 787.657 451 786V605C451 603.343 452.343 602 454 602Z" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
+                                        <path d="M454 789H736C737.657 789 739 790.343 739 792V824C739 825.657 737.657 827 736 827H454C452.343 827 451 825.657 451 824V792C451 790.343 452.343 789 454 789Z" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
+                                        <path d="M706 601H736C737.657 601 739 602.343 739 604V824C739 825.657 737.657 827 736 827H706C704.343 703 704.343 601 706 601Z" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
+                                    </g>
+                                    <g filter="url(#filter3_d_0_1)">
+                                        <rect x="300.653" y="1503.19" width="316.859" height="161.448" rx="4" transform="rotate(0.932283 300.653 1503.19)" fill="#E2E8F0"/>
+                                        <rect x="301.637" y="1504.2" width="314.859" height="159.448" rx="3" transform="rotate(0.932283 301.637 1504.2)" stroke="#94A3B8" stroke-width="2"/>
+                                    </g>
+                                    <rect x="879.956" y="1469.02" width="271.874" height="119.199" rx="3" transform="rotate(0.932283 879.956 1469.02)" fill="#7BE5F8" stroke="#94A3B8" stroke-width="2"/>
+                                    <g filter="url(#filter4_d_0_1)">
+                                        <rect x="1188.5" y="1458.84" width="203.511" height="98.3824" rx="4" transform="rotate(0.932283 1188.5 1458.84)" fill="#E2E8F0"/>
+                                        <rect x="1189.48" y="1459.85" width="201.511" height="96.3824" rx="3" transform="rotate(0.932283 1189.48 1459.85)" stroke="#94A3B8" stroke-width="2"/>
+                                    </g>
+                                    <g filter="url(#filter5_d_0_1)">
+                                        <rect x="1647" y="1618.66" width="221.833" height="121.975" rx="4" transform="rotate(-87.2113 1647 1618.66)" fill="#E2E8F0"/>
+                                        <rect x="1648.05" y="1617.71" width="219.833" height="119.975" rx="3" transform="rotate(-87.2113 1648.05 1617.71)" stroke="#94A3B8" stroke-width="2"/>
+                                    </g>
+                                    <g filter="url(#filter6_d_0_1)">
+                                        <rect x="1583.97" y="1169.9" width="135.431" height="205.393" rx="4" transform="rotate(0.932283 1583.97 1169.9)" fill="#E2E8F0"/>
+                                        <rect x="1584.95" y="1170.91" width="133.431" height="203.393" rx="3" transform="rotate(0.932283 1584.95 1170.91)" stroke="#94A3B8" stroke-width="2"/>
+                                    </g>
+                                    <g filter="url(#filter7_d_0_1)">
+                                        <rect x="1671.33" y="885" width="182.146" height="204.476" rx="4" transform="rotate(0.932283 1671.33 885)" fill="#E2E8F0"/>
+                                        <rect x="1672.31" y="886.016" width="180.146" height="202.476" rx="3" transform="rotate(0.932283 1672.31 886.016)" stroke="#94A3B8" stroke-width="2"/>
+                                    </g>
+                                    <g filter="url(#filter8_d_0_1)">
+                                        <rect x="1780.25" y="689" width="69.393" height="174.894" rx="4" transform="rotate(13.9808 1780.25 689)" fill="#E2E8F0"/>
+                                        <rect x="1780.98" y="690.212" width="67.393" height="172.894" rx="3" transform="rotate(13.9808 1780.98 690.212)" stroke="#94A3B8" stroke-width="2"/>
+                                    </g>
+                                    <g filter="url(#filter9_d_0_1)">
+                                        <rect x="2158.89" y="381.755" width="212.306" height="182.138" rx="4" transform="rotate(0.932283 2158.89 381.755)" fill="#E2E8F0"/>
+                                        <rect x="2159.87" y="382.771" width="210.306" height="180.138" rx="3" transform="rotate(0.932283 2159.87 382.771)" stroke="#94A3B8" stroke-width="2"/>
+                                    </g>
+                                    <g filter="url(#filter10_d_0_1)">
+                                        <rect x="1831.77" y="20.6109" width="332.377" height="108.594" rx="4" transform="rotate(0.932283 1831.77 20.6109)" fill="#E2E8F0"/>
+                                        <rect x="1832.75" y="21.627" width="330.377" height="106.594" rx="3" transform="rotate(0.932283 1832.75 21.627)" stroke="#94A3B8" stroke-width="2"/>
+                                    </g>
+                                    <rect x="1223.76" y="201.016" width="427.471" height="107.208" rx="3" transform="rotate(0.932283 1223.76 201.016)" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
+                                    <rect x="1318.42" y="175.849" width="336.27" height="38.8796" rx="3" transform="rotate(0.932283 1318.42 175.849)" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
+                                    <g filter="url(#filter11_d_0_1)">
+                                        <rect x="1108" y="33.4703" width="220.418" height="61.4218" rx="4" transform="rotate(-6.89738 1108 33.4703)" fill="#E2E8F0"/>
+                                        <rect x="1109.11" y="34.3429" width="218.418" height="59.4218" rx="3" transform="rotate(-6.89738 1109.11 34.3429)" stroke="#94A3B8" stroke-width="2"/>
+                                    </g>
+                                    <rect x="1269.52" y="327.016" width="206.956" height="92.6127" rx="3" transform="rotate(0.932283 1269.52 327.016)" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
+                                    <rect x="1497.36" y="340.016" width="145.785" height="82.6066" rx="3" transform="rotate(0.932283 1497.36 340.016)" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
+                                    <g filter="url(#filter12_d_0_1)">
+                                        <rect x="304.555" y="993" width="88.2919" height="402.89" rx="4" transform="rotate(0.932283 304.555 993)" fill="#E2E8F0"/>
+                                        <rect x="305.539" y="994.016" width="86.2919" height="400.89" rx="3" transform="rotate(0.932283 305.539 994.016)" stroke="#94A3B8" stroke-width="2"/>
+                                    </g>
+                                    <rect x="642.3" y="990.016" width="125.723" height="78.9326" rx="3" transform="rotate(0.932283 642.3 990.016)" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
+                                    <rect x="712.076" y="1128.37" width="143.59" height="70.6408" rx="3" transform="rotate(-4.51288 712.076 1128.37)" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
+                                    <path d="M927.584 936L499.842 956.37L484 1397L757.918 1380.92H1101.34H1433L1456 956.37L927.584 936Z" fill="#B8D98A" stroke="#97BE6A"/>
+                                    <path d="M1009.11 1141.08L977.394 1198.92C972.871 1207.17 970.5 1216.43 970.5 1225.84V1242V1243.81C970.5 1263.74 981.093 1282.17 998.316 1292.2L1002.94 1294.89C1011.49 1299.87 1021.22 1302.5 1031.12 1302.5H1042.36C1049.72 1302.5 1057 1301.05 1063.79 1298.24L1117.5 1276L1163.02 1263.12C1167.98 1261.71 1173.12 1261 1178.27 1261H1238.5H1262.52C1273.9 1261 1285.01 1264.47 1294.38 1270.94L1325.81 1292.69C1335.05 1299.08 1346.02 1302.5 1357.25 1302.5C1374.99 1302.5 1391.66 1293.99 1402.05 1279.61L1411.22 1266.92C1414.06 1262.99 1416.38 1258.71 1418.12 1254.18L1426.41 1232.56C1431.6 1219.05 1431.35 1204.05 1425.72 1190.71L1419.91 1176.94C1417 1170.05 1415.5 1162.64 1415.5 1155.16V1139.84C1415.5 1132.36 1417 1124.95 1419.91 1118.06L1426 1103.62C1431.47 1090.68 1431.87 1076.16 1427.13 1062.94L1423.53 1052.89C1418.4 1038.58 1407.67 1026.97 1393.81 1020.73L1365.89 1008.16C1349.62 1000.83 1330.82 1001.7 1315.29 1010.5L1305.26 1016.18C1289.42 1025.16 1270.21 1025.88 1253.74 1018.1L1219.35 1001.86C1211.88 998.331 1203.71 996.5 1195.44 996.5H1170.5H1132.5H1087.5H1075.11C1061.2 996.5 1047.79 1001.67 1037.49 1011.01L1034.39 1013.83C1022.68 1024.45 1016 1039.51 1016 1055.32V1114.16C1016 1123.57 1013.63 1132.83 1009.11 1141.08Z" fill="#7CC8F8" stroke="#4DA6D9" stroke-width="2"/>
+                                        <path d="M2147.55 414.766L1818.59 296.2L1759.94 438.776L1757 574.935L2107.91 553.942L2147.55 414.766Z" fill="#B8D98A" stroke="#97BE6A"/>
+                                        <path d="M989.5 434.5H1114V268.5H1197V306.5V419.5L1212 453.5H1612L1668.5 434.5L1702.5 238.5V174.5L1668.5 151.5H1464.5L1276 174.5L1174 204.5L1083.5 238.5L1023.5 306.5L989.5 393V434.5Z" fill="#B8D98A" stroke="#97BE6A"/>
+                                        <path d="M571.484 1057.59V1042.79C571.484 1041.46 572.564 1040.38 573.896 1040.38C575.228 1040.38 576.308 1041.46 576.308 1042.79V1057.59C576.308 1058.92 575.228 1060 573.896 1060C572.564 1060 571.484 1058.92 571.484 1057.59Z" fill="#7B4A4A" stroke="#3F6B2A"/>
 <path d="M960 1073.57V1077.97C960 1083.01 962.577 1087.7 966.833 1090.41C969.197 1091.91 971.941 1092.71 974.743 1092.71H983.208C985.922 1092.71 988.597 1092.06 991.008 1090.81C996.656 1087.9 1000.2 1082.07 1000.2 1075.71V1074.97C1000.2 1069.39 997.643 1064.11 993.255 1060.66L992.695 1060.22C989.225 1057.49 984.938 1056 980.522 1056H977.567C973.004 1056 968.621 1057.78 965.344 1060.95C961.928 1064.26 960 1068.81 960 1073.57Z" fill="#5E8C4A" stroke="#3F6B2A"/>
 <path d="M763.484 1340.59V1325.79C763.484 1324.46 764.564 1323.38 765.896 1323.38C767.228 1323.38 768.308 1324.46 768.308 1325.79V1340.59C768.308 1341.92 767.228 1343 765.896 1343C764.564 1343 763.484 1341.92 763.484 1340.59Z" fill="#7B4A4A" stroke="#3F6B2A"/>
 <path d="M747 1310.57V1314.97C747 1320.01 749.577 1324.7 753.833 1327.41C756.197 1328.91 758.941 1329.71 761.743 1329.71H770.208C772.922 1329.71 775.597 1329.06 778.008 1327.81C783.656 1324.9 787.204 1319.07 787.204 1312.71V1311.97C787.204 1306.39 784.643 1301.11 780.255 1297.66L779.695 1297.22C776.225 1294.49 771.938 1293 767.522 1293H764.567C760.004 1293 755.621 1294.78 752.344 1297.95C748.928 1301.26 747 1305.81 747 1310.57Z" fill="#5E8C4A" stroke="#3F6B2A"/>
@@ -412,146 +619,193 @@
 
     </div>
 
-    <div class="zoom-controls">
-        <button id="zoomIn"><i class="bi bi-plus-lg"></i></button>
-        <button id="zoomOut"><i class="bi bi-dash-lg"></i></button>
-    </div>
+                        <!-- FLOATING ZOOM CONTROLS -->
+                        <div class="floating-controls-stack">
+                            <button id="zoomIn" class="btn-floating-control" title="Zoom In">
+                                <i class="bi bi-plus-lg"></i>
+                            </button>
+                            <button id="zoomOut" class="btn-floating-control" title="Zoom Out">
+                                <i class="bi bi-dash-lg"></i>
+                            </button>
+                            <button id="recenterBtn" class="btn-floating-control" title="Center View">
+                                <i class="bi bi-arrows-angle-contract"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-</div>
+            <!-- ROUTE INFORMATION & BUILDING DETAILS PANEL -->
+            <section class="results-section my-4">
+                <div class="row g-4">
+                    
+                    <!-- ROUTE SUMMARY CARD -->
+                    <div class="col-lg-7">
+                        <div class="glass-panel result-card h-100">
+                            <div class="result-card-header">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="bi bi-map-fill text-primary fs-5"></i>
+                                    <h3 class="card-title mb-0">Navigation Summary</h3>
+                                </div>
+                                <div id="statusResult">
+                                    <span class="badge-pill bg-slate-subtle text-slate-700">Select Locations</span>
+                                </div>
+                            </div>
 
-    <div class="result-box">
+                            <div class="result-card-body">
+                                <div class="row g-3">
+                                    
+                                    <!-- FROM & TO SUMMARY -->
+                                    <div class="col-sm-6">
+                                        <div class="info-pill from-pill">
+                                            <div class="pill-icon text-success">
+                                                <i class="bi bi-geo-alt-fill"></i>
+                                            </div>
+                                            <div class="pill-content">
+                                                <span class="pill-label">Starting Point</span>
+                                                <h4 id="fromResult" class="pill-value text-slate-900">-</h4>
+                                            </div>
+                                        </div>
+                                    </div>
 
-    <div class="card shadow-sm border-0">
+                                    <div class="col-sm-6">
+                                        <div class="info-pill to-pill">
+                                            <div class="pill-icon text-danger">
+                                                <i class="bi bi-flag-fill"></i>
+                                            </div>
+                                            <div class="pill-content">
+                                                <span class="pill-label">Destination</span>
+                                                <h4 id="toResult" class="pill-value text-slate-900">-</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-        <div class="card-header bg-primary text-white">
-            <h4 class="mb-0">
-                <i class="bi bi-map-fill"></i> Route Details
-            </h4>
+                                <!-- STATS GRID -->
+                                <div class="row g-3 mt-2">
+                                    <div class="col-4">
+                                        <div class="stat-box">
+                                            <i class="bi bi-signpost-fill text-amber fs-4 mb-1"></i>
+                                            <span class="stat-label">Junctions</span>
+                                            <h3 id="junctionResult" class="stat-value">0</h3>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-4">
+                                        <div class="stat-box">
+                                            <i class="bi bi-clock-fill text-blue fs-4 mb-1"></i>
+                                            <span class="stat-label">Est. Time</span>
+                                            <h3 id="timeResult" class="stat-value">--</h3>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-4">
+                                        <div class="stat-box">
+                                            <i class="bi bi-person-walking text-emerald fs-4 mb-1"></i>
+                                            <span class="stat-label">Route Type</span>
+                                            <h3 class="stat-value text-emerald">Shortest</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BUILDING DETAIL & FLOOR GUIDANCE CARD -->
+                    <div class="col-lg-5">
+                        <div class="glass-panel detail-card h-100">
+                            <div class="detail-card-header">
+                                <i class="bi bi-building-check text-blue fs-5"></i>
+                                <h3 class="card-title mb-0">Building & Floor Details</h3>
+                            </div>
+
+                            <div class="detail-card-body">
+                                <div id="result" class="building-info-container">
+                                    <div class="empty-state">
+                                        <i class="bi bi-cursor-fill fs-1 text-slate-300"></i>
+                                        <p class="mt-2 text-slate-500 mb-0">Click any interactive building block or calculate a route to view department and floor details.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
         </div>
+    </main>
 
-        <div class="card-body">
-
-            <div class="row">
-
-                <div class="col-md-6 mb-3">
-                    <div class="info-box from-box p-3 h-100">
-
-                        <small class="text-muted">
-                            <i class="bi bi-geo-alt-fill text-success"></i>
-                            From
-                        </small>
-
-                        <h5 id="fromResult" class="fw-bold text-success">-</h5>
-
-                    </div>
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <div class="info-box to-box p-3 h-100">
-
-                        <small class="text-muted">
-                            <i class="bi bi-flag-fill text-danger"></i>
-                            Destination
-                        </small>
-
-                        <h5 id="toResult" class="fw-bold text-danger">-</h5>
-
-                    </div>
-                </div>
-
+    <!-- FOOTER -->
+    <footer class="app-footer mt-5">
+        <div class="container-fluid max-w-1400 text-center">
+            <div class="footer-brand mb-2">
+                <img src="logo1.png" alt="CamMap Logo" class="footer-logo">
+                <span class="footer-title">CamMap EMEA Navigation</span>
             </div>
-
-            <div class="row">
-
-                <div class="col-md-4 mb-3">
-                    <div class="info-box waypoint-box p-3 text-center">
-
-                        <i class="bi bi-signpost-fill fs-3 text-warning"></i>
-
-                        <h6 class="mt-2">Junctions</h6>
-
-                        <h5 id="junctionResult">0</h5>
-
-                    </div>
-                </div>
-
-                <div class="col-md-4 mb-3">
-                    <div class="info-box time-box p-3 text-center">
-
-                        <i class="bi bi-clock-fill fs-3 text-primary"></i>
-
-                        <h6 class="mt-2">Time</h6>
-
-                        <h5 id="timeResult">--</h5>
-
-                    </div>
-                </div>
-
-                <div class="col-md-4 mb-3">
-                    <div class="info-box status-box p-3 text-center">
-
-                        <i class="bi bi-check-circle-fill fs-3 text-success"></i>
-
-                        <h6 class="mt-2">Status</h6>
-
-                        <h5 id="statusResult">Ready</h5>
-
-                    </div>
-                </div>
-
+            <p class="footer-sub">Smart Campus Navigation System • EMEA College Kondotty</p>
+            <div class="footer-badge">
+                <i class="bi bi-geo-fill text-warning"></i> Campus BFS Shortest Path Routing Active
             </div>
-
+            <hr class="footer-divider">
+            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2 text-slate-400 fs-7">
+                <span>© 2026 CamMap • Developed by <strong>Muhammed Swalih P</strong></span>
+                <div class="footer-links">
+                    <a href="/" class="footer-link">Home</a>
+                    <span class="sep">•</span>
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#infoModal" class="footer-link">About</a>
+                </div>
+            </div>
         </div>
+    </footer>
 
+    <!-- MODAL: LOCATE ME / GPS -->
+    <div class="modal fade" id="gpsModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content glass-modal border-0 shadow-lg">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold text-slate-900"><i class="bi bi-crosshair text-primary me-2"></i>Campus GPS Position</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body py-4 text-center">
+                    <div class="gps-pulse-ring mb-3 mx-auto">
+                        <i class="bi bi-geo-alt-fill fs-2 text-primary"></i>
+                    </div>
+                    <h6 class="fw-semibold text-slate-800">You are currently on Campus</h6>
+                    <p class="text-slate-500 fs-7 mb-3">Select "Main Gate" as starting location to get turn-by-turn directions to any college department.</p>
+                    <button class="btn btn-primary btn-sm px-4 rounded-pill" data-bs-dismiss="modal" id="quickStartMainGate">Set Start to Main Gate</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-</div>
-<footer class="footer">
-
-    <div class="footer-content">
-
-        <h3>
-            CamMap <span>v1.0</span>
-        </h3>
-
-        <p>
-            Smart Campus Navigation System for EMEA College
-        </p>
-
-        <div class="footer-links">
-
-            <a href="/">
-                <i class="bi bi-house-fill"></i>
-                Home
-            </a>
-
-            <a href="about.html">
-                <i class="bi bi-info-circle-fill"></i>
-                About
-            </a>
-
-            <a href="#">
-                <i class="bi bi-envelope-fill"></i>
-                Contact
-            </a>
-
+    <!-- MODAL: CAMPUS INFO -->
+    <div class="modal fade" id="infoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content glass-modal border-0 shadow-lg">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold text-slate-900"><i class="bi bi-info-circle-fill text-primary me-2"></i>About CamMap EMEA</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body py-3">
+                    <p class="text-slate-600 fs-7">CamMap is an intelligent campus navigation web application created specifically for students, parents, teachers, and visitors of EMEA College.</p>
+                    <div class="bg-blue-subtle p-3 rounded-3 mb-3 fs-7">
+                        <strong class="text-primary d-block mb-1"><i class="bi bi-cpu-fill"></i> Routing Algorithm:</strong>
+                        Uses Graph Theory & Breadth-First Search (BFS) to compute the exact shortest walking path between any two campus landmarks.
+                    </div>
+                    <ul class="list-unstyled fs-7 text-slate-600 mb-0">
+                        <li class="mb-1"><i class="bi bi-check2-circle text-success me-2"></i> Instant campus pathfinding</li>
+                        <li class="mb-1"><i class="bi bi-check2-circle text-success me-2"></i> Panzoom interactive vector canvas</li>
+                        <li><i class="bi bi-check2-circle text-success me-2"></i> Detailed department & floor directory</li>
+                    </ul>
+                </div>
+            </div>
         </div>
-
-        <div class="footer-coming">
-            🚀 Live GPS Navigation Coming Soon
-        </div>
-
-        <hr>
-
-        <p class="copyright">
-            © 2026 CamMap • Developed by <strong>Muhammed Swalih P</strong>
-        </p>
-
     </div>
 
-</footer>
-<script src="https://unpkg.com/@panzoom/panzoom/dist/panzoom.min.js"></script>
-<script src="script.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- SCRIPTS -->
+    <script src="https://unpkg.com/@panzoom/panzoom/dist/panzoom.min.js"></script>
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

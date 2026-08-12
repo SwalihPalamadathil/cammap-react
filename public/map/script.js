@@ -202,26 +202,24 @@ const destinations = {
 };
 
 function clearMarkers() {
-
-   document.getElementById("routeLayer").innerHTML = "";
+    document.getElementById("routeLayer").innerHTML = "";
 
     document.getElementById("mainBlock").classList.remove("active-marker");
     document.getElementById("commerceBlock").classList.remove("active-marker");
     document.getElementById("rusaBlock").classList.remove("active-marker");
     document.getElementById("bvocBlock").classList.remove("active-marker");
-
 }
 
+function calculateAndDisplayRoute(start, destination) {
+    if (!start || !destination) return;
 
-window.onload = function () {
+    const startSel = document.getElementById("startSelect");
+    const destSel = document.getElementById("destSelect");
+    if (startSel) startSel.value = start;
+    if (destSel) destSel.value = destination;
 
-    let start = localStorage.getItem("from");
-    let destination = localStorage.getItem("to");
-
-    if (!start || !destination) {
-        alert("Please select start and destination first.");
-        return;
-    }
+    localStorage.setItem("from", start);
+    localStorage.setItem("to", destination);
 
     let data = destinations[destination];
 
@@ -230,50 +228,271 @@ window.onload = function () {
     let startNode = locationJunction[start];
     let endNode = locationJunction[destination];
 
-    if(startNode && endNode){
+    if (startNode && endNode) {
+        let shortestRoute = findShortestPath(startNode, endNode);
 
-       let shortestRoute = findShortestPath(startNode, endNode);
+        if (shortestRoute) {
+            drawRoute(shortestRoute);
 
-       if(shortestRoute){
+            document.getElementById("fromResult").innerHTML = start;
+            document.getElementById("toResult").innerHTML = destination;
+            document.getElementById("junctionResult").innerHTML = shortestRoute.length;
 
-       drawRoute(shortestRoute);
+            let seconds = shortestRoute.length * 15;
 
-       document.getElementById("fromResult").innerHTML = start;
-       document.getElementById("toResult").innerHTML = destination;
-       document.getElementById("junctionResult").innerHTML = shortestRoute.length;
+            if (seconds >= 60) {
+                let min = Math.ceil(seconds / 60);
+                document.getElementById("timeResult").innerHTML = min + " min";
+            } else {
+                document.getElementById("timeResult").innerHTML = seconds + " sec";
+            }
 
-       let seconds = shortestRoute.length * 15;
-
-       if(seconds >= 60){
-
-          let min = Math.ceil(seconds / 60);
-          document.getElementById("timeResult").innerHTML = min + " min";
-
-       }else{
-
-          document.getElementById("timeResult").innerHTML = seconds + " sec";
-
-       }
-
-       document.getElementById("statusResult").innerHTML =
-       `<span class="badge bg-success fs-6">Route Found</span>`;
-
-       }
-
+            document.getElementById("statusResult").innerHTML =
+                `<span class="badge-pill bg-success text-white"><i class="bi bi-check-circle-fill"></i> Route Found</span>`;
+        }
     }
 
-    if (data.building === "Main Block")
+    if (data && data.building === "Main Block")
         document.getElementById("mainBlock").classList.add("active-marker");
 
-    if (data.building === "Commerce Block")
+    if (data && data.building === "Commerce Block")
         document.getElementById("commerceBlock").classList.add("active-marker");
 
-    if (data.building === "RUSA Building")
+    if (data && data.building === "RUSA Building")
         document.getElementById("rusaBlock").classList.add("active-marker");
 
-    if (data.building === "BVoc Block")
+    if (data && data.building === "BVoc Block")
         document.getElementById("bvocBlock").classList.add("active-marker");
+}
 
+const svgBuildingMap = [
+    { filterId: "filter1_d_0_1", name: "Main Block", id: "building-main-block" },
+    { filterId: "filter2_d_0_1", name: "Commerce Department", id: "building-commerce-block" },
+    { filterId: "filter3_d_0_1", name: "RUSA Building", id: "building-rusa" },
+    { filterId: "filter4_d_0_1", name: "BVoc Block", id: "building-bvoc" },
+    { filterId: "filter5_d_0_1", name: "Sports Hostel", id: "building-sports-hostel" },
+    { filterId: "filter6_d_0_1", name: "Canteen", id: "building-canteen" },
+    { filterId: "filter7_d_0_1", name: "Library Building", id: "building-library" },
+    { filterId: "filter8_d_0_1", name: "Mahogany Park", id: "building-mahogany" },
+    { filterId: "filter9_d_0_1", name: "EMEA Training College", id: "building-emea-training" },
+    { filterId: "filter10_d_0_1", name: "Ladies Hostel", id: "building-ladies-hostel" },
+    { filterId: "filter12_d_0_1", name: "Auditorium", id: "building-auditorium" },
+    { filterId: "filter13_d_0_1", name: "Cooperative Store", id: "building-cooperative" },
+    { filterId: "filter14_d_0_1", name: "Basketball Court", id: "building-basketball" }
+];
+
+let currentSelectedSvgBuilding = null;
+
+function initializeSVGBuildings() {
+    svgBuildingMap.forEach(item => {
+        const group = document.querySelector(`g[filter*="${item.filterId}"]`);
+        if (group) {
+            group.classList.add("svg-building");
+            group.setAttribute("data-location", item.name);
+            group.setAttribute("id", item.id);
+            group.setAttribute("tabindex", "0");
+            group.setAttribute("role", "button");
+            group.setAttribute("aria-label", item.name);
+        }
+    });
+}
+
+function handleBuildingClick(locationName, buildingElement) {
+    if (currentSelectedSvgBuilding) {
+        currentSelectedSvgBuilding.classList.remove("svg-building-selected");
+    }
+
+    if (buildingElement) {
+        buildingElement.classList.add("svg-building-selected");
+        currentSelectedSvgBuilding = buildingElement;
+    }
+
+    const data = destinations[locationName] || {
+        building: locationName,
+        floor: "Ground Floor",
+        route: "Follow highlighted route"
+    };
+
+    const resultBox = document.getElementById("result");
+    if (resultBox) {
+        let floorInfoHTML = "";
+        if (locationName === "Main Block") {
+            floorInfoHTML = `
+                <div class="mb-2"><strong>Ground Floor:</strong> Economics Dept, Language Dept, West Asian Studies</div>
+                <div class="mb-2"><strong>First Floor:</strong> Principal Room, College Office, CS Dept, English Dept, Microbiology Dept</div>
+                <div><strong>Second Floor:</strong> Seminar Hall, Biochemistry Dept, Biotechnology Dept</div>
+            `;
+        } else if (locationName === "Commerce Department" || locationName === "Commerce Block") {
+            floorInfoHTML = `
+                <div><strong>Ground Floor:</strong> Commerce Department, B.Com & M.Com Classrooms</div>
+            `;
+        } else if (locationName === "RUSA Building") {
+            floorInfoHTML = `
+                <div><strong>Ground Floor:</strong> Mathematics & Physics Departments, Research Labs</div>
+            `;
+        } else if (locationName === "BVoc Block") {
+            floorInfoHTML = `
+                <div><strong>Ground Floor:</strong> Logistics, Accounting & Finance Departments</div>
+            `;
+        } else if (data.floor) {
+            floorInfoHTML = `<div><strong>Floor Info:</strong> ${data.floor}</div>`;
+        }
+
+        resultBox.innerHTML = `
+            <div class="building-info-card">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h4 class="fw-bold text-slate-900 mb-0"><i class="bi bi-building-check text-primary me-2"></i>${locationName}</h4>
+                    <span class="badge bg-primary-subtle text-primary fw-semibold">Interactive Landmark</span>
+                </div>
+                <hr class="my-2">
+                <div class="fs-7 text-slate-700 mb-3">
+                    ${floorInfoHTML}
+                </div>
+                <div class="d-flex flex-wrap gap-2 pt-2 border-top">
+                    <button class="btn btn-sm btn-outline-success rounded-pill px-3" onclick="setAsStart('${locationName}')">
+                        <i class="bi bi-geo-alt-fill me-1"></i> Set as Starting Point
+                    </button>
+                    <button class="btn btn-sm btn-primary rounded-pill px-3" onclick="setAsDestination('${locationName}')">
+                        <i class="bi bi-flag-fill me-1"></i> Set as Destination
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+}
+
+window.setAsStart = function(locationName) {
+    const startSel = document.getElementById("startSelect");
+    const destSel = document.getElementById("destSelect");
+    const currentDest = destSel ? destSel.value || "Main Block" : "Main Block";
+    if (startSel) startSel.value = locationName;
+    calculateAndDisplayRoute(locationName, currentDest);
+};
+
+window.setAsDestination = function(locationName) {
+    const startSel = document.getElementById("startSelect");
+    const destSel = document.getElementById("destSelect");
+    const currentStart = startSel ? startSel.value || "Main Gate" : "Main Gate";
+    if (destSel) destSel.value = locationName;
+    calculateAndDisplayRoute(currentStart, locationName);
+};
+
+window.onload = function () {
+    initializeSVGBuildings();
+
+    const campusMap = document.getElementById("campusMap");
+    if (campusMap) {
+        campusMap.addEventListener("click", function(event) {
+            const buildingGroup = event.target.closest(".svg-building");
+            if (!buildingGroup) return;
+            const locationName = buildingGroup.getAttribute("data-location");
+            if (locationName) {
+                handleBuildingClick(locationName, buildingGroup);
+            }
+        });
+
+        campusMap.addEventListener("keydown", function(event) {
+            if (event.key === "Enter" || event.key === " ") {
+                const buildingGroup = event.target.closest(".svg-building");
+                if (!buildingGroup) return;
+                event.preventDefault();
+                const locationName = buildingGroup.getAttribute("data-location");
+                if (locationName) {
+                    handleBuildingClick(locationName, buildingGroup);
+                }
+            }
+        });
+    }
+
+    let start = localStorage.getItem("from") || "Main Gate";
+    let destination = localStorage.getItem("to") || "Main Block";
+
+    calculateAndDisplayRoute(start, destination);
+
+    // Event Listener for "Find Best Route" Button
+    const findBtn = document.getElementById("findRouteBtn");
+    if (findBtn) {
+        findBtn.addEventListener("click", function() {
+            const startSel = document.getElementById("startSelect");
+            const destSel = document.getElementById("destSelect");
+            const s = startSel ? startSel.value : null;
+            const d = destSel ? destSel.value : null;
+            if (!s || !d) {
+                alert("Please select both a start location and a destination.");
+                return;
+            }
+            calculateAndDisplayRoute(s, d);
+        });
+    }
+
+    // Event Listener for Swap Button
+    const swapBtn = document.getElementById("swapBtn");
+    if (swapBtn) {
+        swapBtn.addEventListener("click", function() {
+            const startSel = document.getElementById("startSelect");
+            const destSel = document.getElementById("destSelect");
+            if (startSel && destSel && startSel.value && destSel.value) {
+                const temp = startSel.value;
+                startSel.value = destSel.value;
+                destSel.value = temp;
+                calculateAndDisplayRoute(startSel.value, destSel.value);
+            }
+        });
+    }
+
+    // Quick Pick Chips Listeners
+    document.querySelectorAll(".chip-item").forEach(chip => {
+        chip.addEventListener("click", function() {
+            const targetPlace = this.getAttribute("data-place");
+            const startSel = document.getElementById("startSelect");
+            const destSel = document.getElementById("destSelect");
+            if (targetPlace && destSel) {
+                destSel.value = targetPlace;
+                const currentStart = startSel ? startSel.value || "Main Gate" : "Main Gate";
+                if (startSel) startSel.value = currentStart;
+                calculateAndDisplayRoute(currentStart, targetPlace);
+            }
+        });
+    });
+
+    // Reset Route Button
+    const resetBtn = document.getElementById("resetRouteBtn");
+    if (resetBtn) {
+        resetBtn.addEventListener("click", function() {
+            clearMarkers();
+            if (currentSelectedSvgBuilding) {
+                currentSelectedSvgBuilding.classList.remove("svg-building-selected");
+                currentSelectedSvgBuilding = null;
+            }
+            document.getElementById("fromResult").innerHTML = "-";
+            document.getElementById("toResult").innerHTML = "-";
+            document.getElementById("junctionResult").innerHTML = "0";
+            document.getElementById("timeResult").innerHTML = "--";
+            document.getElementById("statusResult").innerHTML =
+                `<span class="badge-pill bg-slate-subtle text-slate-700">Select Locations</span>`;
+        });
+    }
+
+    // Reset View / Center Map Button
+    const resetViewBtn = document.getElementById("resetViewBtn");
+    const recenterBtn = document.getElementById("recenterBtn");
+    const resetPanzoom = () => {
+        if (panzoom) {
+            panzoom.reset();
+        }
+    };
+    if (resetViewBtn) resetViewBtn.addEventListener("click", resetPanzoom);
+    if (recenterBtn) recenterBtn.addEventListener("click", resetPanzoom);
+
+    // Quick GPS Modal Start Button
+    const gpsBtn = document.getElementById("quickStartMainGate");
+    if (gpsBtn) {
+        gpsBtn.addEventListener("click", function() {
+            const destSel = document.getElementById("destSelect");
+            const currentDest = destSel ? destSel.value || "Main Block" : "Main Block";
+            calculateAndDisplayRoute("Main Gate", currentDest);
+        });
+    }
 };
 
 document.getElementById("mainBlock").addEventListener("click", function(){
