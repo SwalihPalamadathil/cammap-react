@@ -123,14 +123,14 @@ function About() {
                 </div>
               </div>
 
-              <a href="map/index.html" className="map-cta-btn">
+              <a href={`${import.meta.env.BASE_URL}map/index.html`} className="map-cta-btn">
                 Open Campus Map <i className="bi bi-arrow-right"></i>
               </a>
             </div>
 
             <div className="map-preview-graphic">
               <div className="preview-image-box">
-                <img src="map/camMap ui.svg" alt="CamMap SVG Preview" className="preview-svg" />
+                <img src={`${import.meta.env.BASE_URL}map/camMap ui.svg`} alt="CamMap SVG Preview" className="preview-svg" />
                 <div className="preview-glow"></div>
               </div>
             </div>

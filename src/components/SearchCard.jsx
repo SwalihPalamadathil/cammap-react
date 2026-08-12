@@ -76,7 +76,7 @@ function SearchCard() {
     if (from && to) {
       localStorage.setItem("from", from);
       localStorage.setItem("to", to);
-      window.location.href = "map/index.html";
+      window.location.href = `${import.meta.env.BASE_URL}map/index.html`;
     }
   }
 

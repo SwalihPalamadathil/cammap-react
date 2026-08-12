@@ -26,7 +26,7 @@ function Footer() {
               <li><a href="#how-it-works">How It Works</a></li>
               <li><a href="#features">Features</a></li>
               <li><a href="#about">About System</a></li>
-              <li><a href="map/index.html">Open Map</a></li>
+              <li><a href={`${import.meta.env.BASE_URL}map/index.html`}>Open Map</a></li>
             </ul>
           </div>
 
