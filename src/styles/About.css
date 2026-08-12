@@ -1,0 +1,396 @@
+.about-wrapper {
+  width: 100%;
+}
+
+.section-container {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.section-header {
+  margin-bottom: 48px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.section-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: rgba(37, 99, 235, 0.08);
+  color: var(--color-primary);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  margin-bottom: 12px;
+}
+
+.section-header h2 {
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--color-navy-dark);
+  letter-spacing: -0.02em;
+  margin-bottom: 10px;
+}
+
+.section-header p {
+  font-size: 16px;
+  color: var(--color-text-muted);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ==========================================================================
+   1. HOW IT WORKS SECTION
+   ========================================================================== */
+.section-how {
+  padding: 90px 0;
+  background-color: #FFFFFF;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.steps-grid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.step-card {
+  flex: 1;
+  background-color: var(--color-bg-light);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 32px 24px;
+  text-align: center;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.step-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(37, 99, 235, 0.2);
+}
+
+.step-number {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  font-size: 20px;
+  font-weight: 800;
+  color: #CBD5E1;
+}
+
+.step-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background-color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 26px;
+  box-shadow: var(--shadow-sm);
+}
+
+.text-blue { color: var(--color-primary); }
+.text-gold { color: var(--color-accent-gold-dark); }
+.text-green { color: #10B981; }
+
+.step-card h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-navy-dark);
+  margin-bottom: 10px;
+}
+
+.step-card p {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.step-connector {
+  font-size: 22px;
+  color: #CBD5E1;
+  display: flex;
+  align-items: center;
+}
+
+/* ==========================================================================
+   2. FEATURES SECTION
+   ========================================================================== */
+.section-features {
+  padding: 90px 0;
+  background-color: var(--color-bg-light);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 28px;
+}
+
+.feature-card {
+  background-color: #FFFFFF;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: var(--radius-lg);
+  padding: 32px 24px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(37, 99, 235, 0.25);
+}
+
+.feature-icon-box {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover .feature-icon-box {
+  background-color: var(--color-primary);
+  color: #FFFFFF;
+  transform: scale(1.05);
+}
+
+.feature-card h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-navy-dark);
+  margin-bottom: 10px;
+}
+
+.feature-card p {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  line-height: 1.65;
+}
+
+/* ==========================================================================
+   3. MAP PREVIEW SECTION
+   ========================================================================== */
+.section-map-preview {
+  padding: 70px 0;
+  background-color: #FFFFFF;
+}
+
+.map-preview-card {
+  background: linear-gradient(135deg, #0F172A 0%, #172554 100%);
+  border-radius: 28px;
+  padding: 56px 48px;
+  color: #FFFFFF;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 40px;
+  align-items: center;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+.preview-badge {
+  display: inline-block;
+  background-color: rgba(250, 204, 21, 0.15);
+  color: var(--color-accent-gold);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  margin-bottom: 16px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.map-preview-text h2 {
+  font-size: 36px;
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+
+.map-preview-text p {
+  font-size: 16px;
+  color: #94A3B8;
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+
+.preview-features-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #E2E8F0;
+  font-weight: 500;
+}
+
+.list-item i {
+  color: var(--color-accent-gold);
+  font-size: 16px;
+}
+
+.map-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background-color: var(--color-accent-gold);
+  color: #0F172A !important;
+  font-size: 16px;
+  font-weight: 800;
+  padding: 14px 28px;
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 20px rgba(250, 204, 21, 0.3);
+  transition: all 0.25s ease;
+  text-decoration: none;
+}
+
+.map-cta-btn:hover {
+  background-color: #FDE047;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(250, 204, 21, 0.45);
+}
+
+.map-cta-btn i {
+  font-size: 18px;
+  transition: transform 0.2s ease;
+}
+
+.map-cta-btn:hover i {
+  transform: translateX(4px);
+}
+
+.map-preview-graphic {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.preview-image-box {
+  position: relative;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  padding: 16px;
+  backdrop-filter: blur(10px);
+}
+
+.preview-svg {
+  width: 100%;
+  max-height: 240px;
+  object-fit: contain;
+}
+
+/* ==========================================================================
+   4. TRUST / PURPOSE SECTION
+   ========================================================================== */
+.section-purpose {
+  padding: 90px 0;
+  background-color: var(--color-bg-light);
+}
+
+.purpose-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 28px;
+}
+
+.purpose-card {
+  background-color: #FFFFFF;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 36px 28px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+}
+
+.purpose-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-md);
+}
+
+.purpose-badge-icon {
+  font-size: 40px;
+  margin-bottom: 16px;
+}
+
+.purpose-card h4 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-navy-dark);
+  margin-bottom: 10px;
+}
+
+.purpose-card p {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  line-height: 1.65;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN (MOBILE & TABLET)
+   ========================================================================== */
+@media (max-width: 992px) {
+  .map-preview-card {
+    grid-template-columns: 1fr;
+    padding: 40px 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .section-how, .section-features, .section-map-preview, .section-purpose {
+    padding: 60px 0;
+  }
+
+  .steps-grid {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .step-connector {
+    transform: rotate(90deg);
+    margin: -4px 0;
+  }
+
+  .section-header h2 {
+    font-size: 28px;
+  }
+
+  .map-preview-card {
+    padding: 32px 20px;
+    border-radius: 20px;
+  }
+
+  .map-preview-text h2 {
+    font-size: 26px;
+  }
+}
