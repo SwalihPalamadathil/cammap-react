@@ -1,0 +1,609 @@
+body{
+    font-family: Arial, sans-serif;
+    margin:0;
+    background:#f4f6f9;
+}
+
+
+.result-box{
+    width:80%;
+    margin:20px auto;
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.1);
+}
+
+#campusMap{
+    width:100%;
+    height:100%;
+    pointer-events: none;
+}
+
+.map-area{
+    position: relative;
+
+    width: 80%;
+    height: 600px;
+
+    margin: 20px auto;
+
+    background: white;
+    border-radius: 10px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+
+    overflow: hidden;
+}
+
+#routeLayer {
+    pointer-events: none;
+}
+
+#mapWrapper{
+
+    width:100%;
+    height:100%;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    cursor:grab;
+    position: relative;
+
+}
+
+#mapWrapper:active{
+
+    cursor:grabbing;
+
+}
+
+
+.active-marker{
+    background: limegreen !important;
+    transform: scale(1.5);
+}
+
+.junction{
+    position:absolute;
+    width:24px;
+    height:24px;
+    background:blue;
+    color:white;
+    font-size:10px;
+    text-align:center;
+    line-height:24px;
+    border-radius:50%;
+    z-index:200;
+    
+    
+    
+}
+
+.route{
+    stroke: yellow;
+    stroke-width: 7;
+    fill: none;
+    stroke-dasharray: 12 8;
+    animation: moveRoute 1s linear infinite;
+}
+
+.route{
+    animation: flowRoute 0.8s linear infinite;
+}
+
+.route-card{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+.route-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px 18px;
+    border-radius:8px;
+    background:#f7f9fc;
+    border-left:5px solid #0d47a1;
+}
+
+.route-item span{
+    font-weight:bold;
+    color:#0d47a1;
+}
+
+.route-item p{
+    margin:0;
+    font-weight:600;
+    color:#333;
+}
+
+.status{
+    border-left:5px solid #28a745;
+}
+
+.result-box .card{
+    transition:0.3s;
+}
+
+.result-box .card:hover{
+    transform:translateY(-3px);
+    box-shadow:0 8px 20px rgba(0,0,0,.15);
+}
+
+.info-box{
+    border:none;
+    border-radius:15px;
+    padding:20px;
+    transition:0.3s;
+    box-shadow:0 3px 10px rgba(0,0,0,.08);
+}
+
+.info-box:hover{
+    transform:translateY(-4px);
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+}
+
+.from-box{
+    background:#e8f5e9;
+}
+
+.to-box{
+    background:#ffebee;
+}
+
+.waypoint-box{
+    background:#fff8e1;
+}
+
+.time-box{
+    background:#e3f2fd;
+}
+
+.status-box{
+    background:#e8f5e9;
+}
+
+.info-box h5{
+    margin-top:8px;
+    font-weight:700;
+}
+
+.info-box small{
+    font-size:13px;
+}
+
+.result-box .card{
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 10px 30px rgba(0,0,0,.12);
+    border:none;
+}
+
+.card-header{
+    background:linear-gradient(135deg,#0d47a1,#1976d2) !important;
+    padding:18px 25px;
+}
+
+.card-header h4{
+    font-weight:700;
+    letter-spacing:.5px;
+}
+
+.info-box i{
+    font-size:30px;
+}
+
+.info-box h5{
+    font-size:24px;
+    font-weight:700;
+    margin-top:12px;
+}
+
+.info-box small{
+    text-transform:uppercase;
+    letter-spacing:1px;
+    font-weight:600;
+    font-size:12px;
+}
+
+.info-box{
+    cursor:default;
+}
+
+.info-box:hover{
+
+    transform:translateY(-6px);
+
+    transition:.3s;
+
+}
+
+.logo-title{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:15px;
+
+}
+
+.logo-title span{
+
+    font-size:48px;
+
+    font-weight:700;
+
+    letter-spacing:1px;
+
+    color:white;
+
+}
+
+.logo{
+
+    width:58px;
+
+    height:58px;
+
+    object-fit:contain;
+
+}
+
+
+
+@keyframes flowRoute {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: -20; }
+}
+
+.route {
+  stroke: #FFD700;
+  stroke-width: 18;
+  fill: none;
+  stroke-dasharray: 24 16;
+  animation: flowRoute 0.8s linear infinite;
+}
+
+.footer{
+
+    margin-top:60px;
+
+    background:linear-gradient(135deg,#0F172A,#1E3A8A);
+
+    color:white;
+
+    padding:45px 20px 25px;
+
+}
+
+.footer-content{
+
+    max-width:1000px;
+
+    margin:auto;
+
+    text-align:center;
+
+}
+
+.footer h3{
+
+    font-size:30px;
+
+    font-weight:700;
+
+    margin-bottom:10px;
+
+}
+
+.footer h3 span{
+
+    color:#FFD54F;
+
+    font-size:18px;
+
+}
+
+.footer p{
+
+    color:rgba(255,255,255,.8);
+
+    margin:10px 0;
+
+}
+
+.footer-links{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:30px;
+
+    flex-wrap:wrap;
+
+    margin:25px 0;
+
+}
+
+.footer-links a{
+
+    color:white;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.footer-links a i{
+
+    margin-right:6px;
+
+    color:#FFD54F;
+
+}
+
+.footer-links a:hover{
+
+    color:#FFD54F;
+
+}
+
+.footer-coming{
+
+    display:inline-block;
+
+    padding:10px 18px;
+
+    background:rgba(255,213,79,.15);
+
+    color:#FFD54F;
+
+    border-radius:30px;
+
+    font-weight:600;
+
+    margin-bottom:25px;
+
+}
+
+.footer hr{
+
+    border:none;
+
+    height:1px;
+
+    background:rgba(255,255,255,.15);
+
+    margin:25px 0;
+
+}
+
+.copyright{
+
+    font-size:14px;
+
+    color:#94A3B8;
+
+}
+
+.zoom-controls{
+    position:absolute;
+    top:20px;
+    right:20px;
+
+    display:flex;
+    flex-direction:column;
+
+    border-radius:12px;
+    overflow:hidden;
+
+    background:white;
+
+    box-shadow:0 6px 18px rgba(0,0,0,.18);
+
+    z-index:999;
+}
+
+.zoom-controls button{
+
+    width:48px;
+    height:48px;
+
+    border:none;
+
+    background:white;
+
+    cursor:pointer;
+
+    font-size:20px;
+
+    transition:.25s;
+}
+
+.zoom-controls button:first-child{
+    border-bottom:1px solid #E5E7EB;
+}
+
+.zoom-controls button:hover{
+    background:#FFD54F;
+}
+
+/* ==========================
+   Responsive (Mobile)
+========================== */
+
+@media (max-width:768px){
+
+body{
+    overflow-x:hidden;
+}
+
+/* ---------- MAP ---------- */
+
+.map-area{
+
+    width:95%;
+    height:380px;
+
+    margin:15px auto;
+
+}
+
+.result-box{
+
+    width:95%;
+
+    margin:15px auto;
+
+}
+
+/* ---------- ROUTE DETAILS ---------- */
+
+.card-header{
+
+    padding:15px 18px;
+
+}
+
+.card-header h4{
+
+    font-size:20px;
+
+}
+
+.info-box{
+
+    padding:15px;
+
+}
+
+.info-box h5{
+
+    font-size:18px;
+
+}
+
+.info-box i{
+
+    font-size:24px;
+
+}
+
+/* ---------- ZOOM BUTTON ---------- */
+
+.zoom-controls{
+
+    top:12px;
+    right:12px;
+
+}
+
+.zoom-controls button{
+
+    width:40px;
+    height:40px;
+
+    font-size:18px;
+
+}
+
+/* ---------- JUNCTION ---------- */
+
+.junction{
+
+    width:18px;
+    height:18px;
+
+    line-height:18px;
+
+    font-size:8px;
+
+}
+
+/* ---------- FOOTER ---------- */
+
+.footer{
+
+    margin-top:40px;
+
+    padding:30px 15px 18px;
+
+}
+
+.footer h3{
+
+    font-size:24px;
+
+}
+
+.footer h3 span{
+
+    font-size:15px;
+
+}
+
+.footer-links{
+
+    flex-direction:column;
+
+    gap:15px;
+
+}
+
+.footer-links a{
+
+    font-size:15px;
+
+}
+
+.footer-coming{
+
+    font-size:13px;
+
+    padding:8px 14px;
+
+}
+
+.copyright{
+
+    font-size:12px;
+
+}
+
+/* ---------- LOGO ---------- */
+
+.logo{
+
+    width:46px;
+    height:46px;
+
+}
+
+.logo-title{
+
+    gap:10px;
+
+}
+
+.logo-title span{
+
+    font-size:32px;
+
+}
+
+}
