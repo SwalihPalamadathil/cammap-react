@@ -22,35 +22,35 @@
     <!-- TOP GLASS NAVIGATION BAR -->
     <header class="app-header">
         <div class="header-container">
-            <a href="../" class="brand-group">
+            <a href="../" class="brand-group" aria-label="CamMap Home">
                 <img src="logo1.png" alt="CamMap Logo" class="brand-logo">
                 <div class="brand-text">
                     <span class="brand-name">CamMap <span class="badge-tag">PRO</span></span>
-                    <span class="brand-sub">EMEA College Navigation System</span>
+                    <span class="brand-sub">Smart Campus Navigation</span>
                 </div>
             </a>
 
-            <div class="breadcrumb-nav d-none d-md-flex">
-                <a href="../" class="crumb-link"><i class="bi bi-house-door-fill"></i> Home</a>
-                <i class="bi bi-chevron-right crumb-sep"></i>
+            <div class="breadcrumb-nav d-none d-md-flex" aria-label="Breadcrumb navigation">
+                <a href="../" class="crumb-link"><i class="bi bi-house-door-fill" aria-hidden="true"></i> Home</a>
+                <i class="bi bi-chevron-right crumb-sep" aria-hidden="true"></i>
                 <span class="crumb-active">Interactive Campus Map</span>
             </div>
 
-            <div class="header-actions">
-                <button id="resetRouteBtn" class="btn-glass" title="Reset Current Route">
-                    <i class="bi bi-arrow-counterclockwise"></i>
+            <div class="header-actions" role="toolbar" aria-label="Map actions toolbar">
+                <button id="resetRouteBtn" class="btn-glass" title="Reset Current Route" aria-label="Reset Route">
+                    <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i>
                     <span class="d-none d-lg-inline">Reset Route</span>
                 </button>
-                <button id="locateMeBtn" class="btn-glass" title="Locate My Position" data-bs-toggle="modal" data-bs-target="#gpsModal">
-                    <i class="bi bi-crosshair"></i>
+                <button id="locateMeBtn" class="btn-glass" title="Locate My Position" data-bs-toggle="modal" data-bs-target="#gpsModal" aria-label="Locate My Position">
+                    <i class="bi bi-crosshair" aria-hidden="true"></i>
                     <span class="d-none d-lg-inline">Locate Me</span>
                 </button>
-                <button id="resetViewBtn" class="btn-glass" title="Reset Zoom & Pan">
-                    <i class="bi bi-aspect-ratio"></i>
+                <button id="resetViewBtn" class="btn-glass" title="Reset Zoom & Pan" aria-label="Center Map">
+                    <i class="bi bi-aspect-ratio" aria-hidden="true"></i>
                     <span class="d-none d-lg-inline">Center Map</span>
                 </button>
-                <button class="btn-glass btn-icon-only" data-bs-toggle="modal" data-bs-target="#infoModal" title="Campus Info">
-                    <i class="bi bi-info-circle"></i>
+                <button class="btn-glass btn-icon-only" data-bs-toggle="modal" data-bs-target="#infoModal" title="Campus Info" aria-label="About Campus Information">
+                    <i class="bi bi-info-circle" aria-hidden="true"></i>
                 </button>
             </div>
         </div>

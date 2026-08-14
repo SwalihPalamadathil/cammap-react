@@ -4,7 +4,14 @@
    ========================================================================== */
 
 :root {
-  /* Color Palette */
+  /* CamMap Core Palette (Matched from Page 1) */
+  --color-navy-dark: #0F172A;
+  --color-navy-deep: #172554;
+  --color-navy-mid: #1E293B;
+  --color-accent-gold: #FACC15;
+  --color-accent-gold-dark: #EAB308;
+
+  /* Slate Scale */
   --color-slate-900: #0F172A;
   --color-slate-800: #1E293B;
   --color-slate-700: #334155;
@@ -36,7 +43,7 @@
   --glass-shadow-hover: 0 16px 40px rgba(15, 23, 42, 0.14);
 
   /* Typography */
-  --font-sans: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
   /* Layout */
   --max-width: 1400px;
@@ -44,6 +51,7 @@
   --radius-md: 12px;
   --radius-lg: 18px;
   --radius-xl: 24px;
+  --radius-full: 9999px;
 }
 
 /* ==========================================================================
@@ -69,25 +77,27 @@ body {
   max-width: var(--max-width);
 }
 
-/* Focus Ring Accessibility */
+/* Focus Ring Accessibility (Matched to Page 1 Gold Accent) */
 *:focus-visible {
-  outline: 2px solid var(--color-primary);
+  outline: 2px solid var(--color-accent-gold);
   outline-offset: 2px;
 }
 
 /* ==========================================================================
-   Top Glass Navigation Bar
+   Top Glass Navigation Bar (Matches Page 1 CamMap Visual Identity)
    ========================================================================== */
 .app-header {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border-bottom: 1px solid var(--glass-border-subtle);
-  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
+  width: 100%;
+  background-color: rgba(15, 23, 42, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.2);
   padding: 12px 24px;
+  transition: background-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .header-container {
@@ -96,25 +106,34 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 16px;
 }
 
+/* Brand Section */
 .brand-group {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   text-decoration: none;
+  border-radius: var(--radius-sm);
+  transition: opacity 0.2s ease;
+}
+
+.brand-group:focus-visible {
+  outline: 2px solid var(--color-accent-gold);
+  outline-offset: 4px;
 }
 
 .brand-logo {
   width: 42px;
   height: 42px;
   object-fit: contain;
-  filter: drop-shadow(0 4px 8px rgba(37, 99, 235, 0.2));
-  transition: transform 0.3s ease;
+  filter: drop-shadow(0 2px 8px rgba(37, 99, 235, 0.35));
+  transition: transform 0.25s ease;
 }
 
 .brand-group:hover .brand-logo {
-  transform: scale(1.06) rotate(-4deg);
+  transform: scale(1.06);
 }
 
 .brand-text {
@@ -123,61 +142,99 @@ body {
 }
 
 .brand-name {
-  font-size: 1.25rem;
+  font-size: 22px;
   font-weight: 800;
-  color: var(--color-slate-900);
+  color: #FFFFFF;
   letter-spacing: -0.02em;
+  line-height: 1.1;
   display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.badge-tag {
+  font-size: 10px;
+  font-weight: 800;
+  background: rgba(37, 99, 235, 0.25);
+  color: #93C5FD;
+  border: 1px solid rgba(147, 197, 253, 0.35);
+  padding: 2px 8px;
+  border-radius: 9999px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  display: inline-block;
+  line-height: 1.2;
+}
+
+.brand-sub {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-accent-gold);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* Center Breadcrumb Navigation */
+.breadcrumb-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  font-weight: 600;
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 7px 18px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.crumb-link {
+  color: #94A3B8;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.2s ease;
+  border-radius: 4px;
+}
+
+.crumb-link:hover {
+  color: #FFFFFF;
+}
+
+.crumb-link:focus-visible {
+  outline: 2px solid var(--color-accent-gold);
+  outline-offset: 2px;
+  color: #FFFFFF;
+}
+
+.crumb-sep {
+  font-size: 11px;
+  color: #64748B;
+}
+
+.crumb-active {
+  color: #F8FAFC;
+  font-weight: 700;
+  display: inline-flex;
   align-items: center;
   gap: 6px;
 }
 
-.badge-tag {
-  font-size: 0.65rem;
-  font-weight: 700;
-  background: linear-gradient(135deg, var(--color-primary), #3B82F6);
-  color: white;
-  padding: 2px 6px;
-  border-radius: 6px;
-  letter-spacing: 0.05em;
+.crumb-active::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--color-accent-gold);
+  box-shadow: 0 0 8px rgba(250, 204, 21, 0.6);
 }
 
-.brand-sub {
-  font-size: 0.725rem;
-  font-weight: 500;
-  color: var(--color-slate-500);
-}
-
-.breadcrumb-nav {
-  align-items: center;
-  gap: 8px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  background: rgba(241, 245, 249, 0.8);
-  padding: 6px 14px;
-  border-radius: 30px;
-  border: 1px solid var(--color-slate-200);
-}
-
-.crumb-link {
-  color: var(--color-slate-600);
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-.crumb-link:hover {
-  color: var(--color-primary);
-}
-
-.crumb-sep {
-  font-size: 0.7rem;
-  color: var(--color-slate-400);
-}
-
-.crumb-active {
-  color: var(--color-primary);
-}
-
+/* Right Header Actions */
 .header-actions {
   display: flex;
   align-items: center;
@@ -187,29 +244,86 @@ body {
 .btn-glass {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   padding: 8px 16px;
-  font-size: 0.85rem;
+  min-height: 40px;
+  font-size: 13.5px;
   font-weight: 600;
-  color: var(--color-slate-700);
-  background: white;
-  border: 1px solid var(--color-slate-200);
+  color: #F1F5F9;
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: var(--radius-md);
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-  transition: all 0.25s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease;
 }
 
 .btn-glass:hover {
-  background: var(--color-primary-light);
-  color: var(--color-primary);
-  border-color: var(--color-primary-border);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.12);
+  background: rgba(255, 255, 255, 0.14);
+  color: #FFFFFF;
+  border-color: rgba(96, 165, 250, 0.45);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
 }
 
+.btn-glass:focus-visible {
+  outline: 2px solid var(--color-accent-gold);
+  outline-offset: 2px;
+}
+
+.btn-glass:active {
+  transform: translateY(0);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.btn-glass i {
+  font-size: 15px;
+  color: #93C5FD;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.btn-glass:hover i {
+  color: #FFFFFF;
+  transform: scale(1.1);
+}
+
+/* Primary/Accent glass styling for Locate Me */
+#locateMeBtn {
+  background: rgba(37, 99, 235, 0.22);
+  border-color: rgba(96, 165, 250, 0.35);
+  color: #FFFFFF;
+}
+
+#locateMeBtn:hover {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4);
+}
+
+#locateMeBtn i {
+  color: #60A5FA;
+}
+
+#locateMeBtn:hover i {
+  color: #FFFFFF;
+}
+
+/* Icon-only button */
 .btn-icon-only {
-  padding: 8px 10px;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+}
+
+.btn-icon-only i {
+  font-size: 17px;
 }
 
 /* ==========================================================================
@@ -860,6 +974,17 @@ body {
    Responsive Breakpoints (Mobile First to Desktop)
    ========================================================================== */
 @media (max-width: 991px) {
+  .app-header {
+    padding: 10px 20px;
+  }
+  .header-container {
+    gap: 12px;
+  }
+  .breadcrumb-nav {
+    font-size: 12.5px;
+    padding: 6px 14px;
+    gap: 8px;
+  }
   .search-card { padding: 18px; }
   .map-area { height: 480px; }
   .floating-controls-stack { bottom: 16px; right: 16px; }
@@ -867,9 +992,38 @@ body {
 }
 
 @media (max-width: 768px) {
-  .app-header { padding: 10px 16px; }
-  .brand-name { font-size: 1.1rem; }
-  .brand-logo { width: 34px; height: 34px; }
+  .app-header {
+    padding: 10px 16px;
+  }
+  .header-container {
+    gap: 8px;
+  }
+  .brand-group {
+    gap: 10px;
+  }
+  .brand-logo {
+    width: 36px;
+    height: 36px;
+  }
+  .brand-name {
+    font-size: 18px;
+  }
+  .brand-sub {
+    font-size: 9.5px;
+  }
+  .badge-tag {
+    font-size: 9px;
+    padding: 1px 6px;
+  }
+  .header-actions {
+    gap: 6px;
+  }
+  .btn-glass {
+    min-width: 40px;
+    min-height: 40px;
+    padding: 8px 10px;
+    font-size: 13px;
+  }
   .map-area { height: 390px; }
   .result-card, .detail-card { padding: 18px; }
   .stat-value { font-size: 1.05rem; }
@@ -877,12 +1031,63 @@ body {
 }
 
 @media (max-width: 480px) {
+  .app-header {
+    padding: 8px 12px;
+  }
+  .brand-group {
+    gap: 8px;
+  }
+  .brand-logo {
+    width: 32px;
+    height: 32px;
+  }
+  .brand-name {
+    font-size: 16px;
+  }
+  .brand-sub {
+    font-size: 8.5px;
+    letter-spacing: 0.03em;
+  }
+  .badge-tag {
+    font-size: 8px;
+    padding: 1px 5px;
+  }
+  .header-actions {
+    gap: 4px;
+  }
+  .btn-glass {
+    min-width: 38px;
+    min-height: 38px;
+    padding: 6px 8px;
+    font-size: 12px;
+  }
   .search-card { padding: 14px; }
   .map-area { height: 340px; }
   .btn-swap-circular { width: 42px; height: 42px; }
   .stat-box { padding: 12px 6px; }
   .stat-label { font-size: 0.65rem; }
   .pill-value { font-size: 0.9rem; }
+}
+
+@media (max-width: 360px) {
+  .app-header {
+    padding: 6px 8px;
+  }
+  .brand-logo {
+    width: 28px;
+    height: 28px;
+  }
+  .brand-name {
+    font-size: 15px;
+  }
+  .brand-sub {
+    display: none;
+  }
+  .btn-glass {
+    min-width: 34px;
+    min-height: 34px;
+    padding: 4px 6px;
+  }
 }
 
 /* ==========================================================================
