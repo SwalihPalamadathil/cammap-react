@@ -122,15 +122,19 @@ function About() {
                   <i className="bi bi-check-circle-fill"></i> Direct turn estimation & junction breakdown
                 </div>
               </div>
-
-              <a href={`${import.meta.env.BASE_URL}map/index.html`} className="map-cta-btn">
-                Open Campus Map <i className="bi bi-arrow-right"></i>
-              </a>
             </div>
 
             <div className="map-preview-graphic">
               <div className="preview-image-box">
-                <img src={`${import.meta.env.BASE_URL}map/camMap ui.svg`} alt="CamMap SVG Preview" className="preview-svg" />
+                <img 
+                  src={`${import.meta.env.BASE_URL}map/camMap ui.svg`} 
+                  alt="CamMap SVG Preview" 
+                  className="preview-svg" 
+                  width="500" 
+                  height="350" 
+                  loading="lazy" 
+                  decoding="async" 
+                />
                 <div className="preview-glow"></div>
               </div>
             </div>

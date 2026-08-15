@@ -48,7 +48,15 @@ function Header() {
       <div className="header-container">
         {/* LEFT: BRAND */}
         <a href="#" className="logoBox" onClick={closeMobileMenu} aria-label="CamMap Home">
-          <img src={logo} alt="CamMap Logo" className="logo" />
+          <img 
+            src={logo} 
+            alt="CamMap Logo" 
+            className="logo" 
+            width="42" 
+            height="42" 
+            fetchPriority="high" 
+            decoding="async" 
+          />
           <div className="logoText">
             <span className="brandName">CamMap</span>
             <span className="brandSub">Smart Campus Navigation</span>
@@ -66,21 +74,10 @@ function Header() {
           <a href="#how-it-works" onClick={closeMobileMenu}>How It Works</a>
           <a href="#features" onClick={closeMobileMenu}>Features</a>
           <a href="#about" onClick={closeMobileMenu}>About</a>
-          <a 
-            href={`${import.meta.env.BASE_URL}map/index.html`} 
-            className="nav-cta-btn mobile-cta"
-            onClick={closeMobileMenu}
-          >
-            Open Map <i className="bi bi-arrow-right-short" aria-hidden="true"></i>
-          </a>
         </nav>
 
-        {/* RIGHT: DESKTOP CTA & HAMBURGER */}
+        {/* RIGHT: HAMBURGER TOGGLE */}
         <div className="header-actions">
-          <a href={`${import.meta.env.BASE_URL}map/index.html`} className="nav-cta-btn desktop-cta">
-            Open Map <i className="bi bi-arrow-right-short" aria-hidden="true"></i>
-          </a>
-
           <button 
             className={`hamburger-btn ${mobileMenuOpen ? "open" : ""}`}
             onClick={toggleMobileMenu}

@@ -4,10 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CamMap — EMEA College Interactive Campus Map</title>
-    <!-- Google Fonts -->
+    
+    <!-- Preconnect & Preload Critical Assets -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preload" as="image" href="logo1.png" type="image/png" fetchpriority="high">
+    
+    <!-- Google Fonts with display=swap -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
     
     <!-- Framework & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -23,9 +28,17 @@
     <header class="app-header">
         <div class="header-container">
             <a href="../" class="brand-group" aria-label="CamMap Home">
-                <img src="logo1.png" alt="CamMap Logo" class="brand-logo">
+                <img 
+                    src="logo1.png" 
+                    alt="CamMap Logo" 
+                    class="brand-logo" 
+                    width="38" 
+                    height="38" 
+                    fetchpriority="high" 
+                    decoding="async"
+                >
                 <div class="brand-text">
-                    <span class="brand-name">CamMap <span class="badge-tag">PRO</span></span>
+                    <span class="brand-name">CamMap</span>
                     <span class="brand-sub">Smart Campus Navigation</span>
                 </div>
             </a>
@@ -45,10 +58,6 @@
                     <i class="bi bi-crosshair" aria-hidden="true"></i>
                     <span class="d-none d-lg-inline">Locate Me</span>
                 </button>
-                <button id="resetViewBtn" class="btn-glass" title="Reset Zoom & Pan" aria-label="Center Map">
-                    <i class="bi bi-aspect-ratio" aria-hidden="true"></i>
-                    <span class="d-none d-lg-inline">Center Map</span>
-                </button>
                 <button class="btn-glass btn-icon-only" data-bs-toggle="modal" data-bs-target="#infoModal" title="Campus Info" aria-label="About Campus Information">
                     <i class="bi bi-info-circle" aria-hidden="true"></i>
                 </button>
@@ -59,149 +68,87 @@
     <main class="main-content">
         <div class="container-fluid px-3 px-md-4 max-w-1400">
             
-            <!-- SEARCH & ROUTE CONTROLLER PANEL -->
-            <section class="search-section my-4">
-                <div class="glass-panel search-card">
-                    <div class="search-card-header">
+            <!-- READ-ONLY SELECTED ROUTE DISPLAY SECTION -->
+            <section class="selected-route-section my-4" id="selectedRouteSection">
+                <div class="glass-panel selected-route-card" id="selectedRouteCard">
+                    
+                    <div class="selected-route-header">
                         <div class="d-flex align-items-center gap-2">
                             <span class="pulse-dot"></span>
-                            <h2 class="section-title mb-0">Campus Route Planner</h2>
+                            <span class="route-header-badge">SELECTED ROUTE</span>
+                            <span class="d-none d-sm-inline text-slate-500 fs-7">• EMEA Campus Navigator</span>
                         </div>
-                        <span class="badge-pill bg-blue-subtle text-primary">
-                            <i class="bi bi-lightning-charge-fill"></i> BFS Engine Active
-                        </span>
+                        <div class="d-flex align-items-center gap-2">
+                            <div id="routeStatusBadge">
+                                <span class="badge-pill bg-success text-white">
+                                    <i class="bi bi-check-circle-fill"></i> Route Active
+                                </span>
+                            </div>
+                            <a href="../" class="btn-change-route" title="Choose a different route on Home">
+                                <i class="bi bi-arrow-left"></i>
+                                <span>Change Route</span>
+                            </a>
+                        </div>
                     </div>
 
-                    <div class="search-card-body">
-                        <div class="row g-3 align-items-center">
-                            <!-- START LOCATION -->
-                            <div class="col-lg-5 col-md-5">
-                                <div class="input-group-custom">
-                                    <label for="startSelect" class="form-label-custom text-success">
-                                        <i class="bi bi-geo-alt-fill"></i> Starting Location
-                                    </label>
-                                    <div class="select-wrapper">
-                                        <select id="startSelect" class="form-select-custom">
-                                            <option value="" disabled selected>Select start location...</option>
-                                            <option value="Main Gate">Main Gate</option>
-                                            <option value="Main Block">Main Block</option>
-                                            <option value="Commerce Department">Commerce Department</option>
-                                            <option value="Business Administration Department">Business Administration Department</option>
-                                            <option value="Economics Department">Economics Department</option>
-                                            <option value="Language Department">Language Department</option>
-                                            <option value="West Asian Studies Department">West Asian Studies Department</option>
-                                            <option value="Computer Science Department">Computer Science Department</option>
-                                            <option value="English Department">English Department</option>
-                                            <option value="Microbiology Department">Microbiology Department</option>
-                                            <option value="Biochemistry Department">Biochemistry Department</option>
-                                            <option value="Biotechnology Department">Biotechnology Department</option>
-                                            <option value="Mathematics & Physics Department">Mathematics & Physics Department</option>
-                                            <option value="RUSA Building">RUSA Building</option>
-                                            <option value="BVoc Block">BVoc Block</option>
-                                            <option value="Library Building">Library Building</option>
-                                            <option value="Canteen">Canteen</option>
-                                            <option value="Auditorium">Auditorium</option>
-                                            <option value="Sports Hostel">Sports Hostel</option>
-                                            <option value="Ladies Hostel">Ladies Hostel</option>
-                                            <option value="Prayer Hall">Prayer Hall</option>
-                                            <option value="Cooperative Store">Cooperative Store</option>
-                                            <option value="Bamboo Lake">Bamboo Lake</option>
-                                            <option value="Basketball Court">Basketball Court</option>
-                                            <option value="Boys Washroom">Boys Washroom</option>
-                                            <option value="NSS/NCC Office">NSS/NCC Office</option>
-                                            <option value="Audio Visual Theater">Audio Visual Theater</option>
-                                            <option value="EMEA Training College">EMEA Training College</option>
-                                            <option value="Mahogany Park">Mahogany Park</option>
-                                            <option value="NCC Ground">NCC Ground</option>
-                                            <option value="Administrative Office">Administrative Office</option>
-                                            <option value="Principal Room">Principal Room</option>
-                                            <option value="College Office">College Office</option>
-                                            <option value="Seminar Hall">Seminar Hall</option>
-                                        </select>
-                                        <i class="bi bi-chevron-down select-icon"></i>
-                                    </div>
+                    <div class="selected-route-body" id="selectedRouteBody">
+                        <div class="route-flow-grid">
+                            <!-- STARTING POINT (FROM) -->
+                            <div class="route-node-card from-node">
+                                <div class="node-icon-wrapper from-icon">
+                                    <i class="bi bi-geo-alt-fill"></i>
+                                </div>
+                                <div class="node-details">
+                                    <span class="node-label">STARTING POINT</span>
+                                    <h3 class="node-value" id="displayFrom">-</h3>
                                 </div>
                             </div>
 
-                            <!-- SWAP BUTTON -->
-                            <div class="col-lg-2 col-md-2 text-center py-1">
-                                <button id="swapBtn" class="btn-swap-circular" title="Swap From and To Locations">
-                                    <i class="bi bi-arrow-down-up fs-5 d-md-none"></i>
-                                    <i class="bi bi-arrow-left-right fs-5 d-none d-md-inline"></i>
-                                </button>
+                            <!-- ROUTE CONNECTOR -->
+                            <div class="route-connector-box">
+                                <div class="connector-line"></div>
+                                <div class="connector-badge">
+                                    <i class="bi bi-person-walking text-primary"></i>
+                                    <span id="displayTimeBadge">Calculating...</span>
+                                </div>
+                                <div class="connector-arrow">
+                                    <i class="bi bi-arrow-right d-none d-md-inline"></i>
+                                    <i class="bi bi-arrow-down d-md-none"></i>
+                                </div>
                             </div>
 
-                            <!-- DESTINATION LOCATION -->
-                            <div class="col-lg-5 col-md-5">
-                                <div class="input-group-custom">
-                                    <label for="destSelect" class="form-label-custom text-danger">
-                                        <i class="bi bi-flag-fill"></i> Destination
-                                    </label>
-                                    <div class="select-wrapper">
-                                        <select id="destSelect" class="form-select-custom">
-                                            <option value="" disabled selected>Select destination...</option>
-                                            <option value="Main Block">Main Block</option>
-                                            <option value="Main Gate">Main Gate</option>
-                                            <option value="Commerce Department">Commerce Department</option>
-                                            <option value="Business Administration Department">Business Administration Department</option>
-                                            <option value="Economics Department">Economics Department</option>
-                                            <option value="Language Department">Language Department</option>
-                                            <option value="West Asian Studies Department">West Asian Studies Department</option>
-                                            <option value="Computer Science Department">Computer Science Department</option>
-                                            <option value="English Department">English Department</option>
-                                            <option value="Microbiology Department">Microbiology Department</option>
-                                            <option value="Biochemistry Department">Biochemistry Department</option>
-                                            <option value="Biotechnology Department">Biotechnology Department</option>
-                                            <option value="Mathematics & Physics Department">Mathematics & Physics Department</option>
-                                            <option value="RUSA Building">RUSA Building</option>
-                                            <option value="BVoc Block">BVoc Block</option>
-                                            <option value="Library Building">Library Building</option>
-                                            <option value="Canteen">Canteen</option>
-                                            <option value="Auditorium">Auditorium</option>
-                                            <option value="Sports Hostel">Sports Hostel</option>
-                                            <option value="Ladies Hostel">Ladies Hostel</option>
-                                            <option value="Prayer Hall">Prayer Hall</option>
-                                            <option value="Cooperative Store">Cooperative Store</option>
-                                            <option value="Bamboo Lake">Bamboo Lake</option>
-                                            <option value="Basketball Court">Basketball Court</option>
-                                            <option value="Boys Washroom">Boys Washroom</option>
-                                            <option value="NSS/NCC Office">NSS/NCC Office</option>
-                                            <option value="Audio Visual Theater">Audio Visual Theater</option>
-                                            <option value="EMEA Training College">EMEA Training College</option>
-                                            <option value="Mahogany Park">Mahogany Park</option>
-                                            <option value="NCC Ground">NCC Ground</option>
-                                            <option value="Administrative Office">Administrative Office</option>
-                                            <option value="Principal Room">Principal Room</option>
-                                            <option value="College Office">College Office</option>
-                                            <option value="Seminar Hall">Seminar Hall</option>
-                                        </select>
-                                        <i class="bi bi-chevron-down select-icon"></i>
-                                    </div>
+                            <!-- DESTINATION (TO) -->
+                            <div class="route-node-card to-node">
+                                <div class="node-icon-wrapper to-icon">
+                                    <i class="bi bi-flag-fill"></i>
+                                </div>
+                                <div class="node-details">
+                                    <span class="node-label">DESTINATION</span>
+                                    <h3 class="node-value" id="displayTo">-</h3>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- QUICK PICK CHIPS -->
-                        <div class="chips-container mt-3">
-                            <span class="chips-label"><i class="bi bi-stars"></i> Popular Destinations:</span>
-                            <div class="chips-scroll">
-                                <button class="chip-item" data-place="Library Building"><i class="bi bi-journal-bookmark-fill"></i> Library</button>
-                                <button class="chip-item" data-place="Main Block"><i class="bi bi-building-fill"></i> Main Block</button>
-                                <button class="chip-item" data-place="Computer Science Department"><i class="bi bi-laptop-fill"></i> CS Department</button>
-                                <button class="chip-item" data-place="Canteen"><i class="bi bi-cup-hot-fill"></i> Canteen</button>
-                                <button class="chip-item" data-place="Auditorium"><i class="bi bi-mic-fill"></i> Auditorium</button>
-                                <button class="chip-item" data-place="Sports Hostel"><i class="bi bi-trophy-fill"></i> Sports Hostel</button>
-                                <button class="chip-item" data-place="RUSA Building"><i class="bi bi-mortarboard-fill"></i> RUSA</button>
-                                <button class="chip-item" data-place="Ladies Hostel"><i class="bi bi-house-heart-fill"></i> Ladies Hostel</button>
+                        <!-- ROUTE SUB-BAR / METRICS -->
+                        <div class="route-meta-bar" id="routeMetaBar">
+                            <div class="meta-item">
+                                <i class="bi bi-signpost-2 text-primary"></i>
+                                <span>Junctions: <strong id="displayJunctions">0</strong></span>
                             </div>
-                        </div>
-
-                        <!-- SEARCH ACTION BUTTON -->
-                        <div class="mt-4 text-end">
-                            <button id="findRouteBtn" class="btn-primary-action">
-                                <span>Find Best Route</span>
-                                <i class="bi bi-arrow-right-short fs-4"></i>
-                            </button>
+                            <div class="meta-divider">•</div>
+                            <div class="meta-item">
+                                <i class="bi bi-clock-history text-primary"></i>
+                                <span>Est. Walk: <strong id="displayTime">--</strong></span>
+                            </div>
+                            <div class="meta-divider">•</div>
+                            <div class="meta-item">
+                                <i class="bi bi-lightning-charge-fill text-gold"></i>
+                                <span>Optimal BFS Shortest Path</span>
+                            </div>
+                            <div class="meta-divider d-none d-lg-inline">•</div>
+                            <div class="meta-item text-slate-500 d-none d-lg-inline">
+                                <span>Follow highlighted line on map below</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -740,7 +687,15 @@
     <footer class="app-footer mt-5">
         <div class="container-fluid max-w-1400 text-center">
             <div class="footer-brand mb-2">
-                <img src="logo1.png" alt="CamMap Logo" class="footer-logo">
+                <img 
+                    src="logo1.png" 
+                    alt="CamMap Logo" 
+                    class="footer-logo" 
+                    width="36" 
+                    height="36" 
+                    loading="lazy" 
+                    decoding="async"
+                >
                 <span class="footer-title">CamMap EMEA Navigation</span>
             </div>
             <p class="footer-sub">Smart Campus Navigation System • EMEA College Kondotty</p>
@@ -771,9 +726,9 @@
                     <div class="gps-pulse-ring mb-3 mx-auto">
                         <i class="bi bi-geo-alt-fill fs-2 text-primary"></i>
                     </div>
-                    <h6 class="fw-semibold text-slate-800">You are currently on Campus</h6>
-                    <p class="text-slate-500 fs-7 mb-3">Select "Main Gate" as starting location to get turn-by-turn directions to any college department.</p>
-                    <button class="btn btn-primary btn-sm px-4 rounded-pill" data-bs-dismiss="modal" id="quickStartMainGate">Set Start to Main Gate</button>
+                    <h5 class="fw-bold text-slate-900 mb-2">GPS Live Navigation Coming Soon</h5>
+                    <p class="text-slate-600 fs-7 mb-4">Live location-based navigation will be available in a future update.</p>
+                    <button type="button" class="btn btn-primary btn-sm px-4 rounded-pill" data-bs-dismiss="modal">Got It</button>
                 </div>
             </div>
         </div>

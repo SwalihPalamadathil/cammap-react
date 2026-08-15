@@ -49,9 +49,13 @@ function Banner() {
         <div className="banner-visual">
           <div className="hero-card-frame">
             <img
-              src="emea.png"
+              src={`${import.meta.env.BASE_URL}emea.png`}
               alt="EMEA College Campus Map Preview"
               className="hero-map-img"
+              width="500"
+              height="500"
+              fetchPriority="high"
+              decoding="async"
             />
             <div className="hero-card-overlay"></div>
 

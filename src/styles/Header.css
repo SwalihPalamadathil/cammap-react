@@ -121,47 +121,6 @@
   gap: 16px;
 }
 
-.nav-cta-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  background-color: var(--color-primary);
-  color: #FFFFFF !important;
-  font-size: 14px;
-  font-weight: 700;
-  padding: 10px 22px;
-  min-height: 42px;
-  border-radius: var(--radius-full);
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
-  text-decoration: none;
-}
-
-.nav-cta-btn:hover {
-  background-color: var(--color-primary-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
-}
-
-.nav-cta-btn:focus-visible {
-  outline: 2px solid var(--color-accent-gold);
-  outline-offset: 3px;
-}
-
-.nav-cta-btn i {
-  font-size: 18px;
-  transition: transform 0.2s ease;
-}
-
-.nav-cta-btn:hover i {
-  transform: translateX(3px);
-}
-
-.mobile-cta {
-  display: none;
-}
-
 /* Hamburger Button with 44px Touch Target */
 .hamburger-btn {
   display: none;
@@ -219,16 +178,6 @@
 
 /* Responsive Media Queries */
 @media (max-width: 900px) {
-  .desktop-cta {
-    display: none;
-  }
-  
-  .mobile-cta {
-    display: inline-flex;
-    margin-top: 8px;
-    width: 100%;
-  }
-
   .hamburger-btn {
     display: flex;
   }

@@ -211,45 +211,215 @@ function clearMarkers() {
     document.getElementById("bvocBlock").classList.remove("active-marker");
 }
 
-function calculateAndDisplayRoute(start, destination) {
-    if (!start || !destination) return;
+function renderRouteFlowTemplate() {
+    return `
+        <div class="route-flow-grid">
+            <!-- STARTING POINT (FROM) -->
+            <div class="route-node-card from-node">
+                <div class="node-icon-wrapper from-icon">
+                    <i class="bi bi-geo-alt-fill"></i>
+                </div>
+                <div class="node-details">
+                    <span class="node-label">STARTING POINT</span>
+                    <h3 class="node-value" id="displayFrom">-</h3>
+                </div>
+            </div>
 
-    const startSel = document.getElementById("startSelect");
-    const destSel = document.getElementById("destSelect");
-    if (startSel) startSel.value = start;
-    if (destSel) destSel.value = destination;
+            <!-- ROUTE CONNECTOR -->
+            <div class="route-connector-box">
+                <div class="connector-line"></div>
+                <div class="connector-badge">
+                    <i class="bi bi-person-walking text-primary"></i>
+                    <span id="displayTimeBadge">Calculating...</span>
+                </div>
+                <div class="connector-arrow">
+                    <i class="bi bi-arrow-right d-none d-md-inline"></i>
+                    <i class="bi bi-arrow-down d-md-none"></i>
+                </div>
+            </div>
 
-    localStorage.setItem("from", start);
-    localStorage.setItem("to", destination);
+            <!-- DESTINATION (TO) -->
+            <div class="route-node-card to-node">
+                <div class="node-icon-wrapper to-icon">
+                    <i class="bi bi-flag-fill"></i>
+                </div>
+                <div class="node-details">
+                    <span class="node-label">DESTINATION</span>
+                    <h3 class="node-value" id="displayTo">-</h3>
+                </div>
+            </div>
+        </div>
 
-    let data = destinations[destination];
+        <!-- ROUTE SUB-BAR / METRICS -->
+        <div class="route-meta-bar" id="routeMetaBar">
+            <div class="meta-item">
+                <i class="bi bi-signpost-2 text-primary"></i>
+                <span>Junctions: <strong id="displayJunctions">0</strong></span>
+            </div>
+            <div class="meta-divider">•</div>
+            <div class="meta-item">
+                <i class="bi bi-clock-history text-primary"></i>
+                <span>Est. Walk: <strong id="displayTime">--</strong></span>
+            </div>
+            <div class="meta-divider">•</div>
+            <div class="meta-item">
+                <i class="bi bi-lightning-charge-fill text-gold"></i>
+                <span>Optimal BFS Shortest Path</span>
+            </div>
+            <div class="meta-divider d-none d-lg-inline">•</div>
+            <div class="meta-item text-slate-500 d-none d-lg-inline">
+                <span>Follow highlighted line on map below</span>
+            </div>
+        </div>
+    `;
+}
 
+function showNoRouteState() {
     clearMarkers();
+    const body = document.getElementById("selectedRouteBody");
+    const statusBadge = document.getElementById("routeStatusBadge");
+    
+    if (statusBadge) {
+        statusBadge.innerHTML = `<span class="badge-pill bg-slate-subtle text-slate-600"><i class="bi bi-info-circle"></i> No Route Active</span>`;
+    }
+
+    if (body) {
+        body.innerHTML = `
+            <div class="empty-route-state text-center py-4 px-3">
+                <div class="empty-icon-circle mb-3">
+                    <i class="bi bi-compass fs-1 text-primary"></i>
+                </div>
+                <h3 class="fw-bold text-slate-900 mb-2">No Route Selected</h3>
+                <p class="text-slate-600 max-w-500 mx-auto mb-4 fs-6">
+                    Please select your starting point and destination on the CamMap Home Route Selector to view the walking path.
+                </p>
+                <a href="../" class="btn-primary-action text-decoration-none d-inline-flex">
+                    <i class="bi bi-arrow-left fs-5"></i>
+                    <span>Plan Route on Home</span>
+                </a>
+            </div>
+        `;
+    }
+
+    const fromRes = document.getElementById("fromResult");
+    const toRes = document.getElementById("toResult");
+    const juncRes = document.getElementById("junctionResult");
+    const timeRes = document.getElementById("timeResult");
+    const statusRes = document.getElementById("statusResult");
+
+    if (fromRes) fromRes.innerHTML = "-";
+    if (toRes) toRes.innerHTML = "-";
+    if (juncRes) juncRes.innerHTML = "0";
+    if (timeRes) timeRes.innerHTML = "--";
+    if (statusRes) statusRes.innerHTML = `<span class="badge-pill bg-slate-subtle text-slate-700">No Route</span>`;
+}
+
+function showSameLocationState(loc) {
+    clearMarkers();
+    const body = document.getElementById("selectedRouteBody");
+    const statusBadge = document.getElementById("routeStatusBadge");
+    
+    if (statusBadge) {
+        statusBadge.innerHTML = `<span class="badge-pill bg-warning-subtle text-warning-emphasis"><i class="bi bi-exclamation-triangle-fill"></i> Same Location</span>`;
+    }
+
+    if (body) {
+        body.innerHTML = `
+            <div class="empty-route-state text-center py-4 px-3">
+                <div class="empty-icon-circle mb-3 bg-amber-subtle">
+                    <i class="bi bi-geo-alt fs-1 text-amber"></i>
+                </div>
+                <h3 class="fw-bold text-slate-900 mb-2">Starting Point and Destination are the Same</h3>
+                <p class="text-slate-600 max-w-500 mx-auto mb-4 fs-6">
+                    You are already at <strong>${loc}</strong>. Please choose a different destination on the Home page to navigate.
+                </p>
+                <a href="../" class="btn-primary-action text-decoration-none d-inline-flex">
+                    <i class="bi bi-arrow-left fs-5"></i>
+                    <span>Change Destination on Home</span>
+                </a>
+            </div>
+        `;
+    }
+
+    const fromRes = document.getElementById("fromResult");
+    const toRes = document.getElementById("toResult");
+    const juncRes = document.getElementById("junctionResult");
+    const timeRes = document.getElementById("timeResult");
+    const statusRes = document.getElementById("statusResult");
+
+    if (fromRes) fromRes.innerHTML = loc;
+    if (toRes) toRes.innerHTML = loc;
+    if (juncRes) juncRes.innerHTML = "0";
+    if (timeRes) timeRes.innerHTML = "0 min (You are here)";
+    if (statusRes) statusRes.innerHTML = `<span class="badge-pill bg-warning-subtle text-warning-emphasis">Same Location</span>`;
+}
+
+function calculateAndDisplayRoute(start, destination) {
+    if (!start || !destination) {
+        showNoRouteState();
+        return;
+    }
+
+    if (start === destination) {
+        showSameLocationState(start);
+        return;
+    }
 
     let startNode = locationJunction[start];
     let endNode = locationJunction[destination];
 
-    if (startNode && endNode) {
-        let shortestRoute = findShortestPath(startNode, endNode);
+    if (!startNode || !endNode) {
+        showNoRouteState();
+        return;
+    }
 
-        if (shortestRoute) {
-            drawRoute(shortestRoute);
+    // Ensure the route grid DOM elements exist (in case they were replaced by an empty-state before)
+    const body = document.getElementById("selectedRouteBody");
+    if (body && !document.getElementById("displayFrom")) {
+        body.innerHTML = renderRouteFlowTemplate();
+    }
 
-            document.getElementById("fromResult").innerHTML = start;
-            document.getElementById("toResult").innerHTML = destination;
-            document.getElementById("junctionResult").innerHTML = shortestRoute.length;
+    let data = destinations[destination];
+    clearMarkers();
 
-            let seconds = shortestRoute.length * 15;
+    let shortestRoute = findShortestPath(startNode, endNode);
 
-            if (seconds >= 60) {
-                let min = Math.ceil(seconds / 60);
-                document.getElementById("timeResult").innerHTML = min + " min";
-            } else {
-                document.getElementById("timeResult").innerHTML = seconds + " sec";
-            }
+    if (shortestRoute) {
+        drawRoute(shortestRoute);
 
-            document.getElementById("statusResult").innerHTML =
-                `<span class="badge-pill bg-success text-white"><i class="bi bi-check-circle-fill"></i> Route Found</span>`;
+        let seconds = shortestRoute.length * 15;
+        let timeStr = seconds >= 60 ? Math.ceil(seconds / 60) + " min" : seconds + " sec";
+
+        // 1. Update Read-Only Selected Route Card
+        const displayFrom = document.getElementById("displayFrom");
+        const displayTo = document.getElementById("displayTo");
+        const displayJunctions = document.getElementById("displayJunctions");
+        const displayTime = document.getElementById("displayTime");
+        const displayTimeBadge = document.getElementById("displayTimeBadge");
+        const routeStatusBadge = document.getElementById("routeStatusBadge");
+
+        if (displayFrom) displayFrom.innerHTML = start;
+        if (displayTo) displayTo.innerHTML = destination;
+        if (displayJunctions) displayJunctions.innerHTML = shortestRoute.length;
+        if (displayTime) displayTime.innerHTML = timeStr;
+        if (displayTimeBadge) displayTimeBadge.innerHTML = timeStr + " Walk";
+        if (routeStatusBadge) {
+            routeStatusBadge.innerHTML = `<span class="badge-pill bg-success text-white"><i class="bi bi-check-circle-fill"></i> Route Active</span>`;
+        }
+
+        // 2. Update Bottom Summary Card
+        const fromRes = document.getElementById("fromResult");
+        const toRes = document.getElementById("toResult");
+        const juncRes = document.getElementById("junctionResult");
+        const timeRes = document.getElementById("timeResult");
+        const statusRes = document.getElementById("statusResult");
+
+        if (fromRes) fromRes.innerHTML = start;
+        if (toRes) toRes.innerHTML = destination;
+        if (juncRes) juncRes.innerHTML = shortestRoute.length;
+        if (timeRes) timeRes.innerHTML = timeStr;
+        if (statusRes) {
+            statusRes.innerHTML = `<span class="badge-pill bg-success text-white"><i class="bi bi-check-circle-fill"></i> Route Found</span>`;
         }
     }
 
@@ -297,9 +467,12 @@ const standaloneSvgBuildings = [
 let currentSelectedSvgBuilding = null;
 
 function initializeSVGBuildings() {
-    // 1. Initialize filter-group buildings
+    const svgEl = document.getElementById("campusMap");
+    if (!svgEl) return;
+
+    // 1. Initialize filter-group buildings (scoped to svgEl)
     svgBuildingMap.forEach(item => {
-        const group = document.querySelector(`g[filter*="${item.filterId}"]`);
+        const group = svgEl.querySelector(`g[filter*="${item.filterId}"]`);
         if (group) {
             group.classList.add("svg-building");
             group.setAttribute("data-location", item.name);
@@ -311,20 +484,17 @@ function initializeSVGBuildings() {
     });
 
     // 2. Initialize standalone SVG elements (Basketball Court, NCC Ground, Mahogany Park)
-    const svgEl = document.getElementById("campusMap");
-    if (svgEl) {
-        standaloneSvgBuildings.forEach(item => {
-            const elements = svgEl.querySelectorAll(item.selector);
-            elements.forEach(el => {
-                el.classList.add("svg-building");
-                el.setAttribute("data-location", item.name);
-                el.setAttribute("id", item.id);
-                el.setAttribute("tabindex", "0");
-                el.setAttribute("role", "button");
-                el.setAttribute("aria-label", item.name);
-            });
+    standaloneSvgBuildings.forEach(item => {
+        const elements = svgEl.querySelectorAll(item.selector);
+        elements.forEach(el => {
+            el.classList.add("svg-building");
+            el.setAttribute("data-location", item.name);
+            el.setAttribute("id", item.id);
+            el.setAttribute("tabindex", "0");
+            el.setAttribute("role", "button");
+            el.setAttribute("aria-label", item.name);
         });
-    }
+    });
 }
 
 function handleBuildingClick(locationName, buildingElement) {
@@ -442,34 +612,16 @@ function handleBuildingClick(locationName, buildingElement) {
                 <div class="fs-7 text-slate-700 mb-3">
                     ${floorInfoHTML}
                 </div>
-                <div class="d-flex flex-wrap gap-2 pt-2 border-top">
-                    <button class="btn btn-sm btn-outline-success rounded-pill px-3" onclick="setAsStart('${locationName}')">
-                        <i class="bi bi-geo-alt-fill me-1"></i> Set as Starting Point
-                    </button>
-                    <button class="btn btn-sm btn-primary rounded-pill px-3" onclick="setAsDestination('${locationName}')">
-                        <i class="bi bi-flag-fill me-1"></i> Set as Destination
-                    </button>
+                <div class="d-flex flex-wrap gap-2 pt-2 border-top justify-content-between align-items-center">
+                    <span class="fs-8 text-slate-500"><i class="bi bi-info-circle me-1"></i> Interactive Landmark</span>
+                    <a href="../" class="btn btn-sm btn-outline-primary rounded-pill px-3 text-decoration-none">
+                        <i class="bi bi-compass me-1"></i> Plan Route on Home
+                    </a>
                 </div>
             </div>
         `;
     }
 }
-
-window.setAsStart = function (locationName) {
-    const startSel = document.getElementById("startSelect");
-    const destSel = document.getElementById("destSelect");
-    const currentDest = destSel ? destSel.value || "Main Block" : "Main Block";
-    if (startSel) startSel.value = locationName;
-    calculateAndDisplayRoute(locationName, currentDest);
-};
-
-window.setAsDestination = function (locationName) {
-    const startSel = document.getElementById("startSelect");
-    const destSel = document.getElementById("destSelect");
-    const currentStart = startSel ? startSel.value || "Main Gate" : "Main Gate";
-    if (destSel) destSel.value = locationName;
-    calculateAndDisplayRoute(currentStart, locationName);
-};
 
 window.onload = function () {
     initializeSVGBuildings();
@@ -498,58 +650,17 @@ window.onload = function () {
         });
     }
 
-    let start = localStorage.getItem("from") || "Main Gate";
-    let destination = localStorage.getItem("to") || "Main Block";
+    // Read route selections passed from Page 1
+    const start = localStorage.getItem("from");
+    const destination = localStorage.getItem("to");
 
-    calculateAndDisplayRoute(start, destination);
-
-    // Event Listener for "Find Best Route" Button
-    const findBtn = document.getElementById("findRouteBtn");
-    if (findBtn) {
-        findBtn.addEventListener("click", function () {
-            const startSel = document.getElementById("startSelect");
-            const destSel = document.getElementById("destSelect");
-            const s = startSel ? startSel.value : null;
-            const d = destSel ? destSel.value : null;
-            if (!s || !d) {
-                alert("Please select both a start location and a destination.");
-                return;
-            }
-            calculateAndDisplayRoute(s, d);
-        });
+    if (start && destination) {
+        calculateAndDisplayRoute(start, destination);
+    } else {
+        showNoRouteState();
     }
 
-    // Event Listener for Swap Button
-    const swapBtn = document.getElementById("swapBtn");
-    if (swapBtn) {
-        swapBtn.addEventListener("click", function () {
-            const startSel = document.getElementById("startSelect");
-            const destSel = document.getElementById("destSelect");
-            if (startSel && destSel && startSel.value && destSel.value) {
-                const temp = startSel.value;
-                startSel.value = destSel.value;
-                destSel.value = temp;
-                calculateAndDisplayRoute(startSel.value, destSel.value);
-            }
-        });
-    }
-
-    // Quick Pick Chips Listeners
-    document.querySelectorAll(".chip-item").forEach(chip => {
-        chip.addEventListener("click", function () {
-            const targetPlace = this.getAttribute("data-place");
-            const startSel = document.getElementById("startSelect");
-            const destSel = document.getElementById("destSelect");
-            if (targetPlace && destSel) {
-                destSel.value = targetPlace;
-                const currentStart = startSel ? startSel.value || "Main Gate" : "Main Gate";
-                if (startSel) startSel.value = currentStart;
-                calculateAndDisplayRoute(currentStart, targetPlace);
-            }
-        });
-    });
-
-    // Reset Route Button
+    // Reset Route Button in Navbar
     const resetBtn = document.getElementById("resetRouteBtn");
     if (resetBtn) {
         resetBtn.addEventListener("click", function () {
@@ -558,35 +669,18 @@ window.onload = function () {
                 currentSelectedSvgBuilding.classList.remove("svg-building-selected");
                 currentSelectedSvgBuilding = null;
             }
-            document.getElementById("fromResult").innerHTML = "-";
-            document.getElementById("toResult").innerHTML = "-";
-            document.getElementById("junctionResult").innerHTML = "0";
-            document.getElementById("timeResult").innerHTML = "--";
-            document.getElementById("statusResult").innerHTML =
-                `<span class="badge-pill bg-slate-subtle text-slate-700">Select Locations</span>`;
+            showNoRouteState();
         });
     }
 
-    // Reset View / Center Map Button
-    const resetViewBtn = document.getElementById("resetViewBtn");
+    // Center Map Button (Floating Map Controls)
     const recenterBtn = document.getElementById("recenterBtn");
     const resetPanzoom = () => {
         if (panzoom) {
             panzoom.reset();
         }
     };
-    if (resetViewBtn) resetViewBtn.addEventListener("click", resetPanzoom);
     if (recenterBtn) recenterBtn.addEventListener("click", resetPanzoom);
-
-    // Quick GPS Modal Start Button
-    const gpsBtn = document.getElementById("quickStartMainGate");
-    if (gpsBtn) {
-        gpsBtn.addEventListener("click", function () {
-            const destSel = document.getElementById("destSelect");
-            const currentDest = destSel ? destSel.value || "Main Block" : "Main Block";
-            calculateAndDisplayRoute("Main Gate", currentDest);
-        });
-    }
 };
 
 document.getElementById("mainBlock").addEventListener("click", function () {

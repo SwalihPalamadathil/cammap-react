@@ -8,7 +8,15 @@ function Footer() {
         <div className="footer-top">
           <div className="footer-brand">
             <div className="footer-logo-row">
-              <img src={logo} alt="CamMap Logo" className="footer-logo" />
+              <img 
+                src={logo} 
+                alt="CamMap Logo" 
+                className="footer-logo" 
+                width="36" 
+                height="36" 
+                loading="lazy" 
+                decoding="async" 
+              />
               <h2>
                 CamMap <span className="version-tag">v1.0</span>
               </h2>
@@ -26,7 +34,6 @@ function Footer() {
               <li><a href="#how-it-works">How It Works</a></li>
               <li><a href="#features">Features</a></li>
               <li><a href="#about">About System</a></li>
-              <li><a href={`${import.meta.env.BASE_URL}map/index.html`}>Open Map</a></li>
             </ul>
           </div>
 
