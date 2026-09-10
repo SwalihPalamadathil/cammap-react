@@ -394,3 +394,90 @@
     font-size: 26px;
   }
 }
+/* ==========================================================================
+   CAMPUS DIRECTORY SECTION (SEO & VISITOR DIRECTORY)
+   ========================================================================== */
+.section-directory {
+  padding: 80px 0;
+  background-color: #FFFFFF;
+  border-top: 1px solid var(--color-border);
+}
+
+.directory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 28px;
+}
+
+.directory-card {
+  background: var(--color-bg-light);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 32px 26px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.directory-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: rgba(37, 99, 235, 0.3);
+}
+
+.directory-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.directory-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  box-shadow: var(--shadow-sm);
+  flex-shrink: 0;
+}
+
+.directory-card h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-navy-dark);
+  margin: 0;
+}
+
+.directory-desc {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.directory-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.directory-list li {
+  font-size: 14px;
+  color: var(--color-navy-dark);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.directory-list li::before {
+  content: "•";
+  color: var(--color-primary);
+  font-weight: bold;
+  font-size: 16px;
+}

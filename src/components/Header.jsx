@@ -73,7 +73,7 @@ function Header() {
           <a href="#search" onClick={closeMobileMenu}>Route Finder</a>
           <a href="#how-it-works" onClick={closeMobileMenu}>How It Works</a>
           <a href="#features" onClick={closeMobileMenu}>Features</a>
-          <a href="#about" onClick={closeMobileMenu}>About</a>
+          <a href="#directory" onClick={closeMobileMenu}>Directory</a>\n          <a href="#about" onClick={closeMobileMenu}>About</a>
         </nav>
 
         {/* RIGHT: HAMBURGER TOGGLE */}

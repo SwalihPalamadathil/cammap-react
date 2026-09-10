@@ -11,20 +11,19 @@ function Banner() {
           </div>
 
           <h1 className="hero-heading">
-            Find Your Way <br className="hero-br" />
-            <span className="heading-highlight">Around Campus.</span>
+            Navigate EMEA College <br className="hero-br" />
+            <span className="heading-highlight">With CamMap.</span>
           </h1>
 
           <p className="hero-description">
-            Find buildings, departments and important campus locations with a simple interactive navigation system designed for EMEA College.
+            CamMap is the interactive campus map and route finding tool for EMEA College. Locate academic departments, administrative buildings, hostels, and student facilities with zero-latency shortest path navigation.
           </p>
 
           <div className="hero-actions">
-            <a href="https://emeacollege.ac.in/" className="hero-primary-cta">
-              Explore Campus <i className="bi bi-arrow-right"></i>
-            </a>
-            <a href="#search" className="hero-secondary-cta">
-              <i className="bi bi-compass"></i> Find a Route
+            <a href="#search" className="hero-primary-cta" aria-label="Jump to Route Finder">
+              <i className="bi bi-compass-fill hero-lead-icon" aria-hidden="true"></i>
+              <span>Find a Route</span>
+              <i className="bi bi-arrow-right hero-arrow-icon" aria-hidden="true"></i>
             </a>
           </div>
 
@@ -50,7 +49,7 @@ function Banner() {
           <div className="hero-card-frame">
             <img
               src={`${import.meta.env.BASE_URL}emea.png`}
-              alt="EMEA College Campus Map Preview"
+              alt="CamMap EMEA College campus map preview"
               className="hero-map-img"
               width="500"
               height="500"
@@ -61,12 +60,12 @@ function Banner() {
 
             {/* Floating Badges */}
             <div className="floating-badge badge-top-right">
-              <i className="bi bi-lightning-charge-fill text-gold"></i>
+              <i className="bi bi-lightning-charge-fill text-gold" aria-hidden="true"></i>
               <span>Optimal BFS Walking Routes</span>
             </div>
 
             <div className="floating-badge badge-bottom-left">
-              <i className="bi bi-geo-alt-fill text-blue"></i>
+              <i className="bi bi-geo-alt-fill text-blue" aria-hidden="true"></i>
               <span>Interactive Location Junctions</span>
             </div>
           </div>

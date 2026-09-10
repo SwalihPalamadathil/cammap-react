@@ -159,3 +159,18 @@
     text-align: center;
   }
 }
+.footer-brand-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.footer-heading {
+  font-size: 16px;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 16px;
+  display: block;
+}

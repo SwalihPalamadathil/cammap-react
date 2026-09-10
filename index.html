@@ -1,18 +1,101 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/map/logo1.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CamMap — EMEA College Campus Navigation</title>
-    <meta name="description" content="CamMap is a modern smart campus navigation system for EMEA College. Find buildings, departments, and classrooms with optimal route finding." />
+    <meta name="theme-color" content="#0d1b2a" />
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="Muhammed Swalih P" />
+
+    <!-- Primary Title & Description -->
+    <title>CamMap — EMEA College Campus Map & Navigation</title>
+    <meta name="description" content="CamMap is an interactive campus map and navigation tool for EMEA College. Find buildings, departments, facilities, and walking routes across campus." />
+
+    <!-- Canonical URL (Update YOUR-CUSTOM-DOMAIN.com with your production domain) -->
+    <link rel="canonical" href="https://YOUR-CUSTOM-DOMAIN.com/" />
+
+    <!-- Favicons & Touch Icons -->
+    <link rel="icon" type="image/png" href="/map/logo1.png" />
+    <link rel="apple-touch-icon" href="/map/logo1.png" />
+
     <!-- Preload Critical Logo Asset -->
-    <link rel="preload" as="image" href="/map/logo1.png" type="image/png" fetchpriority="high">
+    <link rel="preload" as="image" href="/map/logo1.png" type="image/png" fetchpriority="high" />
+
+    <!-- Open Graph / Facebook / WhatsApp / LinkedIn -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="CamMap" />
+    <meta property="og:title" content="CamMap — EMEA College Campus Map & Navigation" />
+    <meta property="og:description" content="CamMap is an interactive campus map and navigation tool for EMEA College. Find buildings, departments, facilities, and walking routes across campus." />
+    <meta property="og:url" content="https://YOUR-CUSTOM-DOMAIN.com/" />
+    <meta property="og:image" content="https://YOUR-CUSTOM-DOMAIN.com/emea.png" />
+    <meta property="og:image:alt" content="CamMap EMEA College Campus Navigation" />
+    <meta property="og:image:width" content="500" />
+    <meta property="og:image:height" content="500" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter / X Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="CamMap — EMEA College Campus Map & Navigation" />
+    <meta name="twitter:description" content="CamMap is an interactive campus map and navigation tool for EMEA College. Find buildings, departments, facilities, and walking routes across campus." />
+    <meta name="twitter:image" content="https://YOUR-CUSTOM-DOMAIN.com/emea.png" />
+    <meta name="twitter:image:alt" content="CamMap EMEA College Campus Navigation" />
+
+    <!-- Google Search Console Verification Placeholder -->
+    <!-- <meta name="google-site-verification" content="YOUR_GOOGLE_SEARCH_CONSOLE_VERIFICATION_TOKEN" /> -->
 
     <!-- Google Fonts: Plus Jakarta Sans & Inter with display=swap -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- Truthful JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://YOUR-CUSTOM-DOMAIN.com/#website",
+          "name": "CamMap",
+          "alternateName": ["EMEA College Campus Map", "EMEA CamMap"],
+          "url": "https://YOUR-CUSTOM-DOMAIN.com/",
+          "description": "CamMap is an interactive campus map and navigation tool for EMEA College. Find buildings, departments, facilities, and walking routes across campus.",
+          "inLanguage": "en-US",
+          "publisher": {
+            "@type": "CollegeOrUniversity",
+            "name": "EMEA College of Arts and Science",
+            "url": "https://emeacollege.ac.in/",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Kondotti",
+              "addressRegion": "Kerala",
+              "addressCountry": "IN"
+            }
+          }
+        },
+        {
+          "@type": "WebApplication",
+          "@id": "https://YOUR-CUSTOM-DOMAIN.com/#app",
+          "name": "CamMap",
+          "applicationCategory": "NavigationApplication",
+          "operatingSystem": "All modern web browsers",
+          "browserRequirements": "Requires JavaScript. Requires HTML5 Canvas & SVG support.",
+          "url": "https://YOUR-CUSTOM-DOMAIN.com/",
+          "description": "Interactive campus navigation web application for EMEA College of Arts and Science. Calculates shortest walking paths between 35+ campus locations.",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "INR"
+          },
+          "creator": {
+            "@type": "Person",
+            "name": "Muhammed Swalih P"
+          },
+          "image": "https://YOUR-CUSTOM-DOMAIN.com/emea.png"
+        }
+      ]
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>

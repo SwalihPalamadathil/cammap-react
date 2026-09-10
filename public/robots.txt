@@ -1,0 +1,15 @@
+﻿# ==========================================
+# robots.txt for CamMap
+# EMEA College Campus Map & Navigation
+# ==========================================
+
+User-agent: *
+Allow: /
+
+# Allow search engine bots to crawl scripts, styles, and map assets
+Allow: /map/
+Allow: /assets/
+Allow: /emea.png
+
+# Sitemaps: Update YOUR-CUSTOM-DOMAIN.com to your live production domain
+Sitemap: https://YOUR-CUSTOM-DOMAIN.com/sitemap.xml
