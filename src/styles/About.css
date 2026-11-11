@@ -251,6 +251,23 @@ section[id],
   padding: 0;
 }
 
+.step-glyph.bi {
+  -webkit-mask: none;
+  mask: none;
+  background-color: transparent;
+}
+
+.step-glyph.bi::before {
+  content: "";
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  background-color: currentColor;
+  -webkit-mask: var(--bi) center / contain no-repeat;
+  mask: var(--bi) center / contain no-repeat;
+  flex: none;
+}
+
 .timeline-step h3 {
   font-family: var(--font-primary);
   font-size: 22px;
@@ -449,6 +466,23 @@ section[id],
   font-size: 20px;
   color: var(--navy-900);
   background: transparent;
+}
+
+.purpose-icon.bi {
+  -webkit-mask: none;
+  mask: none;
+  background-color: transparent;
+}
+
+.purpose-icon.bi::before {
+  content: "";
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  background-color: currentColor;
+  -webkit-mask: var(--bi) center / contain no-repeat;
+  mask: var(--bi) center / contain no-repeat;
+  flex: none;
 }
 
 .lane-index {

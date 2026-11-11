@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "check:icons": "powershell -NoProfile -Command \"$u=Get-ChildItem src -Recurse -Include *.jsx,*.js | Select-String -Pattern 'bi-[a-z0-9-]+' -AllMatches | % { $_.Matches.Value } | Sort-Object -Unique; $d=Get-ChildItem src -Recurse -Include *.css | Select-String -Pattern '\\.(bi-[a-z0-9-]+)' -AllMatches | % { $_.Matches.Value.TrimStart('.') } | Sort-Object -Unique; $m=$u | ? { $_ -notin $d }; if($m){ Write-Host 'MISSING ICONS:' $m; exit 1 } else { Write-Host 'All icons defined' }\""
   },
   "dependencies": {
     "@panzoom/panzoom": "^4.6.2",
