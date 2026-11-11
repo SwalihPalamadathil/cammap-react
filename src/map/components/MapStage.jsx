@@ -144,21 +144,6 @@ export function MapStage({
               <span className="map-card-title">EMEA College Campus Vector Map</span>
               <span className="map-scale-tag">1:1000 VECTOR</span>
             </div>
-
-            <div className="map-legend d-none d-md-flex align-items-center gap-3">
-              <span className="legend-item">
-                <span className="legend-dot bg-route"></span> Route Path
-              </span>
-              <span className="legend-item">
-                <span className="legend-dot bg-block"></span> Selected Block
-              </span>
-              <span className="legend-item">
-                <span className="legend-dot bg-building"></span> Buildings
-              </span>
-              <span className="legend-item">
-                <span className="legend-dot bg-road"></span> Walking Roads
-              </span>
-            </div>
           </div>
 
           {/* SCALE-BAR RULE DECORATION */}

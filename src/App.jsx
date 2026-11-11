@@ -1,7 +1,7 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+/*import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 
-function App() {
+function App() {>
   return (
     <BrowserRouter basename={import.meta.env.BASE_URL}>
       <Routes>
@@ -10,6 +10,15 @@ function App() {
       </Routes>
     </BrowserRouter>
   );
+}
+
+export default App; */
+
+
+import Maintenance from "./maintenance.jsx";
+
+function App() {
+  return <Maintenance />;
 }
 
 export default App;

@@ -41,6 +41,7 @@ export function RouteBar({ status, from, to, timeStr, buildingName, onResetRoute
                 </button>
                 <button className="btn-card-toolbar btn-card-toolbar-icon" type="button" title="Campus Info" aria-label="About Campus Information" onClick={onOpenInfo}>
                   <i className="bi bi-info-circle" aria-hidden="true"></i>
+                  <span className="btn-text">Info</span>
                 </button>
                 <a href="../" className="btn-change-route" title="Choose a different route on Home">
                   <i className="bi bi-arrow-left" aria-hidden="true"></i>
@@ -142,6 +143,7 @@ export function RouteBar({ status, from, to, timeStr, buildingName, onResetRoute
                 </button>
                 <button className="btn-card-toolbar btn-card-toolbar-icon" type="button" title="Campus Info" aria-label="About Campus Information" onClick={onOpenInfo}>
                   <i className="bi bi-info-circle" aria-hidden="true"></i>
+                  <span className="btn-text">Info</span>
                 </button>
                 <a href="../" className="btn-change-route" title="Choose a different route on Home">
                   <i className="bi bi-arrow-left" aria-hidden="true"></i>
@@ -246,6 +248,7 @@ export function RouteBar({ status, from, to, timeStr, buildingName, onResetRoute
                 </button>
                 <button className="btn-card-toolbar btn-card-toolbar-icon" type="button" title="Campus Info" aria-label="About Campus Information" onClick={onOpenInfo}>
                   <i className="bi bi-info-circle" aria-hidden="true"></i>
+                  <span className="btn-text">Info</span>
                 </button>
                 <a href="../" className="btn-change-route" title="Choose a different route on Home">
                   <i className="bi bi-arrow-left" aria-hidden="true"></i>
@@ -313,6 +316,7 @@ export function RouteBar({ status, from, to, timeStr, buildingName, onResetRoute
                 </button>
                 <button className="btn-card-toolbar btn-card-toolbar-icon" type="button" title="Campus Info" aria-label="About Campus Information" onClick={onOpenInfo}>
                   <i className="bi bi-info-circle" aria-hidden="true"></i>
+                  <span className="btn-text">Info</span>
                 </button>
                 <a href="../" className="btn-change-route" title="Choose a different route on Home">
                   <i className="bi bi-arrow-left" aria-hidden="true"></i>
