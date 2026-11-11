@@ -1,459 +1,323 @@
+/* ==========================================================================
+   ABOUT.CSS — PRECISION ELEVATED (v5)
+   ========================================================================== */
 .about-wrapper {
   width: 100%;
 }
 
+/* Offset anchor targets below sticky header */
+section[id],
+.search-section {
+  scroll-margin-top: calc(var(--header-h) + 16px);
+}
+
 .section-container {
-  max-width: 1240px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 24px;
 }
 
-.section-header {
-  margin-bottom: 48px;
+/* Two-Column Split Section Header (Left Aligned) */
+.section-header-split {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 48px;
+  margin-bottom: 64px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
 }
 
-.text-center {
-  text-align: center;
+.header-left {
+  flex: 1.2;
 }
 
-.section-badge {
+.eyebrow-label {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  background-color: rgba(37, 99, 235, 0.08);
-  color: var(--color-primary);
-  font-size: 13px;
-  font-weight: 700;
-  padding: 6px 14px;
-  border-radius: var(--radius-full);
-  margin-bottom: 12px;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--blue-600);
+  margin-bottom: 14px;
 }
 
-.section-header h2 {
-  font-size: 36px;
-  font-weight: 800;
-  color: var(--color-navy-dark);
-  letter-spacing: -0.02em;
-  margin-bottom: 10px;
+.eyebrow-label::before {
+  content: "";
+  display: inline-block;
+  width: 24px;
+  height: 1px;
+  background-color: var(--blue-600);
 }
 
-.section-header p {
-  font-size: 16px;
-  color: var(--color-text-muted);
-  max-width: 600px;
-  margin: 0 auto;
+.header-left h2 {
+  font-family: var(--font-primary);
+  font-size: clamp(2rem, 3.4vw, 3rem);
+  font-weight: 600;
+  color: var(--navy-900);
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.header-right {
+  max-width: 480px;
+  flex: 1;
+}
+
+.header-right p {
+  font-family: var(--font-primary);
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--slate-600);
+  margin: 0;
+  text-wrap: pretty;
 }
 
 /* ==========================================================================
-   1. HOW IT WORKS SECTION
+   1. HOW IT WORKS — UNIFIED 12-COLUMN TIMELINE & STICKER COMPOSITION
    ========================================================================== */
 .section-how {
-  padding: 90px 0;
-  background-color: #FFFFFF;
-  border-bottom: 1px solid var(--color-border);
-}
-
-.steps-grid {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-}
-
-.step-card {
-  flex: 1;
-  background-color: var(--color-bg-light);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: 32px 24px;
-  text-align: center;
+  padding: 104px 0;
+  background-color: var(--surface);
+  border-bottom: 1px solid var(--border);
   position: relative;
-  transition: all 0.3s ease;
 }
 
-.step-card:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-lg);
-  border-color: rgba(37, 99, 235, 0.2);
-}
-
-.step-number {
-  position: absolute;
-  top: 16px;
-  right: 20px;
-  font-size: 20px;
-  font-weight: 800;
-  color: #CBD5E1;
-}
-
-.step-icon {
-  width: 56px;
-  height: 56px;
-  border-radius: 16px;
-  background-color: #FFFFFF;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 20px;
-  font-size: 26px;
-  box-shadow: var(--shadow-sm);
-}
-
-.text-blue { color: var(--color-primary); }
-.text-gold { color: var(--color-accent-gold-dark); }
-.text-green { color: #10B981; }
-
-.step-card h3 {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--color-navy-dark);
-  margin-bottom: 10px;
-}
-
-.step-card p {
-  font-size: 14px;
-  color: var(--color-text-muted);
-  line-height: 1.6;
-}
-
-.step-connector {
-  font-size: 22px;
-  color: #CBD5E1;
-  display: flex;
-  align-items: center;
-}
-
-/* ==========================================================================
-   2. FEATURES SECTION
-   ========================================================================== */
-.section-features {
-  padding: 90px 0;
-  background-color: var(--color-bg-light);
-}
-
-.features-grid {
+/* Header Row: 12-Column Grid matching content columns */
+.hiw__header {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 28px;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: 32px;
+  align-items: last baseline;
+  margin-bottom: 48px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
 }
 
-.feature-card {
-  background-color: #FFFFFF;
-  border: 1px solid rgba(226, 232, 240, 0.9);
-  border-radius: var(--radius-lg);
-  padding: 32px 24px;
-  box-shadow: var(--shadow-sm);
-  transition: all 0.3s ease;
+.hiw__header .header-left {
+  grid-column: span 7;
+  flex: none;
 }
 
-.feature-card:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-md);
-  border-color: rgba(37, 99, 235, 0.25);
+.hiw__header .header-right {
+  grid-column: span 5;
+  flex: none;
+  max-width: none;
 }
 
-.feature-icon-box {
-  width: 52px;
-  height: 52px;
-  border-radius: 14px;
-  background-color: var(--color-primary-light);
-  color: var(--color-primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  margin-bottom: 20px;
-  transition: all 0.3s ease;
-}
-
-.feature-card:hover .feature-icon-box {
-  background-color: var(--color-primary);
-  color: #FFFFFF;
-  transform: scale(1.05);
-}
-
-.feature-card h3 {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--color-navy-dark);
-  margin-bottom: 10px;
-}
-
-.feature-card p {
-  font-size: 14px;
-  color: var(--color-text-muted);
-  line-height: 1.65;
-}
-
-/* ==========================================================================
-   3. MAP PREVIEW SECTION
-   ========================================================================== */
-.section-map-preview {
-  padding: 70px 0;
-  background-color: #FFFFFF;
-}
-
-.map-preview-card {
-  background: linear-gradient(135deg, #0F172A 0%, #172554 100%);
-  border-radius: 28px;
-  padding: 56px 48px;
-  color: #FFFFFF;
+/* Content Grid: 12 Columns, Equal Height */
+.hiw__grid {
   display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 40px;
-  align-items: center;
-  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.25);
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: 32px;
+  align-items: stretch;
+}
+
+/* Timeline Steps Column (Columns 1–7) */
+.hiw__steps {
+  grid-column: span 7;
   position: relative;
-  overflow: hidden;
-}
-
-.preview-badge {
-  display: inline-block;
-  background-color: rgba(250, 204, 21, 0.15);
-  color: var(--color-accent-gold);
-  font-size: 12px;
-  font-weight: 700;
-  padding: 6px 14px;
-  border-radius: var(--radius-full);
-  margin-bottom: 16px;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-.map-preview-text h2 {
-  font-size: 36px;
-  font-weight: 800;
-  color: #FFFFFF;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
-  margin-bottom: 16px;
-}
-
-.map-preview-text p {
-  font-size: 16px;
-  color: #94A3B8;
-  line-height: 1.7;
-  margin-bottom: 24px;
-}
-
-.preview-features-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 0;
+  justify-content: space-between;
 }
 
-.list-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 14px;
-  color: #E2E8F0;
-  font-weight: 500;
+/* 1px Vertical Track centered at x = 7px (x=6px with 1px width) */
+.timeline-v-guideline {
+  position: absolute;
+  left: 6px;
+  top: 10px;
+  bottom: 24px;
+  width: 1px;
+  background-color: var(--border-strong);
+  z-index: 1;
 }
 
-.list-item i {
-  color: var(--color-accent-gold);
-  font-size: 16px;
+@supports (animation-timeline: view()) {
+  @keyframes fillVerticalTrack {
+    from {
+      transform: scaleY(0);
+    }
+    to {
+      transform: scaleY(1);
+    }
+  }
+
+  .timeline-v-guideline::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: var(--blue-600);
+    transform-origin: top;
+    animation: fillVerticalTrack linear both;
+    animation-timeline: view();
+    animation-range: entry 20% contain 70%;
+  }
 }
 
-.map-cta-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background-color: var(--color-accent-gold);
-  color: #0F172A !important;
-  font-size: 16px;
-  font-weight: 800;
-  padding: 14px 28px;
-  border-radius: var(--radius-md);
-  box-shadow: 0 8px 20px rgba(250, 204, 21, 0.3);
-  transition: all 0.25s ease;
-  text-decoration: none;
-}
-
-.map-cta-btn:hover {
-  background-color: #FDE047;
-  transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(250, 204, 21, 0.45);
-}
-
-.map-cta-btn i {
-  font-size: 18px;
-  transition: transform 0.2s ease;
-}
-
-.map-cta-btn:hover i {
-  transform: translateX(4px);
-}
-
-.map-preview-graphic {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.preview-image-box {
+/* Each Step: 14px circle column + 1fr content */
+.timeline-step {
+  display: grid;
+  grid-template-columns: 14px 1fr;
+  column-gap: 28px;
+  padding-bottom: 36px;
   position: relative;
-  width: 100%;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 20px;
-  padding: 16px;
-  backdrop-filter: blur(10px);
+  z-index: 2;
 }
 
-.preview-svg {
-  width: 100%;
-  max-height: 240px;
-  object-fit: contain;
+.timeline-step:last-child {
+  padding-bottom: 0;
 }
 
-/* ==========================================================================
-   4. TRUST / PURPOSE SECTION
-   ========================================================================== */
-.section-purpose {
-  padding: 90px 0;
-  background-color: var(--color-bg-light);
-}
-
-.purpose-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 28px;
-}
-
-.purpose-card {
-  background-color: #FFFFFF;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: 36px 28px;
-  text-align: center;
-  box-shadow: var(--shadow-sm);
-  transition: all 0.3s ease;
-}
-
-.purpose-card:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-md);
-}
-
-.purpose-badge-icon {
-  font-size: 40px;
-  margin-bottom: 16px;
-}
-
-.purpose-card h4 {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--color-navy-dark);
-  margin-bottom: 10px;
-}
-
-.purpose-card p {
-  font-size: 14px;
-  color: var(--color-text-muted);
-  line-height: 1.65;
-}
-
-/* ==========================================================================
-   RESPONSIVE DESIGN (MOBILE & TABLET)
-   ========================================================================== */
-@media (max-width: 992px) {
-  .map-preview-card {
-    grid-template-columns: 1fr;
-    padding: 40px 32px;
-  }
-}
-
-@media (max-width: 768px) {
-  .section-how, .section-features, .section-map-preview, .section-purpose {
-    padding: 60px 0;
-  }
-
-  .steps-grid {
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .step-connector {
-    transform: rotate(90deg);
-    margin: -4px 0;
-  }
-
-  .section-header h2 {
-    font-size: 28px;
-  }
-
-  .map-preview-card {
-    padding: 32px 20px;
-    border-radius: 20px;
-  }
-
-  .map-preview-text h2 {
-    font-size: 26px;
-  }
-}
-/* ==========================================================================
-   CAMPUS DIRECTORY SECTION (SEO & VISITOR DIRECTORY)
-   ========================================================================== */
-.section-directory {
-  padding: 80px 0;
-  background-color: #FFFFFF;
-  border-top: 1px solid var(--color-border);
-}
-
-.directory-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 28px;
-}
-
-.directory-card {
-  background: var(--color-bg-light);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: 32px 26px;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-.directory-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
-  border-color: rgba(37, 99, 235, 0.3);
-}
-
-.directory-header {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-bottom: 12px;
-}
-
-.directory-icon-box {
-  width: 44px;
-  height: 44px;
-  border-radius: var(--radius-md);
-  background: #FFFFFF;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  box-shadow: var(--shadow-sm);
+/* Nodes: 14px circles centered on the 1px line */
+.step-node-marker {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  margin-top: 5px;
+  position: relative;
+  z-index: 3;
   flex-shrink: 0;
 }
 
-.directory-card h3 {
+.node-outlined {
+  border: 1.5px solid var(--border-strong);
+  background-color: var(--surface);
+}
+
+.node-filled {
+  background-color: var(--blue-600);
+  border: none;
+  box-shadow: 0 0 0 4px var(--blue-100);
+}
+
+/* Step Content */
+.step-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.step-label-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.step-num {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: var(--blue-600);
+}
+
+/* Bare 24px outlined glyph (--navy-900), no border, no background, no radius */
+.step-glyph {
   font-size: 20px;
-  font-weight: 700;
-  color: var(--color-navy-dark);
+  line-height: 1;
+  color: var(--navy-900);
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  padding: 0;
+}
+
+.timeline-step h3 {
+  font-family: var(--font-primary);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--navy-900);
+  margin: 10px 0 8px;
+  letter-spacing: -0.02em;
+}
+
+.timeline-step p {
+  font-family: var(--font-primary);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--slate-600);
+  max-width: 52ch;
+  text-wrap: pretty;
+  margin: 0;
+}
+
+/* Sticker Visual Column (Columns 8–12) */
+.hiw__visual {
+  grid-column: span 5;
+  display: flex;
+  padding: 8px;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   3. CAMPUS DIRECTORY — STRUCTURED INDEX PANEL
+   ========================================================================== */
+.section-directory {
+  padding: 120px 0 128px;
+  background-color: var(--bg);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+
+.directory-index-panel {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--elev-2), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  overflow: hidden;
+}
+
+.directory-col {
+  padding: 36px 32px;
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+}
+
+.directory-col:last-child {
+  border-right: none;
+}
+
+.directory-col-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.dir-glyph {
+  font-size: 22px;
+  color: var(--blue-600);
+}
+
+.directory-col-head h3 {
+  font-family: var(--font-primary);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--navy-900);
+  letter-spacing: -0.02em;
   margin: 0;
 }
 
 .directory-desc {
+  font-family: var(--font-primary);
   font-size: 14px;
-  color: var(--color-text-muted);
-  margin-bottom: 16px;
+  color: var(--slate-600);
+  margin-bottom: 24px;
   line-height: 1.5;
 }
 
@@ -463,21 +327,282 @@
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
 }
 
 .directory-list li {
-  font-size: 14px;
-  color: var(--color-navy-dark);
+  padding: 9px 8px;
+  border-bottom: 1px solid var(--border);
+  font-size: 14.5px;
   font-weight: 500;
+  color: var(--navy-900);
   display: flex;
-  align-items: center;
-  gap: 8px;
+  align-items: baseline;
+  gap: 12px;
+  border-radius: var(--radius-xs);
+  transition: background-color var(--transition-fast);
 }
 
-.directory-list li::before {
-  content: "•";
-  color: var(--color-primary);
-  font-weight: bold;
-  font-size: 16px;
+.directory-list li:hover {
+  background-color: var(--blue-50);
+}
+
+.directory-list li:last-child {
+  border-bottom: none;
+}
+
+.dir-num {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--slate-500);
+  min-width: 24px;
+  font-variant-numeric: tabular-nums;
+  display: inline-block;
+}
+
+/* ==========================================================================
+   3. PURPOSE — 3 CLEAN LANES SEPARATED BY HAIRLINES
+   ========================================================================== */
+.section-purpose {
+  padding: 120px 0 136px;
+  background-color: var(--surface);
+  position: relative;
+}
+
+.purpose-lanes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 56px;
+  margin-top: 32px;
+}
+
+.purpose-lane {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding-right: 32px;
+  border-right: 1px solid var(--border);
+}
+
+.purpose-lane:last-child {
+  border-right: none;
+  padding-right: 0;
+}
+
+.lane-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+/* 44px Outlined Navy Icon (No colored tile) */
+.purpose-icon {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  font-size: 20px;
+  color: var(--navy-900);
+  background: transparent;
+}
+
+.lane-index {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--slate-500);
+  letter-spacing: 0.1em;
+}
+
+.purpose-lane h3 {
+  font-family: var(--font-primary);
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--navy-900);
+  line-height: 1.25;
+  margin-bottom: 12px;
+}
+
+.purpose-lane p {
+  font-family: var(--font-primary);
+  font-size: 15.5px;
+  color: var(--slate-600);
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN PASS
+   ========================================================================== */
+@media (min-width: 992px) and (max-width: 1199px) {
+  .hiw__header,
+  .hiw__grid {
+    column-gap: 24px;
+  }
+
+  .timeline-step h3 {
+    font-size: 20px;
+  }
+
+  .map-sticker--fill {
+    min-height: 300px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .hiw__header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  .hiw__header .header-left,
+  .hiw__header .header-right {
+    grid-column: span 12;
+    max-width: 100%;
+  }
+
+  .hiw__grid {
+    grid-template-columns: 1fr;
+    row-gap: 40px;
+  }
+
+  .hiw__steps {
+    grid-column: span 12;
+    width: 100%;
+  }
+
+  .hiw__visual {
+    grid-column: span 12;
+    width: 100%;
+    margin-top: 0;
+    padding: 0;
+  }
+
+  .map-sticker--fill {
+    aspect-ratio: 16 / 10;
+    max-height: 380px;
+    min-height: auto;
+  }
+}
+
+@media (max-width: 1024px) {
+  .section-header-split:not(.hiw__header) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+  .directory-index-panel {
+    grid-template-columns: 1fr;
+  }
+  .directory-col {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .directory-col:last-child {
+    border-bottom: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .section-how,
+  .section-directory,
+  .section-purpose {
+    padding: 72px 0 80px;
+  }
+
+  .hiw__header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+  }
+
+  .hiw__header .header-left,
+  .hiw__header .header-right {
+    grid-column: span 12;
+    max-width: 100%;
+  }
+
+  .hiw__grid {
+    grid-template-columns: 1fr;
+    row-gap: 32px;
+  }
+
+  .hiw__steps {
+    grid-column: span 12;
+    width: 100%;
+  }
+
+  .timeline-step {
+    padding-bottom: 28px;
+    column-gap: 20px;
+  }
+
+  .timeline-step h3 {
+    font-size: 19px;
+  }
+
+  .timeline-step p {
+    font-size: 15px;
+  }
+
+  .hiw__visual {
+    grid-column: span 12;
+    width: 100%;
+    margin-top: 0;
+    padding: 0;
+  }
+
+  .map-sticker--fill {
+    aspect-ratio: 4 / 3;
+    min-height: auto;
+    max-height: 320px;
+    transform: rotate(-1deg);
+  }
+
+  .map-sticker--fill .map-sticker__face {
+    clip-path: polygon(
+      0 0,
+      100% 0,
+      100% calc(100% - 28px),
+      calc(100% - 28px) 100%,
+      0 100%
+    );
+  }
+
+  .map-sticker--fill::after {
+    width: 28px;
+    height: 28px;
+  }
+
+  .directory-col {
+    padding: 24px 20px;
+  }
+
+  .purpose-lanes-grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+  .purpose-lane {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding-right: 0;
+    padding-bottom: 32px;
+  }
+
+  .purpose-lane:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
 }

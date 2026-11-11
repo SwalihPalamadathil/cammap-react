@@ -1,29 +1,54 @@
 :root {
-  --font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --color-navy-dark: #0F172A;
-  --color-navy-deep: #172554;
-  --color-navy-mid: #1E293B;
-  --color-primary: #2563EB;
-  --color-primary-hover: #1D4ED8;
-  --color-primary-light: #EFF6FF;
-  --color-accent-gold: #FACC15;
-  --color-accent-gold-dark: #EAB308;
-  --color-bg-light: #F8FAFC;
-  --color-bg-card: #FFFFFF;
-  --color-text-main: #0F172A;
-  --color-text-muted: #64748B;
-  --color-border: #E2E8F0;
-  --color-border-hover: #CBD5E1;
-  --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
-  --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.06);
-  --shadow-lg: 0 16px 40px rgba(15, 23, 42, 0.08);
-  --shadow-primary: 0 8px 20px rgba(37, 99, 235, 0.25);
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 18px;
-  --radius-full: 9999px;
-  --transition-fast: 0.2s ease;
-  --transition-normal: 0.3s ease;
+  /* Precision Elevated Design Tokens */
+  --navy-950: #0B1220;
+  --navy-900: #0F172A;
+  --navy-800: #172554;
+  --blue-700: #1D4ED8;
+  --blue-600: #2563EB;
+  --blue-500: #3B82F6;
+  --sky-300: #7DD3FC;
+  --blue-300: #93C5FD;
+  --blue-100: #DBEAFE;
+  --blue-50: #EFF6FF;
+  --bg: #F8FAFC;
+  --surface: #FFFFFF;
+  --slate-600: #475569;
+  --slate-500: #64748B;
+  --border: #E2E8F0;
+  --border-strong: #CBD5E1;
+  --ok: #10B981;
+
+  /* Elevation Tokens */
+  --elev-0: 0 0 0 1px var(--border);
+  --elev-1: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --elev-2: 0 1px 2px rgba(15, 23, 42, 0.05), 0 8px 24px -8px rgba(15, 23, 42, 0.12);
+  --elev-3: 0 1px 2px rgba(15, 23, 42, 0.06), 0 24px 56px -20px rgba(15, 23, 42, 0.28);
+
+  /* Typography */
+  --font-primary: 'Geist', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Radii */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-smooth: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Sticky Header Height */
+  --header-h: 72px;
+
+  color-scheme: light;
+}
+
+@media (max-width: 480px) {
+  :root {
+    --header-h: 64px;
+  }
 }
 
 * {
@@ -34,16 +59,68 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-h) + 16px);
+  background-color: var(--bg);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scrollbar-gutter: stable;
 }
 
 body {
-  font-family: var(--font-family);
-  background-color: var(--color-bg-light);
-  color: var(--color-text-main);
-  line-height: 1.6;
+  font-family: var(--font-primary);
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--navy-900);
+  background-color: var(--bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
+  overflow-x: clip;
+}
+
+/* In-Page Anchor Targets: Land smoothly below sticky header */
+#home,
+#search,
+#how-it-works,
+#features,
+#directory,
+#about {
+  scroll-margin-top: calc(var(--header-h) + 16px);
+}
+
+/* Accessible Precision Focus Rings */
+*:focus-visible {
+  outline: 2px solid var(--blue-600);
+  outline-offset: 3px;
+}
+
+/* Visually Hidden Skip to Content Link */
+.skip-to-content {
+  position: absolute;
+  top: -100px;
+  left: 16px;
+  z-index: 9999;
+  padding: 10px 16px;
+  background: var(--blue-600);
+  color: #FFFFFF;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  transition: top 0.2s ease;
+}
+
+.skip-to-content:focus {
+  top: 16px;
+  outline: 2px solid #FFFFFF;
+  outline-offset: 2px;
+}
+
+button,
+a,
+select,
+.chip-btn {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 a {
@@ -53,25 +130,95 @@ a {
 
 button {
   cursor: pointer;
-  font-family: var(--font-family);
+  font-family: inherit;
+  color: inherit;
+}
+
+input, select, textarea {
+  font-family: inherit;
+  color: inherit;
 }
 
 img {
   max-width: 100%;
   height: auto;
+  display: block;
 }
 
-/* Custom scrollbar */
+/* Precision Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #F1F5F9;
+  background: var(--bg);
 }
 ::-webkit-scrollbar-thumb {
-  background: #CBD5E1;
-  border-radius: 4px;
+  background: var(--border-strong);
+  border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94A3B8;
+  background: var(--slate-500);
+}
+
+/* Eyebrow Label with 24px Hairline */
+.eyebrow-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--blue-600);
+  margin-bottom: 16px;
+}
+
+.eyebrow-label::before {
+  content: "";
+  display: inline-block;
+  width: 24px;
+  height: 1px;
+  background-color: var(--blue-600);
+}
+
+/* Scale-Bar Rule: 1px line with tick marks every 8px (taller every 40px) */
+.scale-bar-rule {
+  width: 100%;
+  height: 8px;
+  position: relative;
+  overflow: hidden;
+  display: block;
+  opacity: 0.75;
+  /* 1px base line at bottom */
+  border-bottom: 1px solid var(--border-strong);
+  /* Regular ticks every 8px (4px tall) and master ticks every 40px (8px tall) */
+  background-image: 
+    repeating-linear-gradient(
+      90deg,
+      var(--slate-500) 0px,
+      var(--slate-500) 1px,
+      transparent 1px,
+      transparent 40px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      var(--border-strong) 0px,
+      var(--border-strong) 1px,
+      transparent 1px,
+      transparent 8px
+    );
+  background-size: 100% 8px, 100% 4px;
+  background-position: bottom left, bottom left;
+  background-repeat: no-repeat;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

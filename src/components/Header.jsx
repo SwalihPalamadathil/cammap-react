@@ -5,6 +5,7 @@ import logo from "../assets/logo1.png";
 function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const headerRef = useRef(null);
+  const hamburgerRef = useRef(null);
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen((prev) => !prev);
@@ -14,29 +15,31 @@ function Header() {
     setMobileMenuOpen(false);
   };
 
-  // Close mobile menu on Escape key or outside click
+  // Close mobile menu on Escape key or outside click, manage body scroll lock & focus
   useEffect(() => {
+    if (!mobileMenuOpen) return;
+
+    document.body.style.overflow = "hidden";
+
     const handleKeyDown = (e) => {
-      if (e.key === "Escape" && mobileMenuOpen) {
+      if (e.key === "Escape") {
         setMobileMenuOpen(false);
+        hamburgerRef.current?.focus();
       }
     };
 
     const handleClickOutside = (e) => {
-      if (
-        mobileMenuOpen &&
-        headerRef.current &&
-        !headerRef.current.contains(e.target)
-      ) {
+      if (headerRef.current && !headerRef.current.contains(e.target)) {
         setMobileMenuOpen(false);
       }
     };
 
     document.addEventListener("keydown", handleKeyDown);
     document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("touchstart", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside, { passive: true });
 
     return () => {
+      document.body.style.overflow = "";
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("touchstart", handleClickOutside);
@@ -45,15 +48,18 @@ function Header() {
 
   return (
     <header className="header" ref={headerRef}>
+      <a href="#main" className="skip-to-content">
+        Skip to content
+      </a>
       <div className="header-container">
         {/* LEFT: BRAND */}
-        <a href="#" className="logoBox" onClick={closeMobileMenu} aria-label="CamMap Home">
+        <a href="#home" className="logoBox" onClick={closeMobileMenu} aria-label="CamMap Home">
           <img 
             src={logo} 
             alt="CamMap Logo" 
             className="logo" 
-            width="42" 
-            height="42" 
+            width="38" 
+            height="38" 
             fetchPriority="high" 
             decoding="async" 
           />
@@ -69,16 +75,18 @@ function Header() {
           className={`navbar ${mobileMenuOpen ? "active" : ""}`}
           aria-label="Main Navigation"
         >
-          <a href="#home" onClick={closeMobileMenu}>Home</a>
-          <a href="#search" onClick={closeMobileMenu}>Route Finder</a>
-          <a href="#how-it-works" onClick={closeMobileMenu}>How It Works</a>
-          <a href="#features" onClick={closeMobileMenu}>Features</a>
-          <a href="#directory" onClick={closeMobileMenu}>Directory</a>\n          <a href="#about" onClick={closeMobileMenu}>About</a>
+          <a href="#home" className="nav-link" onClick={closeMobileMenu}>Home</a>
+          <a href="#search" className="nav-link" onClick={closeMobileMenu}>Route Finder</a>
+          <a href="#how-it-works" className="nav-link" onClick={closeMobileMenu}>How It Works</a>
+          <a href="#features" className="nav-link" onClick={closeMobileMenu}>Features</a>
+          <a href="#directory" className="nav-link" onClick={closeMobileMenu}>Directory</a>
+          <a href="#about" className="nav-link" onClick={closeMobileMenu}>About</a>
         </nav>
 
         {/* RIGHT: HAMBURGER TOGGLE */}
         <div className="header-actions">
           <button 
+            ref={hamburgerRef}
             className={`hamburger-btn ${mobileMenuOpen ? "open" : ""}`}
             onClick={toggleMobileMenu}
             aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
@@ -86,7 +94,6 @@ function Header() {
             aria-controls="primary-navigation"
           >
             <div className="hamburger-icon">
-              <span></span>
               <span></span>
               <span></span>
             </div>

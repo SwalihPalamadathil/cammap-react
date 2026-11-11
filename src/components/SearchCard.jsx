@@ -74,8 +74,12 @@ function SearchCard() {
 
   function handleFindRoute() {
     if (from && to) {
-      localStorage.setItem("from", from);
-      localStorage.setItem("to", to);
+      try {
+        localStorage.setItem("from", from);
+        localStorage.setItem("to", to);
+      } catch {
+        // Safe fallback in private browsing mode where localStorage may throw
+      }
       window.location.href = `${import.meta.env.BASE_URL}map/index.html`;
     }
   }
@@ -121,6 +125,7 @@ function SearchCard() {
                   className="gps-btn"
                   onClick={getCurrentLocation}
                   title="Use Current Location"
+                  aria-label="Use Current Location"
                 >
                   <i className="bi bi-crosshair"></i>
                   <span>GPS</span>
@@ -150,6 +155,7 @@ function SearchCard() {
                 className="swap-btn"
                 onClick={handleSwap}
                 title="Swap Starting Point and Destination"
+                aria-label="Swap Starting Point and Destination"
                 disabled={!from && !to}
               >
                 <i className="bi bi-arrow-down-up"></i>

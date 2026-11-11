@@ -8,7 +8,7 @@ function Home() {
   return (
     <div className="home-page">
       <Header />
-      <main>
+      <main id="main">
         <Banner />
         <SearchCard />
         <About />

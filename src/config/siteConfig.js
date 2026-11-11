@@ -1,4 +1,4 @@
-﻿/**
+/**
  * CamMap Central Site Configuration
  * 
  * Update `SITE_URL` when connecting your custom production domain
@@ -12,8 +12,8 @@
  */
 
 export const SITE_CONFIG = {
-  // Production domain placeholder - replace with your live custom domain
-  siteUrl: "https://YOUR-CUSTOM-DOMAIN.com",
+  // Production domain for CamMap on Vercel
+  siteUrl: "https://cammap-react.vercel.app",
   siteName: "CamMap",
   title: "CamMap — EMEA College Campus Map & Navigation",
   description:

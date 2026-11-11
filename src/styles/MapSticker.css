@@ -1,0 +1,114 @@
+/* ==========================================================================
+   MAP STICKER — Precision Die-Cut Vinyl Sticker Component
+   ========================================================================== */
+.map-sticker {
+  display: inline-block;
+  position: relative;
+  width: clamp(200px, 22vw, 300px);
+  aspect-ratio: 4 / 3;
+  filter: drop-shadow(0 14px 22px rgba(15, 23, 42, 0.30)) drop-shadow(0 2px 3px rgba(15, 23, 42, 0.10));
+  transform: rotate(-4deg);
+  transform-origin: center center;
+  transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  pointer-events: auto;
+  z-index: 3;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .map-sticker {
+    transition: none;
+  }
+}
+
+.map-sticker:hover {
+  transform: rotate(-2deg) translateY(-2px);
+}
+
+/* Face: 6px white die-cut border, hairline outline, clipped bottom-right corner */
+.map-sticker__face {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 6px;
+  background-color: #FFFFFF;
+  border-radius: 10px;
+  outline: 1px solid rgba(15, 23, 42, 0.08);
+  outline-offset: -1px;
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 34px),
+    calc(100% - 34px) 100%,
+    0 100%
+  );
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Peeled corner flap: 34px flat #CBD5E1 sitting at bottom-right */
+.map-sticker::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 34px;
+  height: 34px;
+  background-color: #CBD5E1;
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.95);
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* Map Image inside sticker */
+.map-sticker__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  border-radius: 5px;
+  background-color: #EFF6FF;
+  transform: scale(1.12);
+  transform-origin: center center;
+}
+
+/* ==========================================================================
+   VARIANT: FILL (Used in unified 12-column layout to fill visual container)
+   ========================================================================== */
+.map-sticker--fill {
+  width: 100%;
+  height: 100%;
+  min-height: 340px;
+  aspect-ratio: auto;
+  transform: rotate(-1.5deg);
+  filter: drop-shadow(0 14px 22px rgba(15, 23, 42, 0.28)) drop-shadow(0 2px 3px rgba(15, 23, 42, 0.10));
+}
+
+.map-sticker--fill:hover {
+  transform: rotate(-0.5deg);
+}
+
+.map-sticker--fill .map-sticker__face {
+  border-radius: 16px;
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 40px),
+    calc(100% - 40px) 100%,
+    0 100%
+  );
+}
+
+.map-sticker--fill::after {
+  width: 40px;
+  height: 40px;
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+}
+
+.map-sticker--fill .map-sticker__img {
+  object-position: 50% 58%;
+}
+

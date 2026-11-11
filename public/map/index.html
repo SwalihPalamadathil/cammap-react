@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0d1b2a">
+    <meta name="theme-color" content="#0B1220">
     <meta name="robots" content="index, follow">
     <meta name="author" content="Muhammed Swalih P">
 
@@ -42,8 +42,8 @@
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="preload" as="image" href="logo1.png" type="image/png" fetchpriority="high">
     
-    <!-- Google Fonts with display=swap -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Geist & Geist Mono (Navbar exact match) + Inter & Plus Jakarta Sans (Map content) -->
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Geist:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
     
     <!-- Framework & Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -76,42 +76,86 @@
 </head>
 <body>
     
-    <!-- TOP GLASS NAVIGATION BAR -->
-    <header class="app-header">
-        <div class="header-container">
-            <a href="../" class="brand-group" aria-label="CamMap Home">
+    <!-- TOP NAVIGATION BAR (Exact Match to Page 1 Visual Spec) -->
+    <header class="mapnav-header" id="mapnavHeader">
+        <div class="mapnav-container">
+            <!-- BRAND (LEFT) — LINK TO PAGE 1 HOME -->
+            <a href="../#home" class="mapnav-brand" aria-label="CamMap Home">
                 <img 
                     src="logo1.png" 
                     alt="CamMap Logo" 
-                    class="brand-logo" 
+                    class="mapnav-logo" 
                     width="38" 
                     height="38" 
                     fetchpriority="high" 
                     decoding="async"
                 >
-                <div class="brand-text">
-                    <span class="brand-name">CamMap</span>
-                    <span class="brand-sub">Smart Campus Navigation</span>
+                <div class="mapnav-brand-text">
+                    <span class="mapnav-brand-name">CamMap</span>
+                    <span class="mapnav-brand-sub">Smart Campus Navigation</span>
                 </div>
             </a>
 
-            <div class="breadcrumb-nav d-none d-md-flex" aria-label="Breadcrumb navigation">
-                <a href="../" class="crumb-link"><i class="bi bi-house-door-fill" aria-hidden="true"></i> Home</a>
-                <i class="bi bi-chevron-right crumb-sep" aria-hidden="true"></i>
-                <span class="crumb-active">Interactive Campus Map</span>
-            </div>
+            <!-- NAVIGATION LINKS -->
+            <nav 
+                id="mapnavNavigation" 
+                class="mapnav-nav" 
+                aria-label="Main Navigation"
+            >
+                <a href="../#home" class="mapnav-link">Home</a>
+                <a href="../#search" class="mapnav-link">Route Finder</a>
+                <a href="../#how-it-works" class="mapnav-link">How It Works</a>
+                <a href="../#features" class="mapnav-link">Features</a>
+                <a href="../#directory" class="mapnav-link">Directory</a>
+                <a href="../#about" class="mapnav-link">About</a>
 
-            <div class="header-actions" role="toolbar" aria-label="Map actions toolbar">
-                <button id="resetRouteBtn" class="btn-glass" title="Reset Current Route" aria-label="Reset Route">
-                    <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i>
-                    <span class="d-none d-lg-inline">Reset Route</span>
-                </button>
-                <button id="locateMeBtn" class="btn-glass" title="Locate My Position" data-bs-toggle="modal" data-bs-target="#gpsModal" aria-label="Locate My Position">
-                    <i class="bi bi-crosshair" aria-hidden="true"></i>
-                    <span class="d-none d-lg-inline">Locate Me</span>
-                </button>
-                <button class="btn-glass btn-icon-only" data-bs-toggle="modal" data-bs-target="#infoModal" title="Campus Info" aria-label="About Campus Information">
-                    <i class="bi bi-info-circle" aria-hidden="true"></i>
+                <!-- Mobile-only map action rows inside hamburger panel -->
+                <div class="mapnav-mobile-actions" role="toolbar" aria-label="Map actions mobile toolbar">
+                    <button type="button" id="resetRouteBtnMobile" class="mapnav-mobile-btn" title="Reset Current Route" aria-label="Reset Route">
+                        <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i>
+                        <span>Reset Route</span>
+                    </button>
+                    <button type="button" id="locateMeBtnMobile" class="mapnav-mobile-btn" title="Locate My Position" data-bs-toggle="modal" data-bs-target="#gpsModal" aria-label="Locate My Position">
+                        <i class="bi bi-crosshair" aria-hidden="true"></i>
+                        <span>Locate Me</span>
+                    </button>
+                    <button type="button" class="mapnav-mobile-btn" data-bs-toggle="modal" data-bs-target="#infoModal" title="Campus Info" aria-label="About Campus Information">
+                        <i class="bi bi-info-circle" aria-hidden="true"></i>
+                        <span>Campus Info</span>
+                    </button>
+                </div>
+            </nav>
+
+            <!-- RIGHT ACTIONS: MAP CONTROLS + HAMBURGER -->
+            <div class="mapnav-actions">
+                <!-- Desktop Map action controls (36px square buttons) -->
+                <div class="mapnav-controls" role="toolbar" aria-label="Map actions toolbar">
+                    <button type="button" id="resetRouteBtn" class="mapnav-btn" title="Reset Current Route" aria-label="Reset Route">
+                        <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i>
+                        <span class="mapnav-btn-label">Reset Route</span>
+                    </button>
+                    <button type="button" id="locateMeBtn" class="mapnav-btn" title="Locate My Position" data-bs-toggle="modal" data-bs-target="#gpsModal" aria-label="Locate My Position">
+                        <i class="bi bi-crosshair" aria-hidden="true"></i>
+                        <span class="mapnav-btn-label">Locate Me</span>
+                    </button>
+                    <button type="button" class="mapnav-btn mapnav-btn-icon-only" data-bs-toggle="modal" data-bs-target="#infoModal" title="Campus Info" aria-label="About Campus Information">
+                        <i class="bi bi-info-circle" aria-hidden="true"></i>
+                    </button>
+                </div>
+
+                <!-- Hamburger button -->
+                <button 
+                    type="button" 
+                    id="mapnavHamburger"
+                    class="mapnav-hamburger" 
+                    aria-label="Open navigation menu" 
+                    aria-expanded="false" 
+                    aria-controls="mapnavNavigation"
+                >
+                    <div class="mapnav-hamburger-icon" aria-hidden="true">
+                        <span></span>
+                        <span></span>
+                    </div>
                 </button>
             </div>
         </div>
@@ -122,24 +166,47 @@
             
             <!-- READ-ONLY SELECTED ROUTE DISPLAY SECTION -->
             <section class="selected-route-section my-4" id="selectedRouteSection">
-                <div class="glass-panel selected-route-card" id="selectedRouteCard">
+                <div class="selected-route-card" id="selectedRouteCard">
+                    <!-- Precision Corner Registration Ticks -->
+                    <span class="card-tick tick-tl" aria-hidden="true"></span>
+                    <span class="card-tick tick-tr" aria-hidden="true"></span>
+                    <span class="card-tick tick-bl" aria-hidden="true"></span>
+                    <span class="card-tick tick-br" aria-hidden="true"></span>
+                    <!-- 1px Top Hairline (40% width) -->
+                    <span class="card-top-hairline" aria-hidden="true"></span>
+                    <!-- Hand-Crafted Art & Doodle Layer -->
+                    <div class="card-doodle-layer" aria-hidden="true"></div>
                     
                     <div class="selected-route-header">
-                        <div class="d-flex align-items-center gap-2">
+                        <div class="selected-route-title-group">
                             <span class="pulse-dot"></span>
                             <span class="route-header-badge">SELECTED ROUTE</span>
-                            <span class="d-none d-sm-inline text-slate-500 fs-7">• EMEA Campus Navigator</span>
+                            <span class="header-hairline-sep" aria-hidden="true"></span>
+                            <span class="header-subtitle">EMEA Campus Navigator</span>
                         </div>
-                        <div class="d-flex align-items-center gap-2">
+                        <div class="selected-route-actions-group">
                             <div id="routeStatusBadge">
                                 <span class="badge-pill bg-success text-white">
                                     <i class="bi bi-check-circle-fill"></i> Route Active
                                 </span>
                             </div>
-                            <a href="../" class="btn-change-route" title="Choose a different route on Home">
-                                <i class="bi bi-arrow-left"></i>
-                                <span>Change Route</span>
-                            </a>
+                            <div class="card-toolbar" role="toolbar" aria-label="Route actions toolbar">
+                                <button type="button" class="btn-card-toolbar" id="cardResetRouteBtn" onclick="if(document.getElementById('resetRouteBtn'))document.getElementById('resetRouteBtn').click();else if(window.showNoRouteState){clearMarkers();showNoRouteState();localStorage.removeItem('from');localStorage.removeItem('to');}" title="Reset Current Route" aria-label="Reset Route">
+                                    <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i>
+                                    <span class="btn-text">Reset Route</span>
+                                </button>
+                                <button type="button" class="btn-card-toolbar" id="cardLocateMeBtn" data-bs-toggle="modal" data-bs-target="#gpsModal" title="Locate My Position" aria-label="Locate My Position">
+                                    <i class="bi bi-crosshair" aria-hidden="true"></i>
+                                    <span class="btn-text">Locate Me</span>
+                                </button>
+                                <button type="button" class="btn-card-toolbar btn-card-toolbar-icon" data-bs-toggle="modal" data-bs-target="#infoModal" title="Campus Info" aria-label="About Campus Information">
+                                    <i class="bi bi-info-circle" aria-hidden="true"></i>
+                                </button>
+                                <a href="../" class="btn-change-route" title="Choose a different route on Home">
+                                    <i class="bi bi-arrow-left" aria-hidden="true"></i>
+                                    <span>Change Route</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
 
@@ -183,22 +250,17 @@
 
                         <!-- ROUTE SUB-BAR / METRICS -->
                         <div class="route-meta-bar" id="routeMetaBar">
-                            <div class="meta-item">
-                                <i class="bi bi-signpost-2 text-primary"></i>
-                                <span>Junctions: <strong id="displayJunctions">0</strong></span>
-                            </div>
-                            <div class="meta-divider">•</div>
-                            <div class="meta-item">
+                            <div class="meta-item meta-est-walk">
                                 <i class="bi bi-clock-history text-primary"></i>
                                 <span>Est. Walk: <strong id="displayTime">--</strong></span>
                             </div>
                             <div class="meta-divider">•</div>
-                            <div class="meta-item">
+                            <div class="meta-item meta-bfs-badge">
                                 <i class="bi bi-lightning-charge-fill text-gold"></i>
                                 <span>Optimal BFS Shortest Path</span>
                             </div>
                             <div class="meta-divider d-none d-lg-inline">•</div>
-                            <div class="meta-item text-slate-500 d-none d-lg-inline">
+                            <div class="meta-item meta-guidance text-slate-500 d-none d-lg-inline">
                                 <span>Follow highlighted line on map below</span>
                             </div>
                         </div>
@@ -814,5 +876,93 @@
     <script src="https://unpkg.com/@panzoom/panzoom/dist/panzoom.min.js"></script>
     <script src="script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Map Navbar Mobile & Accessibility Controller -->
+    <script>
+      (function() {
+        const header = document.getElementById('mapnavHeader');
+        const nav = document.getElementById('mapnavNavigation');
+        const hamburger = document.getElementById('mapnavHamburger');
+        const links = nav ? nav.querySelectorAll('.mapnav-link') : [];
+        const resetBtnDesktop = document.getElementById('resetRouteBtn');
+        const resetBtnMobile = document.getElementById('resetRouteBtnMobile');
+        const locateBtnMobile = document.getElementById('locateMeBtnMobile');
+
+        function openMenu() {
+          if (!nav || !hamburger) return;
+          nav.classList.add('active');
+          hamburger.classList.add('open');
+          hamburger.setAttribute('aria-expanded', 'true');
+          hamburger.setAttribute('aria-label', 'Close navigation menu');
+        }
+
+        function closeMenu() {
+          if (!nav || !hamburger) return;
+          nav.classList.remove('active');
+          hamburger.classList.remove('open');
+          hamburger.setAttribute('aria-expanded', 'false');
+          hamburger.setAttribute('aria-label', 'Open navigation menu');
+        }
+
+        function toggleMenu() {
+          if (!nav) return;
+          if (nav.classList.contains('active')) {
+            closeMenu();
+          } else {
+            openMenu();
+          }
+        }
+
+        if (hamburger) {
+          hamburger.addEventListener('click', function(e) {
+            e.stopPropagation();
+            toggleMenu();
+          });
+        }
+
+        links.forEach(function(link) {
+          link.addEventListener('click', function() {
+            closeMenu();
+          });
+        });
+
+        if (resetBtnMobile && resetBtnDesktop) {
+          resetBtnMobile.addEventListener('click', function() {
+            closeMenu();
+            resetBtnDesktop.click();
+          });
+        }
+
+        if (locateBtnMobile) {
+          locateBtnMobile.addEventListener('click', function() {
+            closeMenu();
+          });
+        }
+
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape' && nav && nav.classList.contains('active')) {
+            closeMenu();
+          }
+        });
+
+        document.addEventListener('mousedown', function(e) {
+          if (nav && nav.classList.contains('active') && header && !header.contains(e.target)) {
+            closeMenu();
+          }
+        });
+
+        document.addEventListener('touchstart', function(e) {
+          if (nav && nav.classList.contains('active') && header && !header.contains(e.target)) {
+            closeMenu();
+          }
+        }, { passive: true });
+
+        window.addEventListener('resize', function() {
+          if (window.innerWidth > 868 && nav && nav.classList.contains('active')) {
+            closeMenu();
+          }
+        });
+      })();
+    </script>
 </body>
 </html>
