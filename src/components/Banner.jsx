@@ -83,7 +83,7 @@ function Banner() {
           </p>
 
           <div className="hero-actions">
-            <a href="#search" className="hero-primary-cta" aria-label="Jump to Route Finder">
+            <a href="#search" className="hero-primary-cta" aria-label="Find a Route">
               <span className="hero-cta-compass" aria-hidden="true">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.8" />

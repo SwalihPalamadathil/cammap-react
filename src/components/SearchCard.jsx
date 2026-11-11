@@ -125,7 +125,7 @@ function SearchCard() {
                   className="gps-btn"
                   onClick={getCurrentLocation}
                   title="Use Current Location"
-                  aria-label="Use Current Location"
+                  aria-label="GPS - Use Current Location"
                 >
                   <i className="bi bi-crosshair"></i>
                   <span>GPS</span>

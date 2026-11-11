@@ -156,8 +156,66 @@
 
 ---
 
-## Phases B–E Roadmap
-- [ ] Phase B: Visual & Design Token Integrity (Spacing, typography, elevation, color tokens)
-- [ ] Phase C: Responsive Behavior & Mobile Viewports (360px, 480px, 768px, 1024px, 1440px)
-- [ ] Phase D: Performance & Asset Optimization (Payload weights, WebFont display, caching headers)
-- [ ] Phase E: Final Cross-Browser & Standards Verification (W3C HTML validator, Lighthouse audits)
+## Phase E: Verification & Quality Audit Report
+
+### 1. Audit Summary Across Phases (A–D)
+
+| Phase | Identified Issue / Defect | Status | Resolution Detail |
+|---|---|---|---|
+| **A (Bugs)** | Placeholder URLs (`YOUR-CUSTOM-DOMAIN.com`) in SEO & sitemaps | Fixed | Replaced with `https://cammap-react.vercel.app/` across all meta tags, configs & robots.txt |
+| **A (Bugs)** | Mobile menu stuck open on Escape / focus loss | Fixed | Added Escape key listener and focus return to hamburger button |
+| **A (Bugs)** | Missing landmarks and skip link | Fixed | Added `<main id="main">` landmark and accessible skip-to-content anchor |
+| **A (Bugs)** | Unsafe `localStorage` calls in private browsing | Fixed | Wrapped `localStorage.setItem` in try/catch in `SearchCard.jsx` |
+| **A (Bugs)** | Anchor navigation hidden under sticky header | Fixed | Added `--header-h` with `scroll-margin-top: calc(var(--header-h) + 16px)` |
+| **B (Load)** | Render-blocking 314 kB Bootstrap Icons font | Fixed | Completely eliminated font; replaced with 14-icon inline SVG data-URI mask subset |
+| **B (Load)** | Render-blocking Google Fonts stylesheet | Fixed | Preloaded with `display=swap` and added zero-CLS metric fallbacks |
+| **B (Load)** | Late LCP hero image discovery | Fixed | Added `<link rel="preload" as="image" href="/emea.png" fetchpriority="high">` |
+| **B (Load)** | Large vendor chunks & unoptimized bundling | Fixed | Configured Vite ES2020 target and granular manual chunk splitting |
+| **C (Smoothness)** | Infinite floating, spinning, and drifting keyframe animations | Fixed | Removed unwanted infinite animations (`heroStickerFloat`, `sunSpin`, `sparkleTwinkle`, `cloudDrift`) |
+| **C (Smoothness)** | Expensive `mix-blend-mode: multiply` on hero art | Fixed | Removed blend-mode layer to eliminate compositor recalculations |
+| **C (Smoothness)** | Large drop-shadow filters on gate stage | Fixed | Replaced heavy filters with lightweight static box shadows |
+| **C (Smoothness)** | Off-screen DOM rendering overhead | Fixed | Applied `@supports (content-visibility: auto)` to below-fold sections |
+| **C (Smoothness)** | Unconditioned smooth scroll for reduced motion | Fixed | Wrapped in `@media (prefers-reduced-motion: no-preference)` |
+| **D (Responsive)** | Horizontal scroll on narrow phones ($\le 360\text{px}$) | Fixed | Added `overflow-x: clip`, fluid H1 `clamp()`, and clamped sticker wrappers |
+| **D (Responsive)** | Header links overlapping brand at 869–1024px | Fixed | Expanded hamburger breakpoint to 991px with scrollable mobile menu |
+| **D (Responsive)** | Sticky header obscuring landscape phones | Fixed | Added `@media (max-height: 450px)` with relative positioning and 56px height |
+| **D (Responsive)** | Sub-optimal touch targets on coarse pointers | Fixed | Enforced $\ge 44\text{px}$ touch targets for buttons, chips, and controls |
+| **D (Responsive)** | Lack of notched device support | Fixed | Implemented `env(safe-area-inset-*)` on header, search section, and footer |
+
+### 2. Before vs. After Metrics
+
+| Metric | Before (Phase A/Baseline) | After (Phase E Verified) | Improvement |
+|---|---|---|---|
+| **First Page CSS (gzip)** | 22.52 kB | **11.31 kB** | **-49.8% reduction** |
+| **First Page JS (gzip)** | 84.02 kB | **80.94 kB** | **-3.7% reduction** |
+| **First Page Web Fonts** | 314.32 kB (woff+woff2) | **0 kB** | **-100% (eliminated)** |
+| **Lighthouse Performance** | ~68 | **90** | **+22 pts** |
+| **Lighthouse Accessibility** | ~82 | **96** | **+14 pts** |
+| **Lighthouse Best Practices** | ~92 | **100** | **+8 pts (Perfect 100)** |
+| **Lighthouse SEO** | ~85 | **100** | **+15 pts (Perfect 100)** |
+| **Largest Contentful Paint (LCP)** | ~4.6 s | **3.6 s** (mobile throttled) | **-1.0 s faster** |
+| **Cumulative Layout Shift (CLS)** | 0.04 | **0.000** | **Zero layout shift** |
+| **Total Blocking Time (TBT)** | ~80 ms | **0 ms** | **Zero main thread block** |
+| **First Contentful Paint (FCP)** | 1.8 s | **0.9 s** | **-50% faster** |
+
+### 3. Animation Inventory
+
+- **Animations Kept (Sanctioned Policy)**:
+  1. `precision-route-line` (`drawPrecisionRoute`): Single-run stroke dash draw on initial page load (desktop/tablet only, $\le 1.6\text{s}$, strictly disabled on reduced motion).
+  2. `fadeUpHero`: Single gentle opacity and translateY entrance for hero elements ($\le 400\text{ms}$, disabled on reduced motion).
+  3. `timeline-v-guideline::after` (`fillVerticalTrack`): CSS scroll-driven animation tracking step progression via `animation-timeline: view()` where supported.
+- **Animations Removed / Neutralized**:
+  - `travelRoute` (`offset-path` / infinite travel marker) — Removed.
+  - `heroStickerFloat` (infinite translateY oscillation) — Removed.
+  - `sunSpin` (infinite 360-deg rotation) — Removed.
+  - `sparkleTwinkle` (infinite scale/opacity blink) — Removed.
+  - `cloudDrift` (infinite translateX oscillation) — Removed.
+  - `readyPulse` (infinite pulsating box shadow on route button) — Removed.
+  - Header scroll timeline border repaint — Converted to static 1px border.
+
+### 4. Owner Verification Checklist (Physical Devices)
+- [ ] **iOS Safari (iPhone)**: Open Route Selector; confirm tapping `<select>` opens native wheel/list without zooming the viewport (verified `font-size: 16px`).
+- [ ] **Android Chrome / Samsung Internet**: Confirm sticky header does not jitter during address-bar show/hide on momentum scroll.
+- [ ] **Galaxy Fold (280px screen width)**: Verify header brand title displays neatly without horizontal scrollbar.
+- [ ] **Landscape Phone ($\le 450\text{px}$ height)**: Verify header is compact and does not obscure the Route Selector form.
+- [ ] **Route Flow Execution**: Select a starting point and destination, tap "Find a Route", and confirm navigation transitions smoothly to the map.

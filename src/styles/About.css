@@ -233,7 +233,7 @@ section[id],
   font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.1em;
-  color: var(--blue-600);
+  color: var(--blue-700);
 }
 
 /* Bare 24px outlined glyph (--navy-900), no border, no background, no radius */
@@ -387,7 +387,7 @@ section[id],
   font-family: var(--font-mono);
   font-size: 11.5px;
   font-weight: 500;
-  color: var(--slate-500);
+  color: var(--slate-600);
   min-width: 24px;
   font-variant-numeric: tabular-nums;
   display: inline-block;
@@ -455,7 +455,7 @@ section[id],
   font-family: var(--font-mono);
   font-size: 12px;
   font-weight: 500;
-  color: var(--slate-500);
+  color: var(--slate-600);
   letter-spacing: 0.1em;
 }
 

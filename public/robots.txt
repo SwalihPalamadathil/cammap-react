@@ -11,5 +11,5 @@ Allow: /map/
 Allow: /assets/
 Allow: /emea.png
 
-# Sitemaps: Update YOUR-CUSTOM-DOMAIN.com to your live production domain
+# Sitemap
 Sitemap: https://cammap-react.vercel.app/sitemap.xml

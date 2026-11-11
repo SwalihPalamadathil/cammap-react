@@ -198,7 +198,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: #64748B;
+  color: #94A3B8;
   font-family: var(--font-primary);
   font-size: 13.5px;
 }
@@ -211,7 +211,7 @@
 .footer-subtext {
   font-family: var(--font-mono);
   font-size: 11.5px;
-  color: #64748B;
+  color: #94A3B8;
   letter-spacing: 0.04em;
 }
 
