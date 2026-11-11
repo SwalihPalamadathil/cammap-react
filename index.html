@@ -18,9 +18,6 @@
     <link rel="icon" type="image/png" href="/map/logo1.png" />
     <link rel="apple-touch-icon" href="/map/logo1.png" />
 
-    <!-- Preload Critical Logo Asset -->
-    <link rel="preload" as="image" href="/map/logo1.png" type="image/png" fetchpriority="high" />
-
     <!-- Open Graph / Facebook / WhatsApp / LinkedIn -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="CamMap" />
@@ -43,10 +40,13 @@
     <!-- Google Search Console Verification Placeholder -->
     <!-- <meta name="google-site-verification" content="YOUR_GOOGLE_SEARCH_CONSOLE_VERIFICATION_TOKEN" /> -->
 
-    <!-- Google Fonts: Geist & Geist Mono -->
+    <!-- Google Fonts: Geist & Geist Mono (Non-blocking with display=swap) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Geist:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Geist:wght@400;500;600&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Geist:wght@400;500;600&display=swap" />
+    </noscript>
 
     <!-- Truthful JSON-LD Structured Data -->
     <script type="application/ld+json">

@@ -60,7 +60,6 @@ function Header() {
             className="logo" 
             width="38" 
             height="38" 
-            fetchPriority="high" 
             decoding="async" 
           />
           <div className="logoText">

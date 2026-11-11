@@ -88,26 +88,26 @@
   align-items: center;
 }
 
-/* Staggered Fade-Up Entrance */
+/* Gentle entrance without blocking First Contentful Paint / LCP */
 @media (prefers-reduced-motion: no-preference) {
   .hero-pill {
-    animation: fadeUpHero 0.45s ease-out 0.05s both;
+    animation: fadeUpHero 0.45s ease-out;
   }
   .hero-heading {
-    animation: fadeUpHero 0.45s ease-out 0.12s both;
+    animation: fadeUpHero 0.45s ease-out;
   }
   .hero-description {
-    animation: fadeUpHero 0.45s ease-out 0.19s both;
+    animation: fadeUpHero 0.45s ease-out;
   }
   .hero-actions {
-    animation: fadeUpHero 0.45s ease-out 0.26s both;
+    animation: fadeUpHero 0.45s ease-out;
   }
 }
 
 @keyframes fadeUpHero {
   from {
-    opacity: 0;
-    transform: translateY(12px);
+    opacity: 0.85;
+    transform: translateY(6px);
   }
   to {
     opacity: 1;
