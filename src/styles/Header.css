@@ -81,24 +81,15 @@
   transition: color var(--transition-fast);
 }
 
-.nav-link:hover {
-  color: #FFFFFF;
+@media (hover: hover) {
+  .nav-link:hover {
+    color: #FFFFFF;
+  }
+  .nav-link:hover::after {
+    width: 100%;
+  }
 }
 
-/* Hover: 1px --blue-300 underline offset 8px that grows from center */
-.nav-link::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: -4px;
-  width: 0;
-  height: 1px;
-  background-color: var(--blue-300);
-  transform: translateX(-50%);
-  transition: width var(--transition-fast);
-}
-
-.nav-link:hover::after,
 .nav-link:focus-visible::after {
   width: 100%;
 }
@@ -107,22 +98,6 @@
   outline: 2px solid var(--blue-300);
   outline-offset: 4px;
   color: #FFFFFF;
-}
-
-/* Progressive enhancement: scroll-driven header elevation */
-@supports (animation-timeline: scroll()) {
-  @keyframes header-scroll-elevate {
-    to {
-      border-bottom-color: rgba(255, 255, 255, 0.16);
-      box-shadow: 0 8px 24px rgba(11, 18, 32, 0.45);
-    }
-  }
-
-  .header {
-    animation: header-scroll-elevate linear both;
-    animation-timeline: scroll(root);
-    animation-range: 0px 100px;
-  }
 }
 
 /* Header Actions & Hamburger */
@@ -146,9 +121,11 @@
   transition: background-color var(--transition-fast), border-color var(--transition-fast);
 }
 
-.hamburger-btn:hover {
-  background-color: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.25);
+@media (hover: hover) {
+  .hamburger-btn:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.25);
+  }
 }
 
 .hamburger-btn:focus-visible {

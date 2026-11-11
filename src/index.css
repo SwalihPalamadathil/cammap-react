@@ -77,12 +77,17 @@
 }
 
 html {
-  scroll-behavior: smooth;
   scroll-padding-top: calc(var(--header-h) + 16px);
   background-color: var(--bg);
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
   scrollbar-gutter: stable;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 body {

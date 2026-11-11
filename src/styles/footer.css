@@ -8,6 +8,8 @@
   padding: 96px 24px 40px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   overflow: hidden;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 420px;
 }
 
 /* Finishing Detail: Oversized Outlined "CamMap" Wordmark cropping off bottom edge */

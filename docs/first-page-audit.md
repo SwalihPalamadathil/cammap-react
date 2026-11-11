@@ -84,6 +84,28 @@
 
 ---
 
+## Phase C: Smooth Scroll & Animation Policy (60 FPS Performance)
+
+### Animation & Effect Inventory (First Page)
+1. `.precision-route-line` (`drawPrecisionRoute` once on load) -> **KEEP** (Hero route line draws itself once on load, desktop & tablet only per policy #1).
+2. `.hero-travelling-marker` (`travelRoute` 9s infinite, `offset-path`) -> **REMOVE** (Infinite animation, layout-expensive `offset-path`).
+3. `.hero-pill`, `.hero-heading`, `.hero-description`, `.hero-actions` (`fadeUpHero`) -> **KEEP/CONVERT** (Lightweight single-run entrance without `both` delay, protecting LCP per policy #2).
+4. `.hero-gate-art` (`mix-blend-mode: multiply`) -> **REMOVE** (Forces extra compositing layer repaints on scroll).
+5. `.hero-gate-stage` / `.hero-gate-panel` / `.gate-sketch-wrap` (`filter: drop-shadow`) -> **CONVERT** (Replaced with lightweight static box-shadow).
+6. `.hero-sticker-cs`, `.hero-sticker-route` (`animation: heroStickerFloat ... infinite`) -> **REMOVE** (Unwanted infinite float animation).
+7. `.hero-doodle-sun` (`animation: sunSpin ... infinite`) -> **REMOVE** (Unwanted continuous infinite spin).
+8. `.hero-sparkle-1`, `.hero-sparkle-2` (`animation: sparkleTwinkle ... infinite`) -> **REMOVE** (Unwanted infinite blink animation).
+9. `.hero-doodle-cloud` (`animation: cloudDrift ... infinite`) -> **REMOVE** (Unwanted infinite drift animation).
+10. `.header` (`@supports (animation-timeline: scroll())` animating border & box-shadow) -> **CONVERT** (Static 1px border and pre-painted static shadow to eliminate scroll repaint).
+11. `.timeline-v-guideline::after` (`animation-timeline: view()` fillVerticalTrack) -> **KEEP** (Compositor-only `scaleY` scroll timeline per policy #3).
+12. `.map-sticker` / `.map-sticker--fill` (`filter: drop-shadow(...)` and hover rotation) -> **CONVERT** (Reduced blur to <= 12px; wrapped hover rotation in `@media (hover: hover)`).
+13. `.search-card ... .route-btn` (`readyPulse` box-shadow animation) -> **REMOVE** (Unwanted box-shadow keyframe animation).
+14. `.select-wrapper select` (`font-size: 15.5px`) -> **CONVERT** (Set to `16px` to prevent iOS auto-zoom on focus).
+15. Sections below the fold (`#how-it-works`, `#directory`, `#about`, `.footer`) -> **ADD** (`content-visibility: auto; contain-intrinsic-size: auto 720px`).
+16. `scroll-behavior: smooth` in `index.css` -> **CONVERT** (Wrapped in `@media (prefers-reduced-motion: no-preference)`).
+
+---
+
 ## Phases B–E Roadmap
 - [ ] Phase B: Visual & Design Token Integrity (Spacing, typography, elevation, color tokens)
 - [ ] Phase C: Responsive Behavior & Mobile Viewports (360px, 480px, 768px, 1024px, 1440px)

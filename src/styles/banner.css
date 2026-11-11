@@ -49,31 +49,20 @@
   stroke-dashoffset: 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
   .precision-route-line {
     stroke-dashoffset: 1200;
     animation: drawPrecisionRoute 1.6s ease-out forwards;
   }
+}
 
-  .hero-travelling-marker {
-    offset-path: path("M 120,400 L 360,320 L 480,360 L 680,210 L 820,240 L 1020,130");
-    offset-rotate: 0deg;
-    animation: travelRoute 9s linear infinite;
-  }
+.hero-travelling-marker {
+  display: none;
 }
 
 @keyframes drawPrecisionRoute {
   to {
     stroke-dashoffset: 0;
-  }
-}
-
-@keyframes travelRoute {
-  0% {
-    offset-distance: 0%;
-  }
-  100% {
-    offset-distance: 100%;
   }
 }
 
@@ -364,7 +353,6 @@
   border-radius: 10px;
   display: block;
   object-fit: contain;
-  mix-blend-mode: multiply;
 }
 
 .hero-card-overlay {
@@ -394,7 +382,6 @@
   margin-right: 18px;
   margin-bottom: -6px;
   pointer-events: none;
-  filter: drop-shadow(0 2px 4px rgba(37, 99, 235, 0.15));
 }
 
 /* Bottom-Left Sticker Positioning */
@@ -410,7 +397,6 @@
   margin-left: 28px;
   margin-top: -2px;
   pointer-events: none;
-  filter: drop-shadow(0 2px 4px rgba(37, 99, 235, 0.15));
 }
 
 /* Premium 3D Die-Cut Sticker Style */
@@ -434,21 +420,21 @@
 .sticker-tr {
   --rot: 3.5deg;
   transform: rotate(var(--rot));
-  animation: heroStickerFloat 4.2s ease-in-out infinite;
 }
 
 .sticker-bl {
   --rot: -3deg;
   transform: rotate(var(--rot));
-  animation: heroStickerFloat 4.6s ease-in-out 0.8s infinite;
 }
 
-.hero-sticker:hover {
-  transform: translateY(-3px) rotate(0deg) scale(1.03);
-  box-shadow: 
-    0 14px 30px -4px rgba(15, 23, 42, 0.16), 
-    0 6px 12px -2px rgba(15, 23, 42, 0.08),
-    0 0 0 1px rgba(37, 99, 235, 0.2);
+@media (hover: hover) {
+  .hero-sticker:hover {
+    transform: translateY(-3px) rotate(0deg) scale(1.03);
+    box-shadow: 
+      0 14px 30px -4px rgba(15, 23, 42, 0.16), 
+      0 6px 12px -2px rgba(15, 23, 42, 0.08),
+      0 0 0 1px rgba(37, 99, 235, 0.25);
+  }
 }
 
 .sticker-icon-badge {
@@ -513,10 +499,9 @@
   align-items: center;
   justify-content: center;
   margin-left: 2px;
-  animation: sunSpin 14s linear infinite;
 }
 
-/* Floating Sparkles & Clouds */
+/* Floating Sparkles & Clouds (Static Vector Graphics) */
 .hero-sparkle {
   position: absolute;
   pointer-events: none;
@@ -526,13 +511,11 @@
 .sparkle-tl {
   top: -12px;
   left: 20px;
-  animation: sparkleTwinkle 3.2s ease-in-out infinite;
 }
 
 .sparkle-br {
   bottom: 12px;
   right: -16px;
-  animation: sparkleTwinkle 3.6s ease-in-out 1.5s infinite;
 }
 
 .hero-doodle-cloud {
@@ -542,49 +525,6 @@
   pointer-events: none;
   z-index: 3;
   opacity: 0.9;
-  filter: drop-shadow(0 2px 4px rgba(147, 197, 253, 0.2));
-  animation: cloudDrift 6s ease-in-out infinite alternate;
-}
-
-/* Lightweight Floating Micro-Animations */
-@media (prefers-reduced-motion: no-preference) {
-  @keyframes heroStickerFloat {
-    0%, 100% {
-      transform: translateY(0) rotate(var(--rot, 0deg));
-    }
-    50% {
-      transform: translateY(-6px) rotate(var(--rot, 0deg));
-    }
-  }
-
-  @keyframes sparkleTwinkle {
-    0%, 100% {
-      transform: scale(0.9) rotate(0deg);
-      opacity: 0.75;
-    }
-    50% {
-      transform: scale(1.15) rotate(45deg);
-      opacity: 1;
-    }
-  }
-
-  @keyframes sunSpin {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
-  @keyframes cloudDrift {
-    0% {
-      transform: translateY(0) translateX(0);
-    }
-    100% {
-      transform: translateY(-4px) translateX(3px);
-    }
-  }
 }
 
 /* Responsive Pass */

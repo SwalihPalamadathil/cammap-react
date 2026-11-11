@@ -86,6 +86,8 @@ section[id],
   background-color: var(--surface);
   border-bottom: 1px solid var(--border);
   position: relative;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 680px;
 }
 
 /* Header Row: 12-Column Grid matching content columns */
@@ -269,6 +271,8 @@ section[id],
   background-color: var(--bg);
   border-bottom: 1px solid var(--border);
   position: relative;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 760px;
 }
 
 .directory-index-panel {
@@ -342,8 +346,10 @@ section[id],
   transition: background-color var(--transition-fast);
 }
 
-.directory-list li:hover {
-  background-color: var(--blue-50);
+@media (hover: hover) {
+  .directory-list li:hover {
+    background-color: var(--blue-50);
+  }
 }
 
 .directory-list li:last-child {
@@ -367,6 +373,8 @@ section[id],
   padding: 120px 0 136px;
   background-color: var(--surface);
   position: relative;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 540px;
 }
 
 .purpose-lanes-grid {
