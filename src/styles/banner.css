@@ -131,7 +131,7 @@
 /* Hero Typography: Weight contrast inside headline */
 .hero-heading {
   font-family: var(--font-primary);
-  font-size: clamp(2.75rem, 5.8vw, 5.15rem);
+  font-size: clamp(2.25rem, 6vw, 5.25rem);
   font-weight: 500;
   line-height: 1.02;
   letter-spacing: -0.04em;
@@ -528,6 +528,22 @@
 }
 
 /* Responsive Pass */
+.banner {
+  overflow-x: clip;
+}
+
+.banner-container {
+  min-height: 0;
+}
+
+.hero-stage-col {
+  min-height: 0;
+}
+
+.hero-primary-cta {
+  min-height: 52px;
+}
+
 @media (max-width: 1024px) {
   .banner {
     padding: 88px 24px 96px;
@@ -550,6 +566,10 @@
     bottom: -12px;
     left: -12px;
   }
+  .hero-stage-col {
+    max-width: 560px;
+    margin: 0 auto;
+  }
 }
 
 @media (max-width: 768px) {
@@ -557,7 +577,7 @@
     padding: 72px 16px 80px;
   }
   .hero-heading {
-    font-size: 34px;
+    font-size: clamp(2rem, 8vw, 2.4rem);
   }
   .hero-description {
     font-size: 16px;
@@ -590,5 +610,29 @@
   }
   .hero-sticker {
     transform: scale(0.9) !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .banner {
+    padding: 64px 16px 72px;
+  }
+  /* Clamp sticker wrappers to avoid overflow on Galaxy Fold / 280px */
+  .sticker-tr-wrap,
+  .sticker-bl-wrap {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+}
+
+@media (max-width: 360px) {
+  .hero-sticker {
+    transform: scale(0.8) !important;
+  }
+  .sticker-tr-wrap,
+  .sticker-bl-wrap {
+    display: none;
   }
 }

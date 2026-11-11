@@ -8,8 +8,16 @@
   padding: 96px 24px 40px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   overflow: hidden;
-  content-visibility: auto;
-  contain-intrinsic-size: auto 420px;
+  padding-bottom: max(40px, calc(40px + env(safe-area-inset-bottom)));
+  padding-left: max(24px, env(safe-area-inset-left));
+  padding-right: max(24px, env(safe-area-inset-right));
+}
+
+@supports (content-visibility: auto) {
+  .footer {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 420px;
+  }
 }
 
 /* Finishing Detail: Oversized Outlined "CamMap" Wordmark cropping off bottom edge */
@@ -208,16 +216,32 @@
 }
 
 /* Responsive Media Queries */
-@media (max-width: 900px) {
-  .footer {
-    padding: 72px 16px 32px;
-  }
+@media (max-width: 1023px) {
   .footer-top {
-    grid-template-columns: 1fr;
-    gap: 36px;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
   }
   .footer-col-divider {
     display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer::after {
+    display: none;
+  }
+}
+
+@media (max-width: 599px) {
+  .footer {
+    padding-top: 64px;
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+    padding-bottom: max(32px, calc(32px + env(safe-area-inset-bottom)));
+  }
+  .footer-top {
+    grid-template-columns: 1fr;
+    gap: 32px;
   }
   .footer-bottom {
     flex-direction: column;

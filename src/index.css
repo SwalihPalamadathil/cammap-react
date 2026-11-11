@@ -81,7 +81,12 @@ html {
   background-color: var(--bg);
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  scrollbar-gutter: stable;
+}
+
+@supports (scrollbar-gutter: stable) {
+  html {
+    scrollbar-gutter: stable;
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -99,6 +104,87 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: clip;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 16px;
+  }
+}
+
+/* Global Content Containers & Gutters */
+.header-container,
+.banner-container,
+.search-container,
+.section-container,
+.footer-container {
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+@media (min-width: 1024px) {
+  .header-container,
+  .banner-container,
+  .search-container,
+  .section-container,
+  .footer-container {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 1023px) {
+  .header-container,
+  .banner-container,
+  .search-container,
+  .section-container,
+  .footer-container {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-container,
+  .banner-container,
+  .search-container,
+  .section-container,
+  .footer-container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+/* Touch Device Target Sizes */
+@media (pointer: coarse) {
+  button,
+  .nav-link,
+  .chip-btn,
+  .gps-btn,
+  .swap-btn,
+  .hamburger-btn {
+    min-height: 44px;
+  }
+}
+
+/* Forced Colors / High Contrast Mode Support */
+@media (forced-colors: active) {
+  .search-card,
+  .hero-card-frame,
+  .directory-index-panel,
+  .purpose-lane,
+  .footer {
+    border: 1px solid ButtonText !important;
+  }
+  .hero-primary-cta,
+  .route-btn {
+    border: 2px solid Highlight !important;
+  }
 }
 
 /* In-Page Anchor Targets: Land smoothly below sticky header */

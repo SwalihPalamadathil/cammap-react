@@ -14,7 +14,19 @@ section[id],
 .section-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 32px;
+}
+
+@media (max-width: 1023px) {
+  .section-container {
+    padding: 0 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-container {
+    padding: 0 16px;
+  }
 }
 
 /* Two-Column Split Section Header (Left Aligned) */
@@ -86,8 +98,14 @@ section[id],
   background-color: var(--surface);
   border-bottom: 1px solid var(--border);
   position: relative;
-  content-visibility: auto;
-  contain-intrinsic-size: auto 680px;
+  overflow-x: clip;
+}
+
+@supports (content-visibility: auto) {
+  .section-how {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 680px;
+  }
 }
 
 /* Header Row: 12-Column Grid matching content columns */
@@ -271,8 +289,14 @@ section[id],
   background-color: var(--bg);
   border-bottom: 1px solid var(--border);
   position: relative;
-  content-visibility: auto;
-  contain-intrinsic-size: auto 760px;
+  overflow-x: clip;
+}
+
+@supports (content-visibility: auto) {
+  .section-directory {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 760px;
+  }
 }
 
 .directory-index-panel {
@@ -334,7 +358,8 @@ section[id],
 }
 
 .directory-list li {
-  padding: 9px 8px;
+  padding: 11px 8px;
+  min-height: 44px;
   border-bottom: 1px solid var(--border);
   font-size: 14.5px;
   font-weight: 500;
@@ -344,9 +369,11 @@ section[id],
   gap: 12px;
   border-radius: var(--radius-xs);
   transition: background-color var(--transition-fast);
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
-@media (hover: hover) {
+@media (hover: hover) and (pointer: fine) {
   .directory-list li:hover {
     background-color: var(--blue-50);
   }
@@ -373,8 +400,14 @@ section[id],
   padding: 120px 0 136px;
   background-color: var(--surface);
   position: relative;
-  content-visibility: auto;
-  contain-intrinsic-size: auto 540px;
+  overflow-x: clip;
+}
+
+@supports (content-visibility: auto) {
+  .section-purpose {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 540px;
+  }
 }
 
 .purpose-lanes-grid {
@@ -500,7 +533,7 @@ section[id],
   }
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 991px) {
   .section-header-split:not(.hiw__header) {
     flex-direction: column;
     align-items: flex-start;
@@ -579,6 +612,13 @@ section[id],
   }
 
   .map-sticker--fill .map-sticker__face {
+    -webkit-clip-path: polygon(
+      0 0,
+      100% 0,
+      100% calc(100% - 28px),
+      calc(100% - 28px) 100%,
+      0 100%
+    );
     clip-path: polygon(
       0 0,
       100% 0,

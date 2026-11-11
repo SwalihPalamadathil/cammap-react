@@ -106,6 +106,56 @@
 
 ---
 
+## Phase D: Responsive & Device Compatibility
+
+### Test Matrix & Target Viewports
+- **Ultra-compact / Foldables (280px, 320px)**: Zero horizontal scroll (`overflow-x: clip`), brand subtitle gracefully hidden below 360px, fluid H1 scaling with `clamp()`, full-width touch-friendly CTA ($\ge 52\text{px}$).
+- **Standard Phones (360px, 375px, 390px, 412px, 430px)**: 16px container gutters, $\ge 16\text{px}$ font-size on select elements (no iOS Safari viewport zoom), 44px minimum tap targets.
+- **Landscape Phones (e.g. 667x375, 844x390, 932x430)**: Compact sticky header (56px) and non-sticky search header preventing screen obstruction.
+- **Tablets (600px, 768px, 820px, 1024px)**: Header collapse breakpoint aligned to 991px, How-it-works 12-column grid smoothly stacking below 992px, Directory panel switching to single column.
+- **Desktops & Ultrawide (1180px, 1280px, 1440px, 1920px, 2560px)**: Content strictly centered at 1200px max-width, 32px gutters, zero layout distortion.
+- **Touch & Accessibility**: Hover styles isolated with `@media (hover: hover) and (pointer: fine)`, notched safe area padding via `env(safe-area-inset-*)`.
+
+### Implemented Fixes & Adaptations
+1. **Global & Layout Container Polish**:
+   - Added responsive container gutters: 16px ($\le 480\text{px}$), 24px ($481\text{px} - 1023\text{px}$), 32px ($\ge 1024\text{px}$) across all containers.
+   - Enforced `max-width: 1200px; margin: 0 auto;` on all primary section containers with backgrounds extending full-width on ultrawide viewports ($\ge 1920\text{px}$).
+   - Added `overflow-wrap: anywhere;` and `body { font-size: 16px; }` at $\le 480\text{px}$ to maintain text readability without horizontal clipping.
+   - Wrapped `scrollbar-gutter: stable` in `@supports (scrollbar-gutter: stable)` for Safari compatibility.
+   - Added safe-area insets (`env(safe-area-inset-*)`) on header, footer, and search section for notched devices.
+2. **Header & Navigation (`Header.css`)**:
+   - Adjusted mobile menu collapse breakpoint from 868px to 991px to prevent link wrapping between 869px and 1024px.
+   - Constrained open mobile nav menu with `max-height: calc(100svh - var(--header-h)); overflow-y: auto;`.
+   - Added `@media (max-height: 450px)` for landscape phone handling with `--header-h: 56px` and relative positioning.
+   - Hidden `.brandSub` at $\le 359\text{px}$ to prevent logo container overflow on folded screens.
+3. **Hero Banner (`banner.css`)**:
+   - Replaced fixed px font size with fluid `clamp(2.25rem, 6vw, 5.25rem)` on H1 and `clamp(2rem, 8vw, 2.4rem)` on mobile.
+   - CTA button given `min-height: 52px; width: 100%` on mobile viewports.
+   - Hero stage column given `max-width: 560px; margin: 0 auto;` for stacked layouts.
+   - Repositioned and safely clamped/hidden decorative sticker wrappers at $\le 480\text{px}$ and $\le 360\text{px}$ to eliminate horizontal scroll.
+4. **Route Selector (`searchcard.css`)**:
+   - Adjusted 2-column to 1-column collapse breakpoint to 991px.
+   - Disabled sticky positioning on `.search-header` when stacked ($\le 991\text{px}$) and in landscape phone mode (`max-height: 450px`).
+   - Ensured select dropdowns have $\ge 52\text{px}$ height, 16px font size, and native select accessibility.
+   - Swap button and GPS button updated to 44px tap targets.
+   - Added `padding-bottom: max(128px, calc(96px + env(safe-area-inset-bottom)))` to prevent bottom-bar obstruction.
+5. **How It Works, Directory & Purpose (`About.css`)**:
+   - Directory index panel aligned to 3 columns at $\ge 992\text{px}$ and 1 column at $\le 991\text{px}$.
+   - Directory list items updated with `min-height: 44px; overflow-wrap: anywhere; word-break: break-word;`.
+   - Purpose lanes stack below 768px with borders transitioning from vertical to horizontal hairlines.
+   - Sticker container configured with `aspect-ratio: 16/10` ($\ge 768\text{px}$) and `4/3` ($< 768\text{px}$) with `-webkit-clip-path` vendor prefixes.
+   - Wrapped `content-visibility: auto` in `@supports (content-visibility: auto)`.
+6. **Footer (`footer.css`)**:
+   - Added 2-column intermediate layout at $\le 1023\text{px}$ before collapsing to 1 column at $\le 599\text{px}$.
+   - Outlined decorative wordmark (`::after`) hidden at $\le 768\text{px}$ to prevent horizontal scroll and text occlusion.
+   - Added safe-area padding for bottom, left, and right insets.
+   - Credit line wrapped cleanly with `flex-wrap: wrap; gap: 12px;`.
+7. **Map Sticker (`MapSticker.css`)**:
+   - Added `max-width: 100%` and `-webkit-clip-path` duplicates on all clipped components.
+   - Hover rotations wrapped in `@media (hover: hover) and (pointer: fine)`.
+
+---
+
 ## Phases B–E Roadmap
 - [ ] Phase B: Visual & Design Token Integrity (Spacing, typography, elevation, color tokens)
 - [ ] Phase C: Responsive Behavior & Mobile Viewports (360px, 480px, 768px, 1024px, 1440px)
