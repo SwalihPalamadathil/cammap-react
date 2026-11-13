@@ -15,7 +15,7 @@ function App() {>
 export default App; */
 
 
-import Maintenance from "./maintenance.jsx";
+import Maintenance from "./Maintenance.jsx";
 
 function App() {
   return <Maintenance />;
