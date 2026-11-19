@@ -25,9 +25,6 @@ export function BuildingDetails({ selectedBuilding }) {
                 <h3 className="card-title">Building &amp; Floor Details</h3>
               </div>
             </div>
-            <span className="details-header-badge" aria-hidden="true">
-              <span className="header-status-dot"></span> DIRECTORY
-            </span>
           </div>
 
           {/* Panel Body with Empty State */}
@@ -123,9 +120,6 @@ export function BuildingDetails({ selectedBuilding }) {
               <h3 className="card-title">Building &amp; Floor Details</h3>
             </div>
           </div>
-          <span className="details-header-badge" aria-hidden="true">
-            <span className="header-status-dot active"></span> SELECTED
-          </span>
         </div>
 
         {/* Panel Body */}
@@ -148,10 +142,6 @@ export function BuildingDetails({ selectedBuilding }) {
 
                 <div className="building-hero-content">
                   <div className="building-hero-badge-row">
-                    <span className="building-status-pill">
-                      <span className="status-pulse-dot" aria-hidden="true"></span>
-                      <span>Interactive Landmark</span>
-                    </span>
                     <span className="building-zone-tag" aria-hidden="true">ZONE VERIFIED</span>
                   </div>
 
@@ -208,24 +198,6 @@ export function BuildingDetails({ selectedBuilding }) {
                     </div>
                   )}
                 </div>
-              </div>
-
-              {/* 3. Refined Action Footer */}
-              <div className="building-info-footer">
-                <div className="footer-meta-pill" title="Interactive map element">
-                  <i className="bi bi-geo-alt-fill text-primary" aria-hidden="true"></i>
-                  <span>Interactive Landmark</span>
-                </div>
-
-                <a
-                  href="../"
-                  className="btn-plan-route"
-                  aria-label={`Plan Route to ${selectedBuilding} on Home`}
-                >
-                  <i className="bi bi-compass" aria-hidden="true"></i>
-                  <span>Plan Route on Home</span>
-                  <i className="bi bi-arrow-right action-arrow" aria-hidden="true"></i>
-                </a>
               </div>
 
             </div>

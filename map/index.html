@@ -36,13 +36,14 @@
     <meta name="twitter:description" content="Explore EMEA College with the interactive vector campus map and shortest-path walking route finder.">
     <meta name="twitter:image" content="https://cammap-react.vercel.app/emea.png">
 
-    <!-- Preconnect & Preload Critical Assets -->
+    <!-- Preconnect & Non-blocking Google Fonts: Geist & Geist Mono (400, 500, 600 only) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" as="image" href="/map/logo1.png" type="image/png" fetchpriority="high">
-    
-    <!-- Google Fonts: Geist & Geist Mono -->
-    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" media="print" onload="this.media='all'">
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap">
+    </noscript>
 
     <!-- Structured Data -->
     <script type="application/ld+json">

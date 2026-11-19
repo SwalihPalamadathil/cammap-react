@@ -970,6 +970,10 @@ body {
   margin-bottom: 4px;
 }
 
+#selectedRouteSection .node-label .node-label-icon {
+  display: none;
+}
+
 #selectedRouteSection .node-value {
   font-family: 'Geist', system-ui, sans-serif;
   font-size: clamp(1.5rem, 2.4vw, 2.1rem);
@@ -1104,17 +1108,15 @@ body {
 }
 
 /* Stub Part (.route-meta-bar) with Perforation Line & Notches */
-#selectedRouteSection .route-meta-bar {
-  position: relative;
-  margin-top: 0;
-  padding: 12px 0 12px 32px;
-  border-top: none;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 16px;
-  color: var(--slate-600);
+/* Route Meta Bar & Decorations: Removed from map area (JS displayTime preserved in DOM) */
+#selectedRouteSection .route-meta-bar,
+#routeMetaBar {
+  display: none !important;
+}
+
+#selectedRouteSection .selected-route-card::before,
+#selectedRouteSection .selected-route-card::after {
+  display: none !important;
 }
 
 /* Perforation Dashed Line */
@@ -1524,118 +1526,369 @@ body {
 }
 
 @media (max-width: 767px) {
-  #selectedRouteSection .selected-route-header {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 14px;
-    padding: 14px 16px;
-  }
-  #selectedRouteSection .selected-route-title-group {
-    justify-content: space-between;
-    width: 100%;
-  }
-  #selectedRouteSection .selected-route-actions-group {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-  }
-  #selectedRouteSection #routeStatusBadge {
-    align-self: flex-start;
-  }
-  #selectedRouteSection .card-toolbar {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 8px;
-    width: 100%;
-  }
-  #selectedRouteSection .btn-card-toolbar {
-    width: 100%;
-    min-width: unset;
-    height: 44px;
-    padding: 0 8px;
-    gap: 4px;
-  }
-  #selectedRouteSection .btn-card-toolbar .btn-text {
-    display: inline;
-    font-size: 12px;
-  }
-  #selectedRouteSection .btn-card-toolbar-icon {
-    width: 100%;
-    min-width: unset;
-  }
-  #selectedRouteSection .btn-change-route {
-    grid-column: 1 / -1;
-    width: 100%;
-    height: 44px;
+  /* ==========================================================================
+     MOBILE CLEANUP: Selected Route Card
+     ========================================================================== */
+  #selectedRouteSection {
+    margin-top: 12px !important;
+    margin-bottom: 12px !important;
+    padding: 0 !important;
   }
 
-  /* Stacking Ticket Body with Horizontal Perforation */
+  /* B. CARD: flat white card, 1px #E2E8F0 border, 12px radius, 12-14px padding all round */
+  #selectedRouteSection .selected-route-card {
+    background: #FFFFFF !important;
+    border: 1px solid #E2E8F0 !important;
+    border-radius: 12px !important;
+    padding: 12px 14px !important;
+    box-shadow: none !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    animation: none !important;
+  }
+
+  /* A. REMOVE: green dot + ring + pulse, thin blue top bar, ticks, doodles, notches, header row */
+  #selectedRouteSection .card-top-hairline,
+  #selectedRouteSection .card-tick,
+  #selectedRouteSection .card-doodle-layer,
+  #selectedRouteSection .selected-route-card::before,
+  #selectedRouteSection .selected-route-card::after,
+  #selectedRouteSection .pulse-dot,
+  #selectedRouteSection .selected-route-title-group,
+  #selectedRouteSection #routeStatusBadge,
+  #selectedRouteSection #cardResetRouteBtn,
+  #selectedRouteSection #resetRouteBtn,
+  #selectedRouteSection .btn-card-toolbar-icon {
+    display: none !important;
+  }
+
+  /* Header wrapper: reset padding/borders so only buttons row is rendered */
+  #selectedRouteSection .selected-route-header {
+    display: block !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    background: transparent !important;
+  }
+
+  #selectedRouteSection .selected-route-actions-group {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* C. BUTTONS: one row, two equal-width buttons, 40px tall, 8px gap, 14px text, 16px icons */
+  #selectedRouteSection .card-toolbar {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 8px !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Secondary: "Locate Me" (white, 1px border, radius 10px) */
+  #selectedRouteSection #cardLocateMeBtn,
+  #selectedRouteSection #locateMeBtn {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    height: 40px !important;
+    min-height: 40px !important;
+    max-height: 40px !important;
+    padding: 0 12px !important;
+    border-radius: 10px !important;
+    background: #FFFFFF !important;
+    border: 1px solid #E2E8F0 !important;
+    color: var(--navy-900, #0F172A) !important;
+    font-family: 'Geist', system-ui, sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    white-space: nowrap !important;
+    box-sizing: border-box !important;
+    cursor: pointer !important;
+    box-shadow: none !important;
+    text-decoration: none !important;
+    transition: background-color 0.15s ease, border-color 0.15s ease !important;
+  }
+
+  #selectedRouteSection #cardLocateMeBtn i,
+  #selectedRouteSection #locateMeBtn i {
+    font-size: 16px !important;
+    line-height: 1 !important;
+    color: var(--navy-900, #0F172A) !important;
+    flex-shrink: 0 !important;
+  }
+
+  #selectedRouteSection #cardLocateMeBtn .btn-text,
+  #selectedRouteSection #locateMeBtn .btn-text {
+    display: inline !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+  }
+
+  /* Primary: "Change Route" (dark navy, radius 10px) */
+  #selectedRouteSection .btn-change-route {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    height: 40px !important;
+    min-height: 40px !important;
+    max-height: 40px !important;
+    padding: 0 12px !important;
+    border-radius: 10px !important;
+    background: var(--navy-950, #0B1220) !important;
+    border: 1px solid var(--navy-950, #0B1220) !important;
+    color: #FFFFFF !important;
+    font-family: 'Geist', system-ui, sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    white-space: nowrap !important;
+    text-decoration: none !important;
+    box-sizing: border-box !important;
+    cursor: pointer !important;
+    box-shadow: none !important;
+    transition: background-color 0.15s ease !important;
+  }
+
+  #selectedRouteSection .btn-change-route i {
+    font-size: 16px !important;
+    line-height: 1 !important;
+    color: #FFFFFF !important;
+    flex-shrink: 0 !important;
+  }
+
+  #selectedRouteSection .btn-change-route span {
+    display: inline !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+  }
+
+  /* D. HAIRLINE: 1px divider between buttons and route summary, 12px spacing above & below */
   #selectedRouteSection .selected-route-body {
-    grid-template-columns: 1fr;
-    padding: 18px 16px;
-    gap: 20px;
+    display: flex !important;
+    flex-direction: column !important;
+    margin-top: 12px !important;
+    padding-top: 12px !important;
+    border-top: 1px solid #E2E8F0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-bottom: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    margin-bottom: 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
+
+  /* E. ROUTE SUMMARY: 3 columns on 1 horizontal row [ STARTING POINT / name ] [ connector ] [ DESTINATION / name ] */
   #selectedRouteSection .route-flow-grid {
-    grid-template-columns: 1fr;
-    gap: 14px;
-    padding-right: 0;
-    padding-bottom: 20px;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) !important;
+    align-items: center !important;
+    gap: 8px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
   }
+
+  /* Remove the large 28-36px pin/flag icon blocks */
   #selectedRouteSection .node-icon-wrapper {
-    width: 52px;
-    height: 52px;
-    min-width: 52px;
+    display: none !important;
   }
+
+  #selectedRouteSection .route-node-card {
+    min-width: 0 !important;
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    box-sizing: border-box !important;
+  }
+
+  #selectedRouteSection .node-details {
+    width: 100% !important;
+    min-width: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    overflow: visible !important;
+  }
+
+  /* Labels: 10px Geist Mono uppercase, letter-spacing <= 0.06em, never truncate/wrap */
+  #selectedRouteSection .node-label {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    font-family: 'Geist Mono', ui-monospace, monospace !important;
+    font-size: 10px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.04em !important;
+    color: var(--slate-500, #64748B) !important;
+    text-transform: uppercase !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    line-height: 1 !important;
+    margin-bottom: 4px !important;
+    padding: 0 !important;
+  }
+
+  /* Small 14px Bootstrap icons inline BEFORE the label */
+  #selectedRouteSection .node-label .node-label-icon {
+    display: inline-flex !important;
+    font-size: 14px !important;
+    line-height: 1 !important;
+    color: var(--blue-600, #2563EB) !important;
+    flex-shrink: 0 !important;
+    margin-right: 2px !important;
+  }
+
+  /* Place names: 16px semi-bold, allowed to wrap to 2 lines (line-clamp: 2), ellipsis only after 2 lines */
   #selectedRouteSection .node-value {
-    font-size: 1.5rem;
+    font-family: 'Geist', system-ui, sans-serif !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.02em !important;
+    color: var(--navy-900, #0F172A) !important;
+    line-height: 1.25 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    max-height: 2.5em !important;
+    width: 100% !important;
   }
+
+  /* Connector column (~56-64px max): dashed line with arrow + 2 min Walk shown in full */
   #selectedRouteSection .route-connector-box {
-    width: 100%;
-    min-width: unset;
-    padding: 10px 0;
+    width: 58px !important;
+    min-width: 58px !important;
+    max-width: 62px !important;
+    height: 38px !important;
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    margin: 0 auto !important;
+    box-sizing: border-box !important;
   }
+
+  #selectedRouteSection .route-connector-box::before {
+    display: none !important;
+  }
+
+  /* Walk chip: small 10px chip, never cut off */
+  #selectedRouteSection .connector-badge {
+    position: absolute !important;
+    top: 0 !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    z-index: 2 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 3px !important;
+    background: var(--blue-50, #EFF6FF) !important;
+    border: 1px solid var(--blue-200, #BFDBFE) !important;
+    border-radius: 4px !important;
+    padding: 2px 4px !important;
+    font-family: 'Geist Mono', ui-monospace, monospace !important;
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    color: var(--blue-700, #1D4ED8) !important;
+    line-height: 1.1 !important;
+    text-align: center !important;
+    box-shadow: none !important;
+    box-sizing: border-box !important;
+    white-space: nowrap !important;
+  }
+
+  #selectedRouteSection .connector-badge i {
+    font-size: 11px !important;
+    color: var(--blue-600, #2563EB) !important;
+    line-height: 1 !important;
+    flex-shrink: 0 !important;
+  }
+
+  #selectedRouteSection #displayTimeBadge {
+    display: inline-block !important;
+    max-width: 36px !important;
+    white-space: normal !important;
+    line-height: 1.1 !important;
+    font-size: 10px !important;
+    text-align: center !important;
+  }
+
+  /* Short dashed line ending in right arrow */
   #selectedRouteSection .connector-line {
-    top: 50%;
-    left: 0;
-    right: 0;
+    position: absolute !important;
+    bottom: 4px !important;
+    left: 2px !important;
+    width: 38px !important;
+    height: 0 !important;
+    border-top: 1.5px dashed var(--blue-400, #60A5FA) !important;
+    background: none !important;
+    animation: none !important;
+    z-index: 1 !important;
   }
-  #selectedRouteSection .route-meta-bar {
-    padding-left: 0;
-    padding-top: 18px;
-    border-top: none;
-    border-left: none;
+
+  #selectedRouteSection .connector-line::after {
+    display: none !important;
   }
-  #selectedRouteSection .route-meta-bar::before {
-    left: -16px;
-    right: -16px;
-    top: 0;
-    bottom: unset;
-    width: unset;
-    height: 1px;
-    border-left: none;
-    border-top: 1.5px dashed var(--border-strong);
+
+  #selectedRouteSection .connector-arrow {
+    position: absolute !important;
+    bottom: -3px !important;
+    right: 2px !important;
+    transform: none !important;
+    color: var(--blue-500, #3B82F6) !important;
+    line-height: 1 !important;
+    font-size: 13px !important;
+    z-index: 1 !important;
   }
-  /* Horizontal Perforation Notches on Left and Right */
-  #selectedRouteSection .selected-route-card::before {
-    top: 52%;
-    left: -1px;
-    right: unset;
-    width: 12px;
-    height: 24px;
-    border-radius: 0 12px 12px 0;
-    border: 1px solid var(--border);
-    border-left: none;
+
+  #selectedRouteSection .connector-arrow .bi-arrow-down {
+    display: none !important;
   }
-  #selectedRouteSection .selected-route-card::after {
-    top: 52%;
-    right: -1px;
-    bottom: unset;
-    width: 12px;
-    height: 24px;
-    border-radius: 12px 0 0 12px;
-    border: 1px solid var(--border);
-    border-right: none;
+
+  #selectedRouteSection .connector-arrow .bi-arrow-right {
+    display: inline-block !important;
+    font-size: 13px !important;
+  }
+
+  /* Route Meta Bar: removed from mobile layout (DOM preserved for JS displayTime) */
+  #selectedRouteSection .route-meta-bar,
+  #routeMetaBar {
+    display: none !important;
   }
 }
 
@@ -1645,15 +1898,15 @@ body {
 .map-card {
   padding: 0;
   position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border, #E2E8F0);
+  background: var(--surface, #FFFFFF);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
 }
 
 .map-card-header {
-  padding: 16px 24px;
-  background: rgba(255, 255, 255, 0.95);
-  border-bottom: 1px solid var(--color-slate-200);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: none !important;
 }
 
 .badge-status-dot {
@@ -1690,7 +1943,7 @@ body {
 .map-viewport {
   position: relative;
   width: 100%;
-  background: #F1F5F9;
+  background: #F8FAFC;
   overflow: hidden;
 }
 
@@ -1698,7 +1951,7 @@ body {
   position: relative;
   width: 100%;
   height: 620px;
-  background: white;
+  background: #F8FAFC;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1722,6 +1975,9 @@ body {
 #campusMap {
   width: 100%;
   height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
   pointer-events: none;
 }
 
@@ -1744,6 +2000,23 @@ body {
   stroke-dasharray: 24 16;
   animation: flowRoute 0.8s linear infinite;
   filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+}
+
+/* PERF: Stop continuous route animation on mobile — biggest source of dropped frames
+   during map pan/zoom. Route stays visible (static dashes). */
+@media (max-width: 767px) {
+  .route {
+    animation: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+}
+
+/* Honor reduced-motion preference on all viewports */
+@media (prefers-reduced-motion: reduce) {
+  .route {
+    animation: none !important;
+    stroke-dashoffset: 0 !important;
+  }
 }
 
 /* Building Interactive Markers */
@@ -1782,41 +2055,78 @@ body {
 /* Floating Zoom Control Stack */
 .floating-controls-stack {
   position: absolute;
-  bottom: 24px;
-  right: 24px;
+  top: 8px;
+  right: 8px;
+  bottom: auto;
+  left: auto;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
   z-index: 100;
+  pointer-events: auto;
 }
 
 .btn-floating-control {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: var(--glass-bg-dense);
-  backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--color-slate-200);
-  color: var(--color-slate-800);
-  font-size: 1.15rem;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  border-radius: 8px;
+  background: #FFFFFF;
+  border: 1px solid var(--border, #E2E8F0);
+  color: var(--navy-900, #0F172A);
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0;
   cursor: pointer;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
-  transition: all 0.25s ease;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.1);
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  box-sizing: border-box;
+}
+
+.btn-floating-control i {
+  font-size: 16px;
+  line-height: 1;
+  color: var(--navy-900, #0F172A);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-floating-control:hover {
-  background: var(--color-slate-900);
-  color: white;
-  border-color: var(--color-slate-900);
-  transform: scale(1.1);
-  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.22);
+  background: var(--blue-50, #EFF6FF);
+  border-color: var(--blue-200, #BFDBFE);
+  color: var(--blue-600, #2563EB);
+  transform: none;
+  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.12);
+}
+
+.btn-floating-control:hover i {
+  color: var(--blue-600, #2563EB);
+}
+
+.btn-floating-control:focus-visible {
+  outline: 2px solid var(--blue-600, #2563EB);
+  outline-offset: 1px;
 }
 
 .btn-floating-control:active {
-  transform: scale(0.95);
+  transform: scale(0.96);
+}
+
+/* Route Guidance Line directly below map frame */
+.map-route-guidance {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: 12.5px;
+  color: var(--slate-500, #64748B);
+  text-align: center;
+  margin: 10px 0 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
 }
 
 /* ==========================================================================
@@ -2044,23 +2354,25 @@ body {
    Responsive Breakpoints (Mobile First to Desktop)
    ========================================================================== */
 @media (max-width: 991px) {
-  .map-area { height: 480px; }
-  .floating-controls-stack { bottom: 16px; right: 16px; }
-  .btn-floating-control { width: 44px; height: 44px; font-size: 1rem; }
+  .map-area {
+    height: 72vh;
+    height: 72svh;
+    height: 72dvh;
+    min-height: 460px;
+    max-height: 640px;
+  }
 }
 
 @media (max-width: 768px) {
   :root {
     --glass-blur: blur(8px);
   }
-  .map-area { height: 390px; }
   .result-card, .detail-card { padding: 18px; }
   .stat-value { font-size: 1.05rem; }
   .btn-primary-action { width: 100%; justify-content: center; }
 }
 
 @media (max-width: 480px) {
-  .map-area { height: 340px; }
   .stat-box { padding: 12px 6px; }
   .stat-label { font-size: 0.65rem; }
   .pill-value { font-size: 0.9rem; }

@@ -56,7 +56,7 @@ export function RouteBar({ status, from, to, timeStr, buildingName, onResetRoute
               <div className="route-node-card from-node">
                 <div className="node-icon-wrapper from-icon"><i className="bi bi-geo-alt-fill"></i></div>
                 <div className="node-details">
-                  <span className="node-label">STARTING POINT</span>
+                  <span className="node-label"><i className="bi bi-geo-alt-fill node-label-icon" aria-hidden="true"></i>STARTING POINT</span>
                   <h3 className="node-value" id="displayFrom">{from}</h3>
                 </div>
               </div>
@@ -76,7 +76,7 @@ export function RouteBar({ status, from, to, timeStr, buildingName, onResetRoute
               <div className="route-node-card to-node">
                 <div className="node-icon-wrapper to-icon"><i className="bi bi-flag-fill"></i></div>
                 <div className="node-details">
-                  <span className="node-label">DESTINATION</span>
+                  <span className="node-label"><i className="bi bi-flag-fill node-label-icon" aria-hidden="true"></i>DESTINATION</span>
                   <h3 className="node-value" id="displayTo">{to}</h3>
                 </div>
               </div>

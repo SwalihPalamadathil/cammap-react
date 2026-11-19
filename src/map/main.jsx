@@ -1,6 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import 'bootstrap-icons/font/bootstrap-icons.css';
+import '../styles/bootstrap-icons-subset.css';
 import '../index.css';
 import './map.css';
 import MapPage from './MapPage';

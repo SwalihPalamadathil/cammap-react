@@ -220,7 +220,7 @@ function renderRouteFlowTemplate() {
                     <i class="bi bi-geo-alt-fill"></i>
                 </div>
                 <div class="node-details">
-                    <span class="node-label">STARTING POINT</span>
+                    <span class="node-label"><i class="bi bi-geo-alt-fill node-label-icon" aria-hidden="true"></i>STARTING POINT</span>
                     <h3 class="node-value" id="displayFrom">-</h3>
                 </div>
             </div>
@@ -244,7 +244,7 @@ function renderRouteFlowTemplate() {
                     <i class="bi bi-flag-fill"></i>
                 </div>
                 <div class="node-details">
-                    <span class="node-label">DESTINATION</span>
+                    <span class="node-label"><i class="bi bi-flag-fill node-label-icon" aria-hidden="true"></i>DESTINATION</span>
                     <h3 class="node-value" id="displayTo">-</h3>
                 </div>
             </div>
@@ -1061,5 +1061,6 @@ document.getElementById("zoomOut").addEventListener("click", () => {
 
 // Mouse wheel zoom
 
-mapWrapper.parentElement.addEventListener("wheel", panzoom.zoomWithWheel);
+// zoomWithWheel calls preventDefault() to intercept page scroll, so it must remain non-passive
+mapWrapper.parentElement.addEventListener("wheel", panzoom.zoomWithWheel, { passive: false });
 

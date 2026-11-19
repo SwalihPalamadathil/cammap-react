@@ -4,7 +4,6 @@ import { usePanzoom } from './hooks/usePanzoom';
 import { MapHeader } from './components/MapHeader';
 import { RouteBar } from './components/RouteBar';
 import { MapStage } from './components/MapStage';
-import { MapPlateKey } from './components/MapPlateKey';
 import { BuildingDetails } from './components/BuildingDetails';
 import { GpsDialog } from './components/GpsDialog';
 import { InfoDialog } from './components/InfoDialog';
@@ -76,9 +75,8 @@ export function MapPage() {
             reset={reset}
           />
 
-          {/* SECTION 3: BOTTOM ROW (Map Plate Key + Building Details) */}
-          <section className="bottom-workspace-grid my-4" aria-label="Map plate key and building details">
-            <MapPlateKey />
+          {/* SECTION 3: BUILDING DETAILS */}
+          <section className="bottom-workspace-grid my-4" aria-label="Building details">
             <BuildingDetails selectedBuilding={selectedBuilding} />
           </section>
 

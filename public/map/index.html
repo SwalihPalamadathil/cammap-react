@@ -36,18 +36,24 @@
     <meta name="twitter:description" content="Explore EMEA College with the interactive vector campus map and shortest-path walking route finder.">
     <meta name="twitter:image" content="https://YOUR-CUSTOM-DOMAIN.com/emea.png">
 
-    <!-- Preconnect & Preload Critical Assets -->
+    <!-- Preconnect & Non-blocking Google Fonts: Geist & Geist Mono (Navbar & Map) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="preload" as="image" href="logo1.png" type="image/png" fetchpriority="high">
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" media="print" onload="this.media='all'">
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap">
+    </noscript>
     
-    <!-- Google Fonts: Geist & Geist Mono (Navbar exact match) + Inter & Plus Jakarta Sans (Map content) -->
-    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Geist:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Framework & Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <!-- Framework & Icons: non-blocking load (media=print trick) -->
+    <link rel="preload" as="style" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"></noscript>
+    <link rel="preload" as="style" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"></noscript>
     
     <!-- Custom Style -->
     <link rel="stylesheet" href="style.css">
@@ -218,7 +224,7 @@
                                     <i class="bi bi-geo-alt-fill"></i>
                                 </div>
                                 <div class="node-details">
-                                    <span class="node-label">STARTING POINT</span>
+                                    <span class="node-label"><i class="bi bi-geo-alt-fill node-label-icon" aria-hidden="true"></i>STARTING POINT</span>
                                     <h3 class="node-value" id="displayFrom">-</h3>
                                 </div>
                             </div>
@@ -242,7 +248,7 @@
                                     <i class="bi bi-flag-fill"></i>
                                 </div>
                                 <div class="node-details">
-                                    <span class="node-label">DESTINATION</span>
+                                    <span class="node-label"><i class="bi bi-flag-fill node-label-icon" aria-hidden="true"></i>DESTINATION</span>
                                     <h3 class="node-value" id="displayTo">-</h3>
                                 </div>
                             </div>
@@ -680,19 +686,27 @@
 
     </div>
 
-                        <!-- FLOATING ZOOM CONTROLS -->
-                        <div class="floating-controls-stack">
-                            <button id="zoomIn" class="btn-floating-control" title="Zoom In">
-                                <i class="bi bi-plus-lg"></i>
+                        <!-- FLOATING MAP CONTROLS -->
+                        <div class="floating-controls-stack" role="toolbar" aria-label="Map controls">
+                            <button id="zoomIn" class="btn-floating-control" type="button" title="Zoom In" aria-label="Zoom In">
+                                <i class="bi bi-zoom-in" aria-hidden="true"></i>
                             </button>
-                            <button id="zoomOut" class="btn-floating-control" title="Zoom Out">
-                                <i class="bi bi-dash-lg"></i>
+                            <button id="zoomOut" class="btn-floating-control" type="button" title="Zoom Out" aria-label="Zoom Out">
+                                <i class="bi bi-zoom-out" aria-hidden="true"></i>
                             </button>
-                            <button id="recenterBtn" class="btn-floating-control" title="Center View">
-                                <i class="bi bi-arrows-angle-contract"></i>
+                            <button id="fullscreenBtn" class="btn-floating-control" type="button" title="Expand Map" aria-label="Expand Map">
+                                <i class="bi bi-arrows-fullscreen" aria-hidden="true"></i>
+                            </button>
+                            <button id="recenterBtn" class="btn-floating-control" type="button" title="Normal View" aria-label="Normal View">
+                                <i class="bi bi-fullscreen-exit" aria-hidden="true"></i>
                             </button>
                         </div>
                     </div>
+                </div>
+
+                <!-- ROUTE GUIDANCE LINE DIRECTLY BELOW MAP FRAME -->
+                <div class="map-route-guidance" id="mapRouteGuidance">
+                    <span>Follow highlighted line on map below</span>
                 </div>
             </section>
 
@@ -872,10 +886,11 @@
         </div>
     </div>
 
-    <!-- SCRIPTS -->
+    <!-- SCRIPTS: Panzoom must be synchronous (script.js depends on it at module level).
+         Bootstrap bundle is UI-only (dropdowns, modals) — safe to defer. -->
     <script src="https://unpkg.com/@panzoom/panzoom/dist/panzoom.min.js"></script>
     <script src="script.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Map Navbar Mobile & Accessibility Controller -->
     <script>
@@ -962,6 +977,36 @@
             closeMenu();
           }
         });
+      })();
+
+      // Map Expand / Fullscreen Controller
+      (function() {
+        const fsBtn = document.getElementById('fullscreenBtn');
+        if (!fsBtn) return;
+
+        function updateFsState() {
+          const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+          fsBtn.setAttribute('title', isFs ? 'Normal View' : 'Expand Map');
+          fsBtn.setAttribute('aria-label', isFs ? 'Normal View' : 'Expand Map');
+          const icon = fsBtn.querySelector('i');
+          if (icon) {
+            icon.className = 'bi ' + (isFs ? 'bi-fullscreen-exit' : 'bi-arrows-fullscreen');
+          }
+        }
+
+        fsBtn.addEventListener('click', function() {
+          const target = document.getElementById('mapCard') || document.querySelector('.map-card') || document.querySelector('.map-viewport') || document.documentElement;
+          if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+            if (target.requestFullscreen) target.requestFullscreen().catch(function(){});
+            else if (target.webkitRequestFullscreen) target.webkitRequestFullscreen();
+          } else {
+            if (document.exitFullscreen) document.exitFullscreen().catch(function(){});
+            else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+          }
+        });
+
+        document.addEventListener('fullscreenchange', updateFsState);
+        document.addEventListener('webkitfullscreenchange', updateFsState);
       })();
     </script>
 </body>
