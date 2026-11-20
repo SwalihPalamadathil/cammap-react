@@ -65,8 +65,23 @@ export function MapStage({
       });
     });
 
+    let dragDist = 0;
+    let dragX = 0;
+    let dragY = 0;
+    const handlePointerDown = (e) => {
+      dragX = e.clientX;
+      dragY = e.clientY;
+      dragDist = 0;
+    };
+    const handlePointerMove = (e) => {
+      dragDist += Math.hypot(e.clientX - dragX, e.clientY - dragY);
+      dragX = e.clientX;
+      dragY = e.clientY;
+    };
+
     // Delegate click events on SVG
     const handleClick = (e) => {
+      if (dragDist > 8) return; // Prevent accidental selection during swipe/pan
       const buildingGroup = e.target.closest('.svg-building');
       if (!buildingGroup) return;
       const locationName = buildingGroup.getAttribute('data-location');
@@ -88,10 +103,14 @@ export function MapStage({
       }
     };
 
+    svgEl.addEventListener('pointerdown', handlePointerDown);
+    svgEl.addEventListener('pointermove', handlePointerMove);
     svgEl.addEventListener('click', handleClick);
     svgEl.addEventListener('keydown', handleKeyDown);
 
     return () => {
+      svgEl.removeEventListener('pointerdown', handlePointerDown);
+      svgEl.removeEventListener('pointermove', handlePointerMove);
       svgEl.removeEventListener('click', handleClick);
       svgEl.removeEventListener('keydown', handleKeyDown);
     };

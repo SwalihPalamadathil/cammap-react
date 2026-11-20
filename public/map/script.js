@@ -628,7 +628,22 @@ window.onload = function () {
 
     const campusMap = document.getElementById("campusMap");
     if (campusMap) {
+        let mapDragDist = 0;
+        let mapDragX = 0;
+        let mapDragY = 0;
+        campusMap.addEventListener("pointerdown", function (e) {
+            mapDragX = e.clientX;
+            mapDragY = e.clientY;
+            mapDragDist = 0;
+        });
+        campusMap.addEventListener("pointermove", function (e) {
+            mapDragDist += Math.hypot(e.clientX - mapDragX, e.clientY - mapDragY);
+            mapDragX = e.clientX;
+            mapDragY = e.clientY;
+        });
+
         campusMap.addEventListener("click", function (event) {
+            if (mapDragDist > 8) return; // Prevent accidental selection during swipe/pan
             const buildingGroup = event.target.closest(".svg-building");
             if (!buildingGroup) return;
             const locationName = buildingGroup.getAttribute("data-location");
@@ -676,8 +691,16 @@ window.onload = function () {
     // Center Map Button (Floating Map Controls)
     const recenterBtn = document.getElementById("recenterBtn");
     const resetPanzoom = () => {
+        if (document.fullscreenElement) {
+            document.exitFullscreen().catch(() => {});
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        }
         if (panzoom) {
             panzoom.reset();
+            if (mapWrapper) mapWrapper.style.touchAction = 'pan-y';
+            if (mapFrame) mapFrame.style.touchAction = 'pan-y';
+            panzoom.setOptions({ touchAction: 'pan-y' });
         }
     };
     if (recenterBtn) recenterBtn.addEventListener("click", resetPanzoom);
@@ -1037,30 +1060,135 @@ function drawRoute(routeArray) {
 }
 
 const mapWrapper = document.getElementById("mapWrapper");
+const mapFrame = mapWrapper ? mapWrapper.parentElement : null;
+
+const updateTouchAction = (scale) => {
+    const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+    const action = isFs || scale > 1.01 ? 'none' : 'pan-y';
+    if (mapWrapper) mapWrapper.style.touchAction = action;
+    if (mapFrame) mapFrame.style.touchAction = action;
+    if (panzoom) panzoom.setOptions({ touchAction: action });
+};
 
 const panzoom = Panzoom(mapWrapper, {
-
     maxScale: 5,
     minScale: 1,
-
-    contain: "outside"
-
+    contain: "outside",
+    panOnlyWhenZoomed: true,
+    touchAction: "pan-y",
+    handleStartEvent: (e) => {
+        if (e.pointerType === 'mouse') {
+            e.preventDefault();
+            return;
+        }
+        if (document.fullscreenElement || document.webkitFullscreenElement) {
+            e.preventDefault();
+            return;
+        }
+        if (e.pointerType === 'touch' && !e.isPrimary) {
+            e.preventDefault();
+            return;
+        }
+        if (panzoom && panzoom.getScale() > 1.01) {
+            e.preventDefault();
+            return;
+        }
+    }
 });
 
-document.getElementById("zoomIn").addEventListener("click", () => {
+if (mapWrapper) {
+    let lastTouchX = 0;
+    let lastTouchY = 0;
 
-    panzoom.zoomIn();
+    mapWrapper.addEventListener('touchstart', (e) => {
+        const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+        if (isFs) {
+            e.preventDefault();
+            return;
+        }
+        if (e.touches.length >= 2) {
+            e.preventDefault();
+            return;
+        }
+        const touch = e.touches[0];
+        lastTouchX = touch.clientX;
+        lastTouchY = touch.clientY;
+    }, { passive: false });
 
-});
+    mapWrapper.addEventListener('touchmove', (e) => {
+        const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+        if (isFs) {
+            e.preventDefault();
+            return;
+        }
+        if (e.touches.length >= 2) {
+            e.preventDefault();
+            return;
+        }
+        if (!panzoom) return;
+        const scale = panzoom.getScale();
+        if (scale <= 1.01) return;
 
-document.getElementById("zoomOut").addEventListener("click", () => {
+        const touch = e.touches[0];
+        const deltaX = touch.clientX - lastTouchX;
+        const deltaY = touch.clientY - lastTouchY;
+        lastTouchX = touch.clientX;
+        lastTouchY = touch.clientY;
 
-    panzoom.zoomOut();
+        const wrapperRect = mapWrapper.getBoundingClientRect();
+        const frameRect = mapFrame ? mapFrame.getBoundingClientRect() : wrapperRect;
 
-});
+        const atTopEdge = wrapperRect.top >= frameRect.top - 2;
+        const atBottomEdge = wrapperRect.bottom <= frameRect.bottom + 2;
+
+        const isDraggingDown = deltaY > 0;
+        const isDraggingUp = deltaY < 0;
+        const isVertical = Math.abs(deltaY) > Math.abs(deltaX);
+
+        if (isVertical && ((isDraggingDown && atTopEdge) || (isDraggingUp && atBottomEdge))) {
+            window.scrollBy(0, -deltaY);
+            return;
+        }
+
+        e.preventDefault();
+    }, { passive: false });
+
+    mapWrapper.addEventListener('touchend', (e) => {
+        if (e.touches.length === 0 && panzoom) {
+            updateTouchAction(panzoom.getScale());
+        }
+    }, { passive: true });
+
+    mapWrapper.addEventListener('panzoomchange', (e) => {
+        if (e.detail) {
+            updateTouchAction(e.detail.scale);
+        }
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+        if (panzoom) updateTouchAction(panzoom.getScale());
+    });
+    document.addEventListener('webkitfullscreenchange', () => {
+        if (panzoom) updateTouchAction(panzoom.getScale());
+    });
+}
+
+const zoomInBtn = document.getElementById("zoomIn");
+if (zoomInBtn) {
+    zoomInBtn.addEventListener("click", () => {
+        panzoom.zoomIn();
+    });
+}
+
+const zoomOutBtn = document.getElementById("zoomOut");
+if (zoomOutBtn) {
+    zoomOutBtn.addEventListener("click", () => {
+        panzoom.zoomOut();
+    });
+}
 
 // Mouse wheel zoom
-
-// zoomWithWheel calls preventDefault() to intercept page scroll, so it must remain non-passive
-mapWrapper.parentElement.addEventListener("wheel", panzoom.zoomWithWheel, { passive: false });
+if (mapFrame) {
+    mapFrame.addEventListener("wheel", panzoom.zoomWithWheel, { passive: false });
+}
 

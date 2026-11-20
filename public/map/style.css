@@ -4,6 +4,7 @@
    ========================================================================== */
 
 :root {
+  --map-bg: #FFFFFF;
   /* CamMap Core Palette (Matched from Page 1) */
   --color-navy-dark: #0F172A;
   --color-navy-deep: #172554;
@@ -1806,54 +1807,39 @@ body {
     display: none !important;
   }
 
-  /* Walk chip: small 10px chip, never cut off */
+  /* FIX 1: Remove walk chip on mobile */
   #selectedRouteSection .connector-badge {
-    position: absolute !important;
-    top: 0 !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    z-index: 2 !important;
-    display: inline-flex !important;
+    display: none !important;
+  }
+
+  /* Connector column: short dashed line with arrow, vertically centered */
+  #selectedRouteSection .route-connector-box {
+    width: 44px !important;
+    min-width: 44px !important;
+    max-width: 48px !important;
+    height: 20px !important;
+    position: relative !important;
+    display: flex !important;
     align-items: center !important;
-    justify-content: center !important;
-    gap: 3px !important;
-    background: var(--blue-50, #EFF6FF) !important;
-    border: 1px solid var(--blue-200, #BFDBFE) !important;
-    border-radius: 4px !important;
-    padding: 2px 4px !important;
-    font-family: 'Geist Mono', ui-monospace, monospace !important;
-    font-size: 10px !important;
-    font-weight: 600 !important;
-    color: var(--blue-700, #1D4ED8) !important;
-    line-height: 1.1 !important;
-    text-align: center !important;
-    box-shadow: none !important;
+    justify-content: flex-start !important;
+    padding: 0 !important;
+    margin: 0 auto !important;
     box-sizing: border-box !important;
-    white-space: nowrap !important;
   }
 
-  #selectedRouteSection .connector-badge i {
-    font-size: 11px !important;
-    color: var(--blue-600, #2563EB) !important;
-    line-height: 1 !important;
-    flex-shrink: 0 !important;
+  #selectedRouteSection .route-connector-box::before {
+    display: none !important;
   }
 
-  #selectedRouteSection #displayTimeBadge {
-    display: inline-block !important;
-    max-width: 36px !important;
-    white-space: normal !important;
-    line-height: 1.1 !important;
-    font-size: 10px !important;
-    text-align: center !important;
-  }
-
-  /* Short dashed line ending in right arrow */
+  /* Short dashed line ending in right arrow, centered vertically */
   #selectedRouteSection .connector-line {
     position: absolute !important;
-    bottom: 4px !important;
+    top: 50% !important;
+    bottom: auto !important;
     left: 2px !important;
-    width: 38px !important;
+    right: 14px !important;
+    width: auto !important;
+    transform: translateY(-50%) !important;
     height: 0 !important;
     border-top: 1.5px dashed var(--blue-400, #60A5FA) !important;
     background: none !important;
@@ -1867,9 +1853,10 @@ body {
 
   #selectedRouteSection .connector-arrow {
     position: absolute !important;
-    bottom: -3px !important;
-    right: 2px !important;
-    transform: none !important;
+    top: 50% !important;
+    bottom: auto !important;
+    right: 0 !important;
+    transform: translateY(-50%) !important;
     color: var(--blue-500, #3B82F6) !important;
     line-height: 1 !important;
     font-size: 13px !important;
@@ -1890,6 +1877,8 @@ body {
   #routeMetaBar {
     display: none !important;
   }
+    display: none !important;
+  }
 }
 
 /* ==========================================================================
@@ -1898,11 +1887,12 @@ body {
 .map-card {
   padding: 0;
   position: relative;
-  border-radius: 16px;
+  border-radius: 14px !important;
   overflow: hidden;
-  border: 1px solid var(--border, #E2E8F0);
-  background: var(--surface, #FFFFFF);
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+  border: 1px solid var(--border, #E2E8F0) !important;
+  background: var(--map-bg, #FFFFFF) !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+  overscroll-behavior: contain;
 }
 
 .map-card-header {
@@ -1943,15 +1933,18 @@ body {
 .map-viewport {
   position: relative;
   width: 100%;
-  background: #F8FAFC;
+  background: var(--map-bg, #FFFFFF) !important;
+  border: none !important;
   overflow: hidden;
+  overscroll-behavior: contain;
 }
 
 .map-area {
   position: relative;
   width: 100%;
   height: 620px;
-  background: #F8FAFC;
+  background: var(--map-bg, #FFFFFF) !important;
+  border: none !important;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1966,6 +1959,8 @@ body {
   align-items: center;
   cursor: grab;
   position: relative;
+  background: var(--map-bg, #FFFFFF) !important;
+  touch-action: pan-y;
 }
 
 #mapWrapper:active {
@@ -1979,6 +1974,14 @@ body {
   max-height: 100%;
   object-fit: contain;
   pointer-events: none;
+  background: var(--map-bg, #FFFFFF) !important;
+}
+
+.map-card:fullscreen,
+.map-card:-webkit-full-screen,
+.map-viewport:fullscreen,
+.map-viewport:-webkit-full-screen {
+  background-color: var(--map-bg, #FFFFFF) !important;
 }
 
 #routeLayer {

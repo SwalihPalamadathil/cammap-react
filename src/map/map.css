@@ -3,6 +3,10 @@
    Geist + Geist Mono only. Navy, Blue, Slate, White. No Gold/Glow.
    ========================================================================== */
 
+:root {
+  --map-bg: #FFFFFF;
+}
+
 /* Layout Shell */
 .map-page-shell {
   min-height: 100vh;
@@ -1642,16 +1646,21 @@
     width: 100% !important;
   }
 
-  /* Connector column (~56-64px max): dashed line with arrow + 2 min Walk shown in full */
+  /* FIX 1: Remove walk chip on mobile */
+  #selectedRouteSection .connector-badge {
+    display: none !important;
+  }
+
+  /* Connector column: short dashed line with arrow, vertically centered */
   #selectedRouteSection .route-connector-box {
-    width: 58px !important;
-    min-width: 58px !important;
-    max-width: 62px !important;
-    height: 38px !important;
+    width: 44px !important;
+    min-width: 44px !important;
+    max-width: 48px !important;
+    height: 20px !important;
     position: relative !important;
     display: flex !important;
     align-items: center !important;
-    justify-content: center !important;
+    justify-content: flex-start !important;
     padding: 0 !important;
     margin: 0 auto !important;
     box-sizing: border-box !important;
@@ -1661,54 +1670,15 @@
     display: none !important;
   }
 
-  /* Walk chip: small 10px chip, never cut off */
-  #selectedRouteSection .connector-badge {
-    position: absolute !important;
-    top: 0 !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    z-index: 2 !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 3px !important;
-    background: var(--blue-50, #EFF6FF) !important;
-    border: 1px solid var(--blue-200, #BFDBFE) !important;
-    border-radius: 4px !important;
-    padding: 2px 4px !important;
-    font-family: 'Geist Mono', ui-monospace, monospace !important;
-    font-size: 10px !important;
-    font-weight: 600 !important;
-    color: var(--blue-700, #1D4ED8) !important;
-    line-height: 1.1 !important;
-    text-align: center !important;
-    box-shadow: none !important;
-    box-sizing: border-box !important;
-    white-space: nowrap !important;
-  }
-
-  #selectedRouteSection .connector-badge i {
-    font-size: 11px !important;
-    color: var(--blue-600, #2563EB) !important;
-    line-height: 1 !important;
-    flex-shrink: 0 !important;
-  }
-
-  #selectedRouteSection #displayTimeBadge {
-    display: inline-block !important;
-    max-width: 36px !important;
-    white-space: normal !important;
-    line-height: 1.1 !important;
-    font-size: 10px !important;
-    text-align: center !important;
-  }
-
-  /* Short dashed line ending in right arrow */
+  /* Short dashed line ending in right arrow, centered vertically */
   #selectedRouteSection .connector-line {
     position: absolute !important;
-    bottom: 4px !important;
+    top: 50% !important;
+    bottom: auto !important;
     left: 2px !important;
-    width: 38px !important;
+    right: 14px !important;
+    width: auto !important;
+    transform: translateY(-50%) !important;
     height: 0 !important;
     border-top: 1.5px dashed var(--blue-400, #60A5FA) !important;
     background: none !important;
@@ -1722,9 +1692,10 @@
 
   #selectedRouteSection .connector-arrow {
     position: absolute !important;
-    bottom: -3px !important;
-    right: 2px !important;
-    transform: none !important;
+    top: 50% !important;
+    bottom: auto !important;
+    right: 0 !important;
+    transform: translateY(-50%) !important;
     color: var(--blue-500, #3B82F6) !important;
     line-height: 1 !important;
     font-size: 13px !important;
@@ -1746,7 +1717,7 @@
     display: none !important;
   }
 
-  /* Mobile Map Viewport: Taller frame */
+  /* Mobile Map Viewport: Taller frame, seamless white background */
   .map-viewport {
     aspect-ratio: unset !important;
     height: 72vh;
@@ -1754,7 +1725,9 @@
     height: 72dvh;
     min-height: 460px;
     max-height: 640px;
-    background-color: #F8FAFC !important;
+    background-color: var(--map-bg, #FFFFFF) !important;
+    border: none !important;
+    overscroll-behavior: contain;
   }
 
   /* PERF: Stop all infinite off-screen CSS animations on mobile.
@@ -1797,23 +1770,18 @@
 }
 
 .hero-stage-underlay {
-  position: absolute;
-  inset: -6px;
-  border-radius: var(--radius-xl);
-  background-color: rgba(15, 23, 42, 0.02);
-  border: 1px solid rgba(15, 23, 42, 0.04);
-  pointer-events: none;
-  z-index: 0;
+  display: none !important;
 }
 
 .map-card {
   position: relative;
-  background-color: var(--surface);
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-lg);
+  background-color: var(--map-bg, #FFFFFF) !important;
+  border: 1px solid var(--border, #E2E8F0) !important;
+  border-radius: 14px !important;
   overflow: hidden;
-  box-shadow: var(--elev-2);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
   z-index: 1;
+  overscroll-behavior: contain;
 }
 
 /* Decorative Crop Marks */
@@ -1905,10 +1873,12 @@
   position: relative;
   width: 100%;
   aspect-ratio: 2390 / 1792;
-  background-color: #F8FAFC;
+  background-color: var(--map-bg, #FFFFFF) !important;
+  border: none !important;
   overflow: hidden;
   cursor: grab;
   user-select: none;
+  overscroll-behavior: contain;
 }
 
 .map-viewport:active {
@@ -1922,16 +1892,26 @@
   width: 100%;
   height: 100%;
   transform-origin: 0 0;
-  touch-action: none;
+  background-color: var(--map-bg, #FFFFFF) !important;
+  touch-action: pan-y;
 }
 
-.map-panzoom-target svg {
+.map-panzoom-target svg,
+#campusMap {
   display: block;
   width: 100%;
   height: 100%;
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
+  background-color: var(--map-bg, #FFFFFF) !important;
+}
+
+.map-card:fullscreen,
+.map-card:-webkit-full-screen,
+.map-viewport:fullscreen,
+.map-viewport:-webkit-full-screen {
+  background-color: var(--map-bg, #FFFFFF) !important;
 }
 
 /* Floating Zoom Controls Stack */
