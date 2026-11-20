@@ -1,17 +1,23 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, memo } from 'react';
 
-export function InfoDialog({ isOpen, onClose }) {
+export const InfoDialog = memo(function InfoDialog({ isOpen, onClose }) {
   const dialogRef = useRef(null);
 
   useEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog) return;
 
-    if (isOpen && !dialog.open) {
-      dialog.showModal();
-    } else if (!isOpen && dialog.open) {
-      dialog.close();
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+      if (!dialog.open) dialog.showModal();
+    } else {
+      document.body.style.overflow = '';
+      if (dialog.open) dialog.close();
     }
+
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [isOpen]);
 
   const handleBackdropClick = (e) => {
@@ -76,4 +82,6 @@ export function InfoDialog({ isOpen, onClose }) {
       </div>
     </dialog>
   );
-}
+});
+
+export default InfoDialog;

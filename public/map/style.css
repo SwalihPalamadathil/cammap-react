@@ -96,6 +96,7 @@ body {
   background-color: #0B1220;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   box-sizing: border-box;
+  padding-top: env(safe-area-inset-top);
 }
 
 @supports (animation-timeline: scroll()) {
@@ -116,7 +117,7 @@ body {
 .mapnav-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 16px 24px;
+  padding: 16px max(24px, env(safe-area-inset-right)) 16px max(24px, env(safe-area-inset-left));
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1877,7 +1878,25 @@ body {
   #routeMetaBar {
     display: none !important;
   }
-    display: none !important;
+
+  /* Mobile touch-friendly floating controls (38px touch target for easy thumb taps) */
+  .floating-controls-stack {
+    top: 10px !important;
+    right: 10px !important;
+    gap: 6px !important;
+  }
+
+  .btn-floating-control {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    min-height: 38px !important;
+    border-radius: 9px !important;
+    font-size: 18px !important;
+  }
+
+  .btn-floating-control i {
+    font-size: 18px !important;
   }
 }
 
@@ -1892,7 +1911,7 @@ body {
   border: 1px solid var(--border, #E2E8F0) !important;
   background: var(--map-bg, #FFFFFF) !important;
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
-  overscroll-behavior: contain;
+  overscroll-behavior: auto;
 }
 
 .map-card-header {
@@ -1936,7 +1955,7 @@ body {
   background: var(--map-bg, #FFFFFF) !important;
   border: none !important;
   overflow: hidden;
-  overscroll-behavior: contain;
+  overscroll-behavior: auto;
 }
 
 .map-area {

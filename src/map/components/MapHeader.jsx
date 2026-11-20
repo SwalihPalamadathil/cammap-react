@@ -1,22 +1,28 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, memo } from 'react';
 import logo from '../../assets/logo1.png';
 
-export function MapHeader() {
+export const MapHeader = memo(function MapHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const headerRef = useRef(null);
+  const hamburgerRef = useRef(null);
 
   const toggleMobileMenu = () => setMobileMenuOpen(prev => !prev);
   const closeMobileMenu = () => setMobileMenuOpen(false);
 
-  // Close mobile menu on Escape key or outside click / touch
+  // Close mobile menu on Escape key or outside click / touch, manage scroll lock & focus
   useEffect(() => {
+    if (!mobileMenuOpen) return;
+
+    document.body.style.overflow = 'hidden';
+
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape' && mobileMenuOpen) {
+      if (e.key === 'Escape') {
         setMobileMenuOpen(false);
+        hamburgerRef.current?.focus();
       }
     };
     const handleClickOutside = (e) => {
-      if (mobileMenuOpen && headerRef.current && !headerRef.current.contains(e.target)) {
+      if (headerRef.current && !headerRef.current.contains(e.target)) {
         setMobileMenuOpen(false);
       }
     };
@@ -24,9 +30,10 @@ export function MapHeader() {
     document.addEventListener('mousedown', handleClickOutside);
     document.addEventListener('touchstart', handleClickOutside, { passive: true });
     return () => {
+      document.body.style.overflow = '';
       document.removeEventListener('keydown', handleKeyDown);
       document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('touchstart', handleClickOutside, { passive: true });
+      document.removeEventListener('touchstart', handleClickOutside);
     };
   }, [mobileMenuOpen]);
 
@@ -67,6 +74,7 @@ export function MapHeader() {
         {/* RIGHT: HAMBURGER TOGGLE */}
         <div className="mapnav-actions">
           <button
+            ref={hamburgerRef}
             type="button"
             className={`mapnav-hamburger ${mobileMenuOpen ? 'open' : ''}`}
             onClick={toggleMobileMenu}
@@ -83,6 +91,6 @@ export function MapHeader() {
       </div>
     </header>
   );
-}
+});
 
 export default MapHeader;

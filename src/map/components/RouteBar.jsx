@@ -1,6 +1,8 @@
 
 
-export function RouteBar({ status, from, to, timeStr, buildingName, onResetRoute, onOpenGps, onOpenInfo }) {
+import { memo } from 'react';
+
+export const RouteBar = memo(function RouteBar({ status, from, to, timeStr, buildingName, onResetRoute, onOpenGps, onOpenInfo }) {
 
   /* ── Active Route: Journey Pass Boarding Ticket ── */
   if (status === 'route-active') {
@@ -347,4 +349,6 @@ export function RouteBar({ status, from, to, timeStr, buildingName, onResetRoute
 
   /* Fallback: same as no-route */
   return null;
-}
+});
+
+export default RouteBar;

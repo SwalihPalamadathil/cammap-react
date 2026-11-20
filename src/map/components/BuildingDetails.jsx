@@ -1,7 +1,8 @@
+import { memo } from 'react';
 import { buildingFloorDetails } from '../data/buildingInfo';
 import { destinations } from '../engine/routeEngine';
 
-export function BuildingDetails({ selectedBuilding }) {
+export const BuildingDetails = memo(function BuildingDetails({ selectedBuilding }) {
   // Empty State: No building selected yet
   if (!selectedBuilding) {
     return (
@@ -206,6 +207,6 @@ export function BuildingDetails({ selectedBuilding }) {
       </div>
     </div>
   );
-}
+});
 
 export default BuildingDetails;

@@ -20,7 +20,7 @@
 
 .main-content {
   flex: 1 0 auto;
-  padding: 0 0 48px;
+  padding: 0 0 max(48px, calc(32px + env(safe-area-inset-bottom)));
 }
 
 .map-page-container {
@@ -47,6 +47,7 @@
   background-color: var(--navy-950, #0B1220);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   box-sizing: border-box;
+  padding-top: env(safe-area-inset-top);
 }
 
 @supports (animation-timeline: scroll()) {
@@ -67,7 +68,7 @@
 .mapnav-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 16px 24px;
+  padding: 16px max(24px, env(safe-area-inset-right)) 16px max(24px, env(safe-area-inset-left));
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1727,7 +1728,7 @@
     max-height: 640px;
     background-color: var(--map-bg, #FFFFFF) !important;
     border: none !important;
-    overscroll-behavior: contain;
+    overscroll-behavior: auto;
     container-type: size;
   }
 
@@ -1786,6 +1787,26 @@
     stroke-dashoffset: 0 !important;
     opacity: 1 !important;
   }
+
+  /* Mobile touch-friendly floating controls (38px touch target for easy thumb taps) */
+  .floating-controls-stack {
+    top: 10px !important;
+    right: 10px !important;
+    gap: 6px !important;
+  }
+
+  .btn-floating-control {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    min-height: 38px !important;
+    border-radius: 9px !important;
+    font-size: 18px !important;
+  }
+
+  .btn-floating-control i {
+    font-size: 18px !important;
+  }
 }
 
 /* ==========================================================================
@@ -1814,7 +1835,7 @@
   overflow: hidden;
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
   z-index: 1;
-  overscroll-behavior: contain;
+  overscroll-behavior: auto;
 }
 
 /* Decorative Crop Marks */
@@ -1911,7 +1932,7 @@
   overflow: hidden;
   cursor: grab;
   user-select: none;
-  overscroll-behavior: contain;
+  overscroll-behavior: auto;
 }
 
 .map-viewport:active {
@@ -2536,6 +2557,9 @@
   box-shadow: var(--elev-3);
   max-width: 480px;
   width: calc(100% - 32px);
+  max-height: calc(100svh - 48px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
   margin: auto;
 }
 

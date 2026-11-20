@@ -1,17 +1,23 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, memo } from 'react';
 
-export function GpsDialog({ isOpen, onClose }) {
+export const GpsDialog = memo(function GpsDialog({ isOpen, onClose }) {
   const dialogRef = useRef(null);
 
   useEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog) return;
 
-    if (isOpen && !dialog.open) {
-      dialog.showModal();
-    } else if (!isOpen && dialog.open) {
-      dialog.close();
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+      if (!dialog.open) dialog.showModal();
+    } else {
+      document.body.style.overflow = '';
+      if (dialog.open) dialog.close();
     }
+
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [isOpen]);
 
   const handleBackdropClick = (e) => {
@@ -78,4 +84,6 @@ export function GpsDialog({ isOpen, onClose }) {
       </div>
     </dialog>
   );
-}
+});
+
+export default GpsDialog;

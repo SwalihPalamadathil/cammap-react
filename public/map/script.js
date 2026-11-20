@@ -628,22 +628,22 @@ window.onload = function () {
 
     const campusMap = document.getElementById("campusMap");
     if (campusMap) {
-        let mapDragDist = 0;
-        let mapDragX = 0;
-        let mapDragY = 0;
+        let mapStartX = -999;
+        let mapStartY = -999;
         campusMap.addEventListener("pointerdown", function (e) {
-            mapDragX = e.clientX;
-            mapDragY = e.clientY;
-            mapDragDist = 0;
+            mapStartX = e.clientX;
+            mapStartY = e.clientY;
         });
-        campusMap.addEventListener("pointermove", function (e) {
-            mapDragDist += Math.hypot(e.clientX - mapDragX, e.clientY - mapDragY);
-            mapDragX = e.clientX;
-            mapDragY = e.clientY;
+        campusMap.addEventListener("pointercancel", function () {
+            mapStartX = -999;
+            mapStartY = -999;
         });
 
         campusMap.addEventListener("click", function (event) {
-            if (mapDragDist > 8) return; // Prevent accidental selection during swipe/pan
+            if (mapStartX !== -999 && mapStartY !== -999) {
+                const dist = Math.hypot(event.clientX - mapStartX, event.clientY - mapStartY);
+                if (dist > 8) return; // Prevent accidental selection during swipe/pan
+            }
             const buildingGroup = event.target.closest(".svg-building");
             if (!buildingGroup) return;
             const locationName = buildingGroup.getAttribute("data-location");
@@ -1116,12 +1116,78 @@ if (mapWrapper) {
         }
     }, true); // capture phase, before tap handlers
 
-    // ── Pinch / two-finger pan ────────────────────────────────────────────────────────────
+    // ── Pinch / two-finger pan (Batched via rAF & Dynamic Passive 1-Finger Scrolling) ──
     let _lastMidX = 0, _lastMidY = 0;
     let _lastDist = 0;
     let _twoFingerActive = false;
+    let _rafId = null;
+    let _pendingPinch = null;
 
-    mapWrapper.addEventListener('touchstart', (e) => {
+    const applyPendingPinch = () => {
+        _rafId = null;
+        if (!_pendingPinch || !panzoom) return;
+        const { scale, midX, midY, panDX, panDY } = _pendingPinch;
+        _pendingPinch = null;
+
+        if (scale !== null) {
+            panzoom.zoomToPoint(scale, { clientX: midX, clientY: midY });
+        }
+        if (panDX !== 0 || panDY !== 0) {
+            const { x, y } = panzoom.getPan();
+            panzoom.pan(x + panDX, y + panDY);
+        }
+    };
+
+    const schedulePinchUpdate = (scale, midX, midY, panDX, panDY) => {
+        _pendingPinch = { scale, midX, midY, panDX, panDY };
+        if (_rafId === null) {
+            _rafId = requestAnimationFrame(applyPendingPinch);
+        }
+    };
+
+    const onTouchMove = (e) => {
+        if (isFullscreen()) {
+            e.preventDefault();
+            return;
+        }
+        if (e.touches.length < 2) {
+            // ONE FINGER: never preventDefault. Browser handles native scroll!
+            return;
+        }
+
+        // TWO FINGERS: pinch-zoom + two-finger pan batched via rAF.
+        e.preventDefault();
+        _twoFingerActive = true;
+        if (!panzoom) return;
+
+        const t0 = e.touches[0], t1 = e.touches[1];
+        const curMidX = (t0.clientX + t1.clientX) / 2;
+        const curMidY = (t0.clientY + t1.clientY) / 2;
+        const curDist = Math.hypot(t1.clientX - t0.clientX, t1.clientY - t0.clientY);
+
+        let newScale = null;
+        if (_lastDist > 0) {
+            newScale = Math.min(5, Math.max(1, panzoom.getScale() * (curDist / _lastDist)));
+        }
+
+        let dX = 0, dY = 0;
+        if (panzoom.getScale() > 1.01 && _lastDist > 0) {
+            const diffX = curMidX - _lastMidX;
+            const diffY = curMidY - _lastMidY;
+            if (Math.abs(diffX) > 0.5 || Math.abs(diffY) > 0.5) {
+                dX = diffX;
+                dY = diffY;
+            }
+        }
+
+        schedulePinchUpdate(newScale, curMidX, curMidY, dX, dY);
+
+        _lastMidX = curMidX;
+        _lastMidY = curMidY;
+        _lastDist = curDist;
+    };
+
+    const onTouchStart = (e) => {
         if (isFullscreen()) return; // Fullscreen: Panzoom handles all gestures
         if (e.touches.length >= 2) {
             // Two-finger gesture starting: prevent browser page-zoom
@@ -1132,66 +1198,35 @@ if (mapWrapper) {
             _lastMidX = (t0.clientX + t1.clientX) / 2;
             _lastMidY = (t0.clientY + t1.clientY) / 2;
             _lastDist = Math.hypot(t1.clientX - t0.clientX, t1.clientY - t0.clientY);
+            // Dynamically attach non-passive touchmove listener ONLY when 2 fingers touch down
+            mapWrapper.addEventListener('touchmove', onTouchMove, { passive: false });
         } else {
-            // Single touch: DO NOT preventDefault — page scrolls natively.
+            // Single touch: DO NOT preventDefault — page scrolls natively with 100% passive momentum!
             _twoFingerActive = false;
-        }
-    }, { passive: false });
-
-    mapWrapper.addEventListener('touchmove', (e) => {
-        if (isFullscreen()) {
-            // Body scroll is locked in fullscreen, let Panzoom pan.
-            e.preventDefault();
-            return;
-        }
-        if (e.touches.length < 2) {
-            // ONE FINGER: never preventDefault.
-            // touch-action:pan-y lets the browser scroll the page at any zoom level.
-            return;
-        }
-
-        // TWO FINGERS: pinch-zoom + two-finger pan via rAF.
-        e.preventDefault();
-        _twoFingerActive = true;
-        if (!panzoom) return;
-
-        const t0 = e.touches[0], t1 = e.touches[1];
-        const curMidX = (t0.clientX + t1.clientX) / 2;
-        const curMidY = (t0.clientY + t1.clientY) / 2;
-        const curDist = Math.hypot(t1.clientX - t0.clientX, t1.clientY - t0.clientY);
-
-        // Pinch: zoom around the midpoint
-        if (_lastDist > 0) {
-            const scaleBy  = curDist / _lastDist;
-            const newScale = Math.min(5, Math.max(1, panzoom.getScale() * scaleBy));
-            panzoom.zoomToPoint(newScale, { clientX: curMidX, clientY: curMidY });
-        }
-
-        // Two-finger pan: translate by midpoint delta when zoomed in
-        if (panzoom.getScale() > 1.01 && _lastDist > 0) {
-            const panDX = curMidX - _lastMidX;
-            const panDY = curMidY - _lastMidY;
-            if (Math.abs(panDX) > 0.5 || Math.abs(panDY) > 0.5) {
-                const { x, y } = panzoom.getPan();
-                panzoom.pan(x + panDX, y + panDY);
-            }
-        }
-
-        _lastMidX = curMidX;
-        _lastMidY = curMidY;
-        _lastDist = curDist;
-    }, { passive: false });
-
-    const onTouchEnd = (e) => {
-        if (e.touches.length < 2 && _twoFingerActive) {
-            _twoFingerActive = false;
-            _lastDist = 0;
-            _gestureEndTime = Date.now();
-            setTimeout(() => { _gestureActive = false; }, 400);
+            mapWrapper.removeEventListener('touchmove', onTouchMove);
         }
     };
-    mapWrapper.addEventListener('touchend',    onTouchEnd, { passive: true });
-    mapWrapper.addEventListener('touchcancel', onTouchEnd, { passive: true });
+
+    const onTouchEnd = (e) => {
+        if (e.touches.length < 2) {
+            mapWrapper.removeEventListener('touchmove', onTouchMove);
+            if (_twoFingerActive) {
+                _twoFingerActive = false;
+                _lastDist = 0;
+                _gestureEndTime = Date.now();
+                if (_rafId !== null) {
+                    cancelAnimationFrame(_rafId);
+                    _rafId = null;
+                }
+                _pendingPinch = null;
+                setTimeout(() => { _gestureActive = false; }, 400);
+            }
+        }
+    };
+
+    mapWrapper.addEventListener('touchstart',  onTouchStart, { passive: false });
+    mapWrapper.addEventListener('touchend',    onTouchEnd,   { passive: true });
+    mapWrapper.addEventListener('touchcancel', onTouchEnd,   { passive: true });
 
     // ── Fullscreen body-scroll lock ─────────────────────────────────────────────────────────
     const onFullscreenChange = () => {
@@ -1227,8 +1262,14 @@ if (zoomOutBtn) {
     });
 }
 
-// Mouse wheel zoom
+// Mouse wheel zoom: normal wheel scrolls page; Ctrl/Cmd+wheel (or fullscreen) zooms map
 if (mapFrame) {
-    mapFrame.addEventListener("wheel", panzoom.zoomWithWheel, { passive: false });
+    mapFrame.addEventListener("wheel", (e) => {
+        const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+        if (e.ctrlKey || e.metaKey || isFs) {
+            e.preventDefault();
+            panzoom.zoomWithWheel(e);
+        }
+    }, { passive: false });
 }
 

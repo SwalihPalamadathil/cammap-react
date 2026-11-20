@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, memo } from 'react';
 import { createPortal } from 'react-dom';
 import campusMapSvgRaw from '../assets/campus-map.inline.svg?raw';
 import { svgBuildingMap, standaloneSvgBuildings } from '../data/buildingInfo';
 import { RouteLayer } from './RouteLayer';
 import { ZoomControls } from './ZoomControls';
 
-export function MapStage({
+export const MapStage = memo(function MapStage({
   wrapperRef,
   frameRef,
   routeState,
@@ -65,23 +65,25 @@ export function MapStage({
       });
     });
 
-    let dragDist = 0;
-    let dragX = 0;
-    let dragY = 0;
+    // High-performance tap detection: record pointerdown coords, compute delta on click.
+    // Eliminates continuous pointermove listener overhead on mobile devices!
+    let startX = -999;
+    let startY = -999;
     const handlePointerDown = (e) => {
-      dragX = e.clientX;
-      dragY = e.clientY;
-      dragDist = 0;
+      startX = e.clientX;
+      startY = e.clientY;
     };
-    const handlePointerMove = (e) => {
-      dragDist += Math.hypot(e.clientX - dragX, e.clientY - dragY);
-      dragX = e.clientX;
-      dragY = e.clientY;
+    const handlePointerCancel = () => {
+      startX = -999;
+      startY = -999;
     };
 
     // Delegate click events on SVG
     const handleClick = (e) => {
-      if (dragDist > 8) return; // Prevent accidental selection during swipe/pan
+      if (startX !== -999 && startY !== -999) {
+        const dist = Math.hypot(e.clientX - startX, e.clientY - startY);
+        if (dist > 8) return; // Prevent accidental selection during swipe/pan
+      }
       const buildingGroup = e.target.closest('.svg-building');
       if (!buildingGroup) return;
       const locationName = buildingGroup.getAttribute('data-location');
@@ -104,13 +106,13 @@ export function MapStage({
     };
 
     svgEl.addEventListener('pointerdown', handlePointerDown);
-    svgEl.addEventListener('pointermove', handlePointerMove);
+    svgEl.addEventListener('pointercancel', handlePointerCancel);
     svgEl.addEventListener('click', handleClick);
     svgEl.addEventListener('keydown', handleKeyDown);
 
     return () => {
       svgEl.removeEventListener('pointerdown', handlePointerDown);
-      svgEl.removeEventListener('pointermove', handlePointerMove);
+      svgEl.removeEventListener('pointercancel', handlePointerCancel);
       svgEl.removeEventListener('click', handleClick);
       svgEl.removeEventListener('keydown', handleKeyDown);
     };
@@ -194,4 +196,6 @@ export function MapStage({
       </div>
     </section>
   );
-}
+});
+
+export default MapStage;

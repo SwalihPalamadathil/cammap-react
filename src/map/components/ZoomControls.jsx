@@ -1,8 +1,8 @@
 
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 
-export function ZoomControls({ onZoomIn, onZoomOut, onRecenter }) {
+export const ZoomControls = memo(function ZoomControls({ onZoomIn, onZoomOut, onRecenter }) {
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
@@ -82,4 +82,6 @@ export function ZoomControls({ onZoomIn, onZoomOut, onRecenter }) {
       </button>
     </div>
   );
-}
+});
+
+export default ZoomControls;
