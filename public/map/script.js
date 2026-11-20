@@ -1062,12 +1062,21 @@ function drawRoute(routeArray) {
 const mapWrapper = document.getElementById("mapWrapper");
 const mapFrame = mapWrapper ? mapWrapper.parentElement : null;
 
-const updateTouchAction = (scale) => {
-    const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
-    const action = isFs || scale > 1.01 ? 'none' : 'pan-y';
+// ─── GESTURE HANDLING ──────────────────────────────────────────────────────────────────────────────────
+// RULE: touch-action is ALWAYS "pan-y" at any zoom level so the browser can
+// scroll the page with one finger.  Only expanded/fullscreen uses "none"
+// (body scroll is locked there, so one-finger pan is safe).
+//
+// One-finger touches NEVER get preventDefault — the browser handles page scroll.
+// Two-finger touches get preventDefault only during active pinch/two-finger pan.
+// Desktop mouse behaviour is unchanged.
+
+const isFullscreen = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
+
+const setWrapperTouchAction = (action) => {
     if (mapWrapper) mapWrapper.style.touchAction = action;
-    if (mapFrame) mapFrame.style.touchAction = action;
-    if (panzoom) panzoom.setOptions({ touchAction: action });
+    if (mapFrame)   mapFrame.style.touchAction   = action;
+    if (panzoom)    panzoom.setOptions({ touchAction: action });
 };
 
 const panzoom = Panzoom(mapWrapper, {
@@ -1075,102 +1084,133 @@ const panzoom = Panzoom(mapWrapper, {
     minScale: 1,
     contain: "outside",
     panOnlyWhenZoomed: true,
+    // Always pan-y so the browser's native vertical scroll is never blocked by CSS.
+    // JS overrides this to "none" in fullscreen only.
     touchAction: "pan-y",
     handleStartEvent: (e) => {
+        // Desktop: preventDefault allows drag-pan without text-selection.
         if (e.pointerType === 'mouse') {
             e.preventDefault();
             return;
         }
-        if (document.fullscreenElement || document.webkitFullscreenElement) {
+        // Fullscreen: body scroll is locked, one-finger pan is intentional.
+        if (isFullscreen()) {
             e.preventDefault();
             return;
         }
-        if (e.pointerType === 'touch' && !e.isPrimary) {
-            e.preventDefault();
-            return;
-        }
-        if (panzoom && panzoom.getScale() > 1.01) {
-            e.preventDefault();
-            return;
-        }
+        // Single touch at any zoom level: DO NOT preventDefault.
+        // The browser scrolls the page via touch-action: pan-y.
+        // Panzoom's panOnlyWhenZoomed:true means it won't pan at scale=1.
     }
 });
 
 if (mapWrapper) {
-    let lastTouchX = 0;
-    let lastTouchY = 0;
+    // ── Ghost-click guard ─────────────────────────────────────────────────────────────────────
+    // After a pinch, absorb the synthetic click (~300 ms after gesture ends).
+    let _gestureEndTime = 0;
+    let _gestureActive  = false;
+    mapWrapper.addEventListener('click', (e) => {
+        if (_gestureActive || (Date.now() - _gestureEndTime < 350)) {
+            e.stopPropagation();
+            e.preventDefault();
+        }
+    }, true); // capture phase, before tap handlers
+
+    // ── Pinch / two-finger pan ────────────────────────────────────────────────────────────
+    let _lastMidX = 0, _lastMidY = 0;
+    let _lastDist = 0;
+    let _twoFingerActive = false;
 
     mapWrapper.addEventListener('touchstart', (e) => {
-        const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
-        if (isFs) {
-            e.preventDefault();
-            return;
-        }
+        if (isFullscreen()) return; // Fullscreen: Panzoom handles all gestures
         if (e.touches.length >= 2) {
+            // Two-finger gesture starting: prevent browser page-zoom
             e.preventDefault();
-            return;
+            _twoFingerActive = true;
+            _gestureActive   = true;
+            const t0 = e.touches[0], t1 = e.touches[1];
+            _lastMidX = (t0.clientX + t1.clientX) / 2;
+            _lastMidY = (t0.clientY + t1.clientY) / 2;
+            _lastDist = Math.hypot(t1.clientX - t0.clientX, t1.clientY - t0.clientY);
+        } else {
+            // Single touch: DO NOT preventDefault — page scrolls natively.
+            _twoFingerActive = false;
         }
-        const touch = e.touches[0];
-        lastTouchX = touch.clientX;
-        lastTouchY = touch.clientY;
     }, { passive: false });
 
     mapWrapper.addEventListener('touchmove', (e) => {
-        const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
-        if (isFs) {
+        if (isFullscreen()) {
+            // Body scroll is locked in fullscreen, let Panzoom pan.
             e.preventDefault();
             return;
         }
-        if (e.touches.length >= 2) {
-            e.preventDefault();
-            return;
-        }
-        if (!panzoom) return;
-        const scale = panzoom.getScale();
-        if (scale <= 1.01) return;
-
-        const touch = e.touches[0];
-        const deltaX = touch.clientX - lastTouchX;
-        const deltaY = touch.clientY - lastTouchY;
-        lastTouchX = touch.clientX;
-        lastTouchY = touch.clientY;
-
-        const wrapperRect = mapWrapper.getBoundingClientRect();
-        const frameRect = mapFrame ? mapFrame.getBoundingClientRect() : wrapperRect;
-
-        const atTopEdge = wrapperRect.top >= frameRect.top - 2;
-        const atBottomEdge = wrapperRect.bottom <= frameRect.bottom + 2;
-
-        const isDraggingDown = deltaY > 0;
-        const isDraggingUp = deltaY < 0;
-        const isVertical = Math.abs(deltaY) > Math.abs(deltaX);
-
-        if (isVertical && ((isDraggingDown && atTopEdge) || (isDraggingUp && atBottomEdge))) {
-            window.scrollBy(0, -deltaY);
+        if (e.touches.length < 2) {
+            // ONE FINGER: never preventDefault.
+            // touch-action:pan-y lets the browser scroll the page at any zoom level.
             return;
         }
 
+        // TWO FINGERS: pinch-zoom + two-finger pan via rAF.
         e.preventDefault();
+        _twoFingerActive = true;
+        if (!panzoom) return;
+
+        const t0 = e.touches[0], t1 = e.touches[1];
+        const curMidX = (t0.clientX + t1.clientX) / 2;
+        const curMidY = (t0.clientY + t1.clientY) / 2;
+        const curDist = Math.hypot(t1.clientX - t0.clientX, t1.clientY - t0.clientY);
+
+        // Pinch: zoom around the midpoint
+        if (_lastDist > 0) {
+            const scaleBy  = curDist / _lastDist;
+            const newScale = Math.min(5, Math.max(1, panzoom.getScale() * scaleBy));
+            panzoom.zoomToPoint(newScale, { clientX: curMidX, clientY: curMidY });
+        }
+
+        // Two-finger pan: translate by midpoint delta when zoomed in
+        if (panzoom.getScale() > 1.01 && _lastDist > 0) {
+            const panDX = curMidX - _lastMidX;
+            const panDY = curMidY - _lastMidY;
+            if (Math.abs(panDX) > 0.5 || Math.abs(panDY) > 0.5) {
+                const { x, y } = panzoom.getPan();
+                panzoom.pan(x + panDX, y + panDY);
+            }
+        }
+
+        _lastMidX = curMidX;
+        _lastMidY = curMidY;
+        _lastDist = curDist;
     }, { passive: false });
 
-    mapWrapper.addEventListener('touchend', (e) => {
-        if (e.touches.length === 0 && panzoom) {
-            updateTouchAction(panzoom.getScale());
+    const onTouchEnd = (e) => {
+        if (e.touches.length < 2 && _twoFingerActive) {
+            _twoFingerActive = false;
+            _lastDist = 0;
+            _gestureEndTime = Date.now();
+            setTimeout(() => { _gestureActive = false; }, 400);
         }
-    }, { passive: true });
+    };
+    mapWrapper.addEventListener('touchend',    onTouchEnd, { passive: true });
+    mapWrapper.addEventListener('touchcancel', onTouchEnd, { passive: true });
 
-    mapWrapper.addEventListener('panzoomchange', (e) => {
-        if (e.detail) {
-            updateTouchAction(e.detail.scale);
+    // ── Fullscreen body-scroll lock ─────────────────────────────────────────────────────────
+    const onFullscreenChange = () => {
+        if (isFullscreen()) {
+            document.body.style.overflow = 'hidden';
+            setWrapperTouchAction('none');
+        } else {
+            document.body.style.overflow = '';
+            setWrapperTouchAction('pan-y');
         }
-    });
+    };
+    document.addEventListener('fullscreenchange',       onFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', onFullscreenChange);
 
-    document.addEventListener('fullscreenchange', () => {
-        if (panzoom) updateTouchAction(panzoom.getScale());
-    });
-    document.addEventListener('webkitfullscreenchange', () => {
-        if (panzoom) updateTouchAction(panzoom.getScale());
-    });
+    // ── Safari/iOS: prevent native pinch-to-page-zoom on the map ─────────────────
+    // gesturestart/gesturechange are Safari-only. They fire before touchmove
+    // and prevent the page from zooming while the user pinches over the map.
+    mapWrapper.addEventListener('gesturestart',  (e) => { e.preventDefault(); }, { passive: false });
+    mapWrapper.addEventListener('gesturechange', (e) => { e.preventDefault(); }, { passive: false });
 }
 
 const zoomInBtn = document.getElementById("zoomIn");

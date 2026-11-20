@@ -1,20 +1,28 @@
 import { useEffect, useRef, useCallback } from 'react';
 import Panzoom from '@panzoom/panzoom';
 
+// ─── GESTURE RULES ────────────────────────────────────────────────────────────
+// touch-action is ALWAYS 'pan-y' at any zoom level.  The browser handles
+// one-finger page scroll natively; JS never calls preventDefault for 1-touch.
+// Two-finger touch: preventDefault to block browser page-zoom, then we drive
+// pinch-zoom + midpoint pan ourselves.
+// Fullscreen: body scroll is locked → touch-action switches to 'none' so
+// one-finger pan works inside the full-screen map.
+// Desktop: unchanged (mouse-wheel zoom, mouse-drag pan).
+
 export function usePanzoom(wrapperRef, frameRef) {
   const panzoomInstanceRef = useRef(null);
 
   useEffect(() => {
     const wrapper = wrapperRef.current;
-    const frame = frameRef.current;
+    const frame   = frameRef.current;
     if (!wrapper || !frame) return;
 
-    // Helper: update touchAction on wrapper and frame
-    const updateTouchAction = (scale) => {
-      const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
-      const action = isFs || scale > 1.01 ? 'none' : 'pan-y';
+    const isFs = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
+
+    const setTouchAction = (action) => {
       wrapper.style.touchAction = action;
-      frame.style.touchAction = action;
+      frame.style.touchAction   = action;
       pz.setOptions({ touchAction: action });
     };
 
@@ -23,154 +31,149 @@ export function usePanzoom(wrapperRef, frameRef) {
       minScale: 1,
       contain: 'outside',
       panOnlyWhenZoomed: true,
+      // Always pan-y — browser scrolls page on 1-finger at any zoom level.
       touchAction: 'pan-y',
       handleStartEvent: (e) => {
-        // Desktop mouse: preventDefault so drag works without text selection
-        if (e.pointerType === 'mouse') {
-          e.preventDefault();
-          return;
-        }
-        // In fullscreen mode: map handles all touches
-        if (document.fullscreenElement || document.webkitFullscreenElement) {
-          e.preventDefault();
-          return;
-        }
-        // Multi-touch pinch: prevent browser page-zoom
-        if (e.pointerType === 'touch' && !e.isPrimary) {
-          e.preventDefault();
-          return;
-        }
-        // Zoomed in: allow map panning
-        if (pz.getScale() > 1.01) {
-          e.preventDefault();
-          return;
-        }
-        // Scale === 1, single touch: DO NOT preventDefault! Let page scroll vertically
+        // Desktop drag-pan: prevent text-selection, no effect on touch.
+        if (e.pointerType === 'mouse') { e.preventDefault(); return; }
+        // Fullscreen: body scroll locked → one-finger pan is intentional.
+        if (isFs()) { e.preventDefault(); return; }
+        // Touch (single or multi): DO NOT preventDefault here.
+        // Two-finger pinch is handled by our touchstart/touchmove listeners below.
       }
     });
     panzoomInstanceRef.current = pz;
 
-    // Track touchmove on wrapper to handle pinch-zoom and edge-scroll handoff
-    let lastTouchX = 0;
-    let lastTouchY = 0;
+    // ── Ghost-click guard ───────────────────────────────────────────────────
+    let _gestureEndTime = 0;
+    let _gestureActive  = false;
+    const onClickCapture = (e) => {
+      if (_gestureActive || (Date.now() - _gestureEndTime < 350)) {
+        e.stopPropagation();
+        e.preventDefault();
+      }
+    };
+    wrapper.addEventListener('click', onClickCapture, true);
+
+    // ── Pinch / two-finger pan ───────────────────────────────────────────────
+    let _lastMidX = 0, _lastMidY = 0;
+    let _lastDist = 0;
+    let _twoFingerActive = false;
 
     const onTouchStart = (e) => {
-      const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
-      if (isFs) {
-        e.preventDefault();
-        return;
-      }
+      if (isFs()) return; // fullscreen: Panzoom handles all gestures
       if (e.touches.length >= 2) {
-        // Pinch zoom starts: prevent browser viewport zoom
-        e.preventDefault();
-        return;
+        e.preventDefault(); // block browser page-zoom on this element
+        _twoFingerActive = true;
+        _gestureActive   = true;
+        const t0 = e.touches[0], t1 = e.touches[1];
+        _lastMidX = (t0.clientX + t1.clientX) / 2;
+        _lastMidY = (t0.clientY + t1.clientY) / 2;
+        _lastDist = Math.hypot(t1.clientX - t0.clientX, t1.clientY - t0.clientY);
+      } else {
+        // One finger: DO NOT preventDefault — page scrolls natively.
+        _twoFingerActive = false;
       }
-      const touch = e.touches[0];
-      lastTouchX = touch.clientX;
-      lastTouchY = touch.clientY;
-      // When scale === 1, do NOT preventDefault to allow native vertical page scroll
     };
 
     const onTouchMove = (e) => {
-      const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
-      if (isFs) {
+      if (isFs()) {
+        // Body scroll is locked in fullscreen; let Panzoom handle one-finger pan.
         e.preventDefault();
         return;
       }
-
-      if (e.touches.length >= 2) {
-        // Pinch zoom active: prevent native browser page zoom
-        e.preventDefault();
+      if (e.touches.length < 2) {
+        // ONE FINGER: never preventDefault.
+        // touch-action:pan-y lets the browser scroll the page at any zoom level.
         return;
       }
 
-      const scale = pz.getScale();
-      if (scale <= 1.01) {
-        // Scale is 1: normal native vertical scrolling happens via touch-action: pan-y
-        return;
-      }
-
-      // Scale > 1: check pan boundary to prevent scroll trap
-      const touch = e.touches[0];
-      const deltaX = touch.clientX - lastTouchX;
-      const deltaY = touch.clientY - lastTouchY;
-      lastTouchX = touch.clientX;
-      lastTouchY = touch.clientY;
-
-      const wrapperRect = wrapper.getBoundingClientRect();
-      const frameRect = frame.getBoundingClientRect();
-
-      const atTopEdge = wrapperRect.top >= frameRect.top - 2;
-      const atBottomEdge = wrapperRect.bottom <= frameRect.bottom + 2;
-
-      const isDraggingDown = deltaY > 0;
-      const isDraggingUp = deltaY < 0;
-      const isVertical = Math.abs(deltaY) > Math.abs(deltaX);
-
-      if (isVertical && ((isDraggingDown && atTopEdge) || (isDraggingUp && atBottomEdge))) {
-        // Map is at its vertical pan limit in this drag direction: hand gesture to page
-        window.scrollBy(0, -deltaY);
-        return;
-      }
-
-      // Otherwise map is panning
+      // TWO FINGERS: pinch-zoom + two-finger pan via rAF.
       e.preventDefault();
+      _twoFingerActive = true;
+
+      const t0 = e.touches[0], t1 = e.touches[1];
+      const curMidX = (t0.clientX + t1.clientX) / 2;
+      const curMidY = (t0.clientY + t1.clientY) / 2;
+      const curDist = Math.hypot(t1.clientX - t0.clientX, t1.clientY - t0.clientY);
+
+      // Pinch: zoom around the midpoint
+      if (_lastDist > 0) {
+        const newScale = Math.min(5, Math.max(1, pz.getScale() * (curDist / _lastDist)));
+        pz.zoomToPoint(newScale, { clientX: curMidX, clientY: curMidY });
+      }
+
+      // Two-finger pan: translate by midpoint delta when zoomed in
+      if (pz.getScale() > 1.01 && _lastDist > 0) {
+        const { x, y } = pz.getPan();
+        const dX = curMidX - _lastMidX;
+        const dY = curMidY - _lastMidY;
+        if (Math.abs(dX) > 0.5 || Math.abs(dY) > 0.5) {
+          pz.pan(x + dX, y + dY);
+        }
+      }
+
+      _lastMidX = curMidX;
+      _lastMidY = curMidY;
+      _lastDist = curDist;
     };
 
     const onTouchEnd = (e) => {
-      if (e.touches.length === 0) {
-        updateTouchAction(pz.getScale());
+      if (e.touches.length < 2 && _twoFingerActive) {
+        _twoFingerActive = false;
+        _lastDist = 0;
+        _gestureEndTime = Date.now();
+        setTimeout(() => { _gestureActive = false; }, 400);
       }
     };
 
-    // Scoped non-passive touch listeners on wrapper
-    wrapper.addEventListener('touchstart', onTouchStart, { passive: false });
-    wrapper.addEventListener('touchmove', onTouchMove, { passive: false });
-    wrapper.addEventListener('touchend', onTouchEnd, { passive: true });
-    wrapper.addEventListener('touchcancel', onTouchEnd, { passive: true });
+    // Scoped non-passive ONLY for the two listeners that call preventDefault
+    wrapper.addEventListener('touchstart',  onTouchStart, { passive: false });
+    wrapper.addEventListener('touchmove',   onTouchMove,  { passive: false });
+    wrapper.addEventListener('touchend',    onTouchEnd,   { passive: true  });
+    wrapper.addEventListener('touchcancel', onTouchEnd,   { passive: true  });
 
-    // Update touch-action when panzoom zooms
-    const onPanzoomChange = (e) => {
-      if (e.detail) {
-        updateTouchAction(e.detail.scale);
-      }
-    };
-    wrapper.addEventListener('panzoomchange', onPanzoomChange);
+    // ── Safari/iOS: prevent native pinch-to-page-zoom on the map ────────────
+    const onGesture = (e) => e.preventDefault();
+    wrapper.addEventListener('gesturestart',  onGesture, { passive: false });
+    wrapper.addEventListener('gesturechange', onGesture, { passive: false });
 
-    // Mouse wheel zoom on frame for desktop
-    const onWheel = (e) => {
-      pz.zoomWithWheel(e);
-    };
-    frame.addEventListener('wheel', onWheel, { passive: false });
-
-    // Handle fullscreen changes
+    // ── Fullscreen body-scroll lock ─────────────────────────────────────────
     const onFullscreenChange = () => {
-      updateTouchAction(pz.getScale());
+      if (isFs()) {
+        document.body.style.overflow = 'hidden';
+        setTouchAction('none');
+      } else {
+        document.body.style.overflow = '';
+        setTouchAction('pan-y');
+      }
     };
-    document.addEventListener('fullscreenchange', onFullscreenChange);
+    document.addEventListener('fullscreenchange',       onFullscreenChange);
     document.addEventListener('webkitfullscreenchange', onFullscreenChange);
 
+    // ── Desktop mouse-wheel zoom ────────────────────────────────────────────
+    const onWheel = (e) => { pz.zoomWithWheel(e); };
+    frame.addEventListener('wheel', onWheel, { passive: false });
+
     return () => {
-      wrapper.removeEventListener('touchstart', onTouchStart);
-      wrapper.removeEventListener('touchmove', onTouchMove);
-      wrapper.removeEventListener('touchend', onTouchEnd);
-      wrapper.removeEventListener('touchcancel', onTouchEnd);
-      wrapper.removeEventListener('panzoomchange', onPanzoomChange);
-      frame.removeEventListener('wheel', onWheel);
-      document.removeEventListener('fullscreenchange', onFullscreenChange);
+      wrapper.removeEventListener('click',         onClickCapture, true);
+      wrapper.removeEventListener('touchstart',    onTouchStart);
+      wrapper.removeEventListener('touchmove',     onTouchMove);
+      wrapper.removeEventListener('touchend',      onTouchEnd);
+      wrapper.removeEventListener('touchcancel',   onTouchEnd);
+      wrapper.removeEventListener('gesturestart',  onGesture);
+      wrapper.removeEventListener('gesturechange', onGesture);
+      frame.removeEventListener('wheel',           onWheel);
+      document.removeEventListener('fullscreenchange',       onFullscreenChange);
       document.removeEventListener('webkitfullscreenchange', onFullscreenChange);
+      document.body.style.overflow = '';
       pz.destroy();
       panzoomInstanceRef.current = null;
     };
   }, [wrapperRef, frameRef]);
 
-  const zoomIn = useCallback(() => {
-    panzoomInstanceRef.current?.zoomIn();
-  }, []);
-
-  const zoomOut = useCallback(() => {
-    panzoomInstanceRef.current?.zoomOut();
-  }, []);
+  const zoomIn  = useCallback(() => { panzoomInstanceRef.current?.zoomIn();  }, []);
+  const zoomOut = useCallback(() => { panzoomInstanceRef.current?.zoomOut(); }, []);
 
   const reset = useCallback(() => {
     if (document.fullscreenElement) {
@@ -179,18 +182,12 @@ export function usePanzoom(wrapperRef, frameRef) {
       document.webkitExitFullscreen();
     }
     panzoomInstanceRef.current?.reset();
-    if (wrapperRef.current) {
-      wrapperRef.current.style.touchAction = 'pan-y';
-    }
-    if (frameRef.current) {
-      frameRef.current.style.touchAction = 'pan-y';
-    }
+    // Always restore pan-y; fullscreenchange handler will set 'none' if needed.
+    if (wrapperRef.current) wrapperRef.current.style.touchAction = 'pan-y';
+    if (frameRef.current)   frameRef.current.style.touchAction   = 'pan-y';
     panzoomInstanceRef.current?.setOptions({ touchAction: 'pan-y' });
+    document.body.style.overflow = '';
   }, [wrapperRef, frameRef]);
 
-  return {
-    zoomIn,
-    zoomOut,
-    reset
-  };
+  return { zoomIn, zoomOut, reset };
 }

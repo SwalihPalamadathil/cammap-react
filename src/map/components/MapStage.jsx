@@ -24,7 +24,7 @@ export function MapStage({
     if (!wrapper) return;
 
     if (!wrapper.querySelector('#campusMap')) {
-      wrapper.innerHTML = campusMapSvgRaw;
+      wrapper.innerHTML = `<div id="mapRotationWrapper" class="map-rotation-wrapper">${campusMapSvgRaw}</div>`;
     }
 
     const svgEl = wrapper.querySelector('#campusMap');

@@ -1728,6 +1728,39 @@
     background-color: var(--map-bg, #FFFFFF) !important;
     border: none !important;
     overscroll-behavior: contain;
+    container-type: size;
+  }
+
+  @media (orientation: portrait) {
+    .map-panzoom-target {
+      position: relative !important;
+      overflow: visible !important;
+    }
+
+    /* Rotate map 90deg clockwise so Rusa Building is at top, Main Gate at left */
+    .map-rotation-wrapper {
+      position: absolute !important;
+      top: 50% !important;
+      left: 50% !important;
+      width: calc(72svh - 16px) !important;
+      height: calc(100vw - 32px) !important;
+      max-width: calc(72svh - 16px) !important;
+      max-height: calc(100vw - 32px) !important;
+      transform: translate(-50%, -50%) rotate(90deg) !important;
+      transform-origin: center center !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+
+    @supports (container-type: size) {
+      .map-rotation-wrapper {
+        width: calc(100cqh - 16px) !important;
+        height: calc(100cqw - 16px) !important;
+        max-width: calc(100cqh - 16px) !important;
+        max-height: calc(100cqw - 16px) !important;
+      }
+    }
   }
 
   /* PERF: Stop all infinite off-screen CSS animations on mobile.
@@ -1894,8 +1927,21 @@
   transform-origin: 0 0;
   background-color: var(--map-bg, #FFFFFF) !important;
   touch-action: pan-y;
+  position: relative;
 }
 
+/* Static inner wrapper around SVG for map orientation */
+.map-rotation-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--map-bg, #FFFFFF);
+}
+
+.map-rotation-wrapper svg,
 .map-panzoom-target svg,
 #campusMap {
   display: block;

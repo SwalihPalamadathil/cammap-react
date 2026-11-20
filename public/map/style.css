@@ -1967,7 +1967,20 @@ body {
   cursor: grabbing;
 }
 
+/* Static inner wrapper around SVG for map orientation */
+.map-rotation-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--map-bg, #FFFFFF);
+}
+
+.map-rotation-wrapper svg,
 #campusMap {
+  display: block;
   width: 100%;
   height: 100%;
   max-width: 100%;
@@ -2008,6 +2021,42 @@ body {
 /* PERF: Stop continuous route animation on mobile — biggest source of dropped frames
    during map pan/zoom. Route stays visible (static dashes). */
 @media (max-width: 767px) {
+  .map-area, .map-viewport {
+    container-type: size;
+  }
+
+  @media (orientation: portrait) {
+    #mapWrapper, .map-panzoom-target {
+      position: relative !important;
+      overflow: visible !important;
+    }
+
+    /* Rotate map 90deg clockwise so Rusa Building is at top, Main Gate at left */
+    .map-rotation-wrapper {
+      position: absolute !important;
+      top: 50% !important;
+      left: 50% !important;
+      width: calc(72svh - 16px) !important;
+      height: calc(100vw - 32px) !important;
+      max-width: calc(72svh - 16px) !important;
+      max-height: calc(100vw - 32px) !important;
+      transform: translate(-50%, -50%) rotate(90deg) !important;
+      transform-origin: center center !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+
+    @supports (container-type: size) {
+      .map-rotation-wrapper {
+        width: calc(100cqh - 16px) !important;
+        height: calc(100cqw - 16px) !important;
+        max-width: calc(100cqh - 16px) !important;
+        max-height: calc(100cqw - 16px) !important;
+      }
+    }
+  }
+
   .route {
     animation: none !important;
     stroke-dashoffset: 0 !important;
